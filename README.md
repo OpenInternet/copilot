@@ -8,4 +8,6 @@ Research on [the needs of digital security trainers](https://www.internews.org/r
 This project is a prototype Training "Co-Pilot:" an easy to use censorship simulating access point in a box. The Co-Pilot will allow a trainer to simulate various censorship environments (Blocking Tor, Throttling psiphon, Blocking IP-Address', Blocking Traffic by keywords) so that trainees are able to safely and actively experience using circumvention tools in a censorship environment. The "Co-Pilot" will allow trainers to gauge trainee understanding when they are still in a positioned to help.
 
 
+**CURRENT STATE OF CO-PILOT:** [NEEDS ASSESSMENT](https://github.com/OpenInternet/co-pilot/milestones/Initial%20Needs%20Assessment%20Completed)
+
 **Please see [issues](https://github.com/OpenInternet/co-pilot/issues) and the [wiki](https://github.com/OpenInternet/co-pilot/wiki) for current needs assessment work taking place on this project.**
