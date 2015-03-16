@@ -1,3 +1,4 @@
 # Virtualenv
 env
 instance
+*.pyc

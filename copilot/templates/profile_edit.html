@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% from "_rule_list.html" import render_multi_field %}
+{% block body %}
+<h2>Welcome to Co-Pilot</h2>
+{{ render_multi_field(profile.rules, profile.name) }}
+{% endblock %}

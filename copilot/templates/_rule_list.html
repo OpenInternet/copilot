@@ -1,0 +1,25 @@
+{% macro render_multi_field(rules, profile_name) %}
+<div class="form-group">
+    {{ profile_name }}
+    {% for rule in rules %}
+    <div class="base_class{% if rule.errors %} error_class{% endif %}" id="{{rule.uuid}}-group">
+        <button data-field="{{ rule.uuid }}-group">Remove Entry</button>
+	<select name="{{ rule.uuid }}-action">
+  	    <option>Block</option>
+	</select>
+	<select name="{{ rule.uuid }}-target">
+	    <option>URL</option>
+  	    <option>DNS</option>
+	</select>
+	<input type="text" name="{{ rule.uuid }}-sub-target">
+    </div>
+        {% if rule.errors %}
+            {% for error in rule.errors %}
+            <p class="error_class">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    <br/>
+    <button type="button">Add entry</button>
+</div>
+{% endmacro %}

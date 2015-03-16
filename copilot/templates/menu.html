@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Welcome to Co-Pilot</h2>
+<div class="container">
+    <a class="button" href="{{ url_for('profile_new') }}"> New Profile </a>
+    <a class="button" href="{{ url_for('profile_load') }}"> Load Profile </a>
+    <a class="button" href="{{ url_for('config_admin') }}"> Configuration </a>
+</div>
+{% endblock %}
