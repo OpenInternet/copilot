@@ -21,6 +21,8 @@ def config_initial():
         trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
         db.session.add(trainer)
         db.session.commit()
+        trainer.write_ap_config()
+        subprocess.call(["service", "create_ap", "restart"])
         login_user(trainer)
         flash('Your configuration has been set!')
         return redirect(url_for('index'))
@@ -42,6 +44,9 @@ def config_admin():
         if form.ap_password.data != "":
             flash("set ap password")
             trainer.ap_password = form.ap_password.data
+        db.session.commit()
+        trainer.write_ap_config()
+        subprocess.call(["service", "create_ap", "restart"])
         return redirect(url_for('index'))
 
     return render_template('admin_config.html', form=form)

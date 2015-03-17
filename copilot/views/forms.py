@@ -1,11 +1,11 @@
 from flask.ext.wtf import Form
 
 # Import Form elements
-from wtforms import PasswordField, TextField
+from wtforms import PasswordField, TextField, SelectField, FieldList, FormField
 
 # Import Form validators
 from wtforms.validators import Required, Length, EqualTo, ValidationError, Optional
-from copilot.models import Trainer
+from copilot.models import Trainer, get_valid_actions, get_valid_targets
 
 # Define the login form
 class LoginForm(Form):
@@ -49,3 +49,20 @@ class AdminConfig(Form):
         EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Repeat Trainer Administration Password')
 
+class RuleField(Form):
+    action = SelectField("Action", choices=zip(get_valid_actions(), get_valid_actions()), default="block")
+    target = SelectField("Target", choices=zip(get_valid_targets(), get_valid_targets()), default="dns")
+    sub_target = TextField("Sub-Target", default="")
+
+class ProfileForm(Form):
+    rules = FieldList(FormField(RuleField))
+    def __init__(self, *args, **kwargs):
+        kwargs['csrf_enabled'] = False
+        super(ProfileForm, self).__init__(*args, **kwargs)
+
+class NewProfileForm(Form):
+    prof_name = TextField('Profile Name', default="new")
+    rules = FieldList(FormField(RuleField))
+    def __init__(self, *args, **kwargs):
+        kwargs['csrf_enabled'] = False
+        super(NewProfileForm, self).__init__(*args, **kwargs)

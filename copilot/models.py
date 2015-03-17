@@ -4,8 +4,19 @@ from flask.ext.login import UserMixin
 import csv
 import os
 import uuid
+from urlparse import urlparse
+import subprocess
 
+COPILOT_DIR="/tmp/copilot/"
 PROFILE_DIR="/tmp/copilot/profiles/"
+
+def get_valid_targets():
+    VALID_TARGETS=["dns", "url"]
+    return VALID_TARGETS
+
+def get_valid_actions():
+    VALID_ACTIONS=['block']
+    return VALID_ACTIONS
 
 class Base(db.Model):
 
@@ -30,12 +41,14 @@ class Trainer(Base, UserMixin):
     _ap_password = db.Column(db.String(192),  nullable=False)
     # Trainer password
     _password = db.Column(db.String(192),  nullable=False)
+    _current = db.Column(db.String(192),  nullable=True)
 
     def __init__(self, trainer_pass, ap_name="copilot", ap_password="copilot"):
         self.password = trainer_pass
         self.ap_name = ap_name
         self.ap_password = ap_password
         self.solo = True
+        self.current = False
 
     @property
     def solo(self):
@@ -53,6 +66,14 @@ class Trainer(Base, UserMixin):
     def password(self, plaintext):
         self._password = bcrypt.generate_password_hash(plaintext)
 
+    @property
+    def current(self):
+        return self._current
+
+    @current.setter
+    def current(self, plaintext):
+        self._current = plaintext
+
     def is_correct_password(self, plaintext):
         return bcrypt.check_password_hash(self._password, plaintext)
 
@@ -66,7 +87,8 @@ class Trainer(Base, UserMixin):
             all(char in string.printable for char in plaintext)):
             self._ap_password = plaintext
         else:
-            raise ValueError("Access Point passwords must be between 1 and 63 characters long and use only printable ASCII characters.")
+            print(plaintext)
+            raise ValueError("Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.")
 
     @property
     def ap_name(self):
@@ -78,6 +100,15 @@ class Trainer(Base, UserMixin):
             self._ap_name = name
         else:
             raise ValueError("Access Point names must be between 1 and 31 characters long.")
+
+    def write_ap_config(self):
+        #TODO remove this repeat code later
+        if not os.path.exists(COPILOT_DIR):
+            os.makedirs(COPILOT_DIR)
+        AP_CONFIG = "/tmp/copilot/ap.conf"
+        with open(AP_CONFIG, 'w') as config_file:
+            config_file.write("#!/bin/bash \n")
+            config_file.write("/usr/bin/create_ap  wlan0 eth0 {0} {1}".format(self._ap_name, self._ap_password))
 
     def __repr__(self):
         return '<Ap Name %r Solo %r>' % (self.ap_name, self.solo)
@@ -93,8 +124,6 @@ class Profile:
                     self.add_rule(rule)
             except ValueError as _err: #TODO add real error correction here
                 raise _err
-        else:
-            self.add_rule(Rule("dns", "block", "foxnews.com"))
 
     def add_rule(self, rule):
         try:
@@ -103,6 +132,7 @@ class Profile:
             raise ValueError(_err) #TODO add real error correction here
         if _rule.is_valid():
             self.rules.append(_rule)
+            print("VALID RULE")
 
     def save(self):
         if not os.path.exists(PROFILE_DIR):
@@ -114,19 +144,38 @@ class Profile:
         for rule in self.rules:
             rule.save(PROFILE_FILE)
 
-    def load(self, save_file):
+    def exist(self):
         PROFILE_FILE = (PROFILE_DIR + self.name)
-        with open(PROFILE_FILE, 'rb') as csvfile:
+        if os.path.isfile(PROFILE_FILE):
+            return True
+
+    def load(self):
+        PROFILE_FILE = (PROFILE_DIR + self.name)
+        with open(PROFILE_FILE, 'r') as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
             for row in csv_reader:
                 _rule=Rule(row[0], row[1], row[2])
                 self.add_rule(_rule)
 
+    def apply_it(self):
+        #TODO remove this repeat code later
+        if not os.path.exists(COPILOT_DIR):
+            os.makedirs(COPILOT_DIR)
+        DNSC_CONFIG = "/tmp/copilot/dnschef.conf"
+        with open(DNSC_CONFIG, 'w') as config_file:
+            config_file.write("[A]")
+            config_file.write("\n")
+            for rule in self.rules:
+                config_file.write(rule.get_dns())
+                config_file.write("=127.0.0.1")
+                config_file.write("\n")
+        subprocess.call(["service", "dnschef", "restart"])
+
 class Rule:
 
-    def __init__(self, target, action, sub_target=None):
-        self.valid_actions = ['block']
-        self.valid_targets = ['dns']
+    def __init__(self, target, action, sub_target=""):
+        self.valid_actions = get_valid_actions()
+        self.valid_targets = get_valid_targets()
         self.errors = {}
         self.target = target
         self.action = action
@@ -139,11 +188,28 @@ class Rule:
             url : True,
             dns : True}
 
+    def get_dns(self):
+        tld = ["ac", "ad", "ae", "aero", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "arpa", "as", "asia", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "biz", "bj", "bl", "bm", "bn", "bo", "bq", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cat", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "com", "coop", "cr", "cs", "cu", "cv", "cw", "cx", "cy", "cz", "dd", "de", "dj", "dk", "dm", "do", "dz", "ec", "edu", "ee", "eg", "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gov", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "info", "int", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jobs", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "local", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "me", "mf", "mg", "mh", "mil", "mk", "ml", "mm", "mn", "mo", "mobi", "mp", "mq", "mr", "ms", "mt", "mu", "museum", "mv", "mw", "mx", "my", "mz", "na", "name", "nato", "nc", "ne", "net", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "onion", "org", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "pro", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "su", "sv", "sx", "sy", "sz", "tc", "td", "tel", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tp", "tr", "travel", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "xxx", "ye", "yt", "yu", "za", "zm", "zr", "zw"]
+        _sub = self.sub_target
+        parsed = urlparse(_sub)
+        split_sub = string.split(parsed.path, ".")
+        #TODO the below is a monstrosity
+        if len(split_sub) > 3:
+            raise ValueError("invalid url")
+        elif len(split_sub) == 3:
+            return _parsed
+        elif len(split_sub) == 1:
+            return "*.{0}.*".format(split_sub[0])
+        elif (len(split_sub) == 2 and split_sub[1] not in tld):
+            return "{0}.{1}.*".format(split_sub[0], split_sub[1])
+        elif split_sub[1] in tld:
+            return "*.{0}.{1}".format(split_sub[0], split_sub[1])
+
     def save(self, save_file):
         with open(save_file, 'a') as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=' ',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([self.target, self.sub_target, self.action])
+            csv_writer.writerow([self.target,  self.action, self.sub_target])
 
     def is_valid(self):
         if self.errors:
@@ -161,7 +227,7 @@ class Rule:
             value_to_set = self.valid_targets.index(string.lower(plaintext))
             self._target = plaintext
         except ValueError:
-            raise ValueError("The target \"%s\" is invalid.".format(plaintext))
+            raise ValueError("The target \"{0}\" is invalid.".format(plaintext))
 
     @property
     def sub_target(self):
@@ -171,7 +237,7 @@ class Rule:
     def sub_target(self, plaintext):
         #If a target is not set then we cannot check the sub-target against it.
         if not self._target:
-            raise ValueError("The sub-target \"%s\" cannot be set without a valid target.".format(plaintext))
+            raise ValueError("The sub-target \"{0}\" cannot be set without a valid target.".format(plaintext))
         print("TODO Validate sub-targets.")
         self._sub_target = plaintext
 
@@ -185,7 +251,8 @@ class Rule:
             value_to_set = self.valid_actions.index(string.lower(plaintext))
             self._action = plaintext
         except ValueError:
-            raise ValueError("The action \"%s\" is invalid.".format(plaintext))
+            raise ValueError("The action \"{0}\" is invalid.".format(plaintext))
+            
 
     def __repr__(self):
         return '<Ap Name %r Solo %r>' % (self.ap_name, self.solo)
