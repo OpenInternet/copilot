@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% from "_rule_list.html" import render_multi_field %}
+{% block body %}
+<h2>{{ form.name }}</h2>
+<div class="container">
+    {% for name in profile %}
+    <a href="{{ url_for('profile_edit', profile_dir=name) }}">{{ name }}</a>
+    {% endfor %}
+</div>
+</form>
+{% endblock %}

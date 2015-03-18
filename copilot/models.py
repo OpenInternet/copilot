@@ -204,7 +204,9 @@ class Rule:
             return "{0}.{1}.*".format(split_sub[0], split_sub[1])
         elif split_sub[1] in tld:
             return "*.{0}.{1}".format(split_sub[0], split_sub[1])
+        #todo add just TLD.
 
+            
     def save(self, save_file):
         with open(save_file, 'a') as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=' ',

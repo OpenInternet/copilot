@@ -10,6 +10,9 @@ from flask.ext.login import login_user, login_required
 from wtforms import FormField
 from copilot.controllers import get_trainer
 
+from os import listdir
+from os.path import isfile, join
+
 @app.route('/profile/new', methods=["GET", "POST"])
 @login_required
 def profile_new():
@@ -92,8 +95,9 @@ def profile_save():
 @login_required
 def profile_load():
     """Display the profile that is currently being run on the Co-Pilot box. """
-
-    return render_template('profile_load.html', form=form)
+    PROFILE_DIR="/tmp/copilot/profiles/"
+    profiles = [ f for f in listdir(PROFILE_DIR) if isfile(join(PROFILE_DIR,f)) ]
+    return render_template('profile_load.html', profiles=profiles)
 
 @app.route('/profile/current', methods=["GET", "POST"])
 @login_required
