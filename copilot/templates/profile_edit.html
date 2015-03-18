@@ -2,7 +2,7 @@
 {% from "_rule_list.html" import render_multi_field %}
 {% block body %}
 <h2>{{ form.name }}</h2>
-      <form action="{{ url_for('profile_edit', variable=form.name) }}" method=post>
+      <form action="{{ url_for('profile_edit', prof_name=form.name) }}" method=post>
           {{ form.csrf_token }}
           {% if form.prof_name %}
           {{form.prof_name }}
