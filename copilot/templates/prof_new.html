@@ -5,6 +5,7 @@
       <form action="{{ url_for('profile_new') }}" method=post>
           {{ form.csrf_token }}
           {% if form.prof_name %}
+          <label for="Name">Name</label>
           {{form.prof_name }}
           {% endif %}
           {{ render_multi_field(form.rules, form.name) }}

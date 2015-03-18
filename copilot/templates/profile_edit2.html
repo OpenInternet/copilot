@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block body %}
+  <h2>Configure Co-Pilot</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+      {{ }}
+      <form action="{{ url_for('config_admin') }}" method=post>
+          {{ form.csrf_token }}
+          <dl>
+              {% for subfield in field %}
+              {{ render_field(subfield.target) }}
+              {{ render_field(form.action) }}
+              {{ render_field(form.ap_password) }}
+              {{ render_field(form.confirm_ap_pass) }}
+              {{ render_field(form.password) }}
+              {{ render_field(form.confirm) }}
+              { % endfor }
+          </dl>
+          <p><input type=submit value=configure></p>
+      </form>
+{% endblock %}
