@@ -35,6 +35,9 @@ def profile_new():
         profile = models.Profile("new")
         profile.save()
         form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
+        form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
+        form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
+        form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
         return render_template('prof_new.html', form=form)
 
 

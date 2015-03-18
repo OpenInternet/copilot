@@ -11,7 +11,7 @@ COPILOT_DIR="/tmp/copilot/"
 PROFILE_DIR="/tmp/copilot/profiles/"
 
 def get_valid_targets():
-    VALID_TARGETS=["dns", "url"]
+    VALID_TARGETS=["dns"]
     return VALID_TARGETS
 
 def get_valid_actions():
