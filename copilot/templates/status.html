@@ -1,0 +1,15 @@
+{% macro render_status_items(status_items) %}
+<div class="container">
+        <div class="row">
+        {% for status in status_items %}
+            <div class="status three columns">
+                {# https://lincolnloop.com/blog/svg-sprites-and-icon-systems-are-super/  #}
+                {# http://svgpocketguide.com/book/ #}
+                {# http://24ways.org/2014/an-overview-of-svg-sprite-creation-techniques/ #}
+			    <svg class="icon {{ status.status }}"><use xlink:href="#{{ status.icon }}"></use></svg>
+                <h3>{{ status.value }}</h3>
+            </div>
+        {% endfor %}
+        </div>
+</div>
+{% endmacro %}

@@ -1,0 +1,15 @@
+{% macro render_submit_buttons(buttons) %}
+<div class="container">
+        <div class="row">
+        {% for name, submit in buttons %}
+                <div>
+                        {% if submit == True  %}
+                        <input type="submit" value="{{ name }}" class="two columns form_button">
+                        {% else %}
+                        <input type="button" value="{{ name }}" class="two columns form_button">
+                        {% endif %}
+                </div>
+        {% endfor %}
+        </div>
+</div>
+{% endmacro %}

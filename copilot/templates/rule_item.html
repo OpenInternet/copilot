@@ -1,0 +1,25 @@
+{% macro render_rules(field, field_name) %}
+<div class="row" id="rule_list">
+        <div class="one columns">
+                <img src="{{ url_for('static/images', filename='delete_rule.png') }}" onclick="add_rule()">
+        </div>
+        {% for subfield in field %}
+        <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
+                {# Deal with Errors First #}
+                {% if subfield.errors %}
+                {% for error in subfield.errors %}
+                <p class="error">{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+
+                {# Actual Rule Subfield #}
+                {{ subfield.name }}
+                {{ subfield.label.text }}
+                {{ subfield.data }}
+                <div class="help">
+                        {{ subfield.description }}
+                </div>
+        </div>
+        {% endfor %}
+</div>
+{% endmacro %}

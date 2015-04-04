@@ -4,11 +4,12 @@ from copilot.models import get_valid_actions, get_valid_targets
 from copilot.views import forms
 from flask.ext.wtf import Form
 
+
 #Get flask modules
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, login_required
 from wtforms import FormField
-from copilot.controllers import get_trainer
+from copilot.controllers import get_trainer, get_status_items
 
 from os import listdir
 from os.path import isfile, join
@@ -38,7 +39,15 @@ def profile_new():
         form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
         form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
         form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
-        return render_template('prof_new.html', form=form)
+        status_items = get_status_items()
+        buttons = [{"name":"Submit", "submit":False},
+                   {"name":"Test", "submit":False},
+                   {"name":"Save", "submit":False},
+                   {"name":"Save & Apply", "submit":True}]
+        return render_template('profile.html',
+                               form=form,
+                               status_items=status_items,
+                               buttons=buttons)
 
 
 @app.route('/profile/edit/<string:prof_name>', methods=["GET", "POST"])
@@ -69,7 +78,16 @@ def profile_edit(prof_name):
     for rule in profile.rules:
         form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
 
-    return render_template('profile_edit.html', form=form)
+        status_items = get_status_items()
+        buttons = [{"name":"Submit", "submit":False},
+                   {"name":"Test", "submit":False},
+                   {"name":"Save", "submit":False},
+                   {"name":"Save & Apply", "submit":True}]
+        return render_template('profile.html',
+                               form=form,
+                               status_items=status_items,
+                               buttons=buttons)
+
 
 @app.route('/profile/applied', methods=["GET", "POST"])
 @login_required

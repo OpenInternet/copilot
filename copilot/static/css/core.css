@@ -1,0 +1,118 @@
+/*
+Color Palette
+
+Dark Blue : 002e62
+Light Blue : 005baa
+Grey Blue : 96a3c3
+Light Grey : 939192
+Dark Grey : 626264
+Green : 6db33
+Light Green : b3d78d
+Orange : fbb033
+Yellow : fbb033
+*/
+
+body {
+    font-family: "Helvetica";
+    background: #ffffff;
+}
+
+/* === Text Formatting === */
+a, h1, h2 {
+    color: #005baa;
+}
+
+h1 {
+    border-bottom: 2px solid #96a3c3;
+}
+
+.page {
+    background: white;
+
+}
+
+.indicator {
+    
+}
+
+/* Alert Message Lists */
+
+ul.flashes {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+li.flashes {
+    padding-left: 1em;
+    text-indent: -.7em;
+}
+
+li.flashes.error {
+    border-bottom: 1px solid #f25d23;
+}
+
+li.flashes.success {
+    border-bottom: 1px solid #6db33;
+}
+
+li.flashes:before {
+    content: "• ";
+}
+
+li.flashes.error:before {
+    color: #f25d23;
+}
+
+li.flashes.success:before {
+    color: #6db33;
+}
+
+/* Form Submission Buttons */
+
+.form_button {
+  position: relative;
+  vertical-align: top;
+  width: 100%;
+  height: 80%;
+  padding: 0;
+  font-size: 1.5em;
+  color: white;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  background: #005baa;
+  border: 0;
+  border-bottom: 2px solid #002e62;
+  cursor: pointer;
+  -webkit-box-shadow: inset 0 -2px #002e62;
+  box-shadow: inset 0 -2px #002e62;
+}
+
+.form_button:active {
+  top: 1px;
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* Rules and Profiles */
+.rule {}
+
+.rule.error {
+    border-bottom: 1px solid #f25d23;
+	padding-left: 1em;
+    text-indent: -.7em;
+}
+
+.rule.error:before {
+    content: "• ";
+	color: #f25d23;
+}
+
+.rule.help {
+    display: none;
+}
+
+.rule.input:focus + div.help {
+	display: block;
+}
