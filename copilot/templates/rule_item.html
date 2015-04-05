@@ -4,21 +4,21 @@
         <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="del_rule()">
         {% for subfield in field %}
         {% if subfield.short_name != "csrf_token" %}
-        <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
-            {# Deal with Errors First #}
-            {% if subfield.errors %}
-            {% for error in subfield.errors %}
-            <p class="error">{{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            {# Actual data goes here. #}
-            {{ subfield(class_="u-full-width "+subfield.short_name) }}
-        </div>
-        <div class="help">
-            {{ subfield.description }}
-        </div>
-        {% endif %}
-        {% endfor %}
     </div>
+    <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
+        {# Deal with Errors First #}
+        {% if subfield.errors %}
+        {% for error in subfield.errors %}
+        <p class="error">{{ error }}</p>
+        {% endfor %}
+        {% endif %}
+        {# Actual data goes here. #}
+        {{ subfield(class_="u-full-width "+subfield.short_name) }}
+    </div>
+    <div class="help">
+        {{ subfield.description }}
+    </div>
+    {% endif %}
+    {% endfor %}
 </div>
 {% endmacro %}
