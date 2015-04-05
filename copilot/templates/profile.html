@@ -18,7 +18,7 @@
         <div class="container">
             {% for item in form.rules %}
             {% if item.short_name != "csrf_token" %}
-            {{ render_rules(item, item.name) }}
+            {{ render_rules(item.rules, item.name) }}
             {% endif %}
             {% endfor %}
             <div class="row" id="rule_list">
