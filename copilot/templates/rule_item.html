@@ -1,7 +1,7 @@
 {% macro render_rules(field, field_name) %}
 <div class="row" id="rule_list">
         <div class="one columns">
-                <img src="{{ url_for('static/images', filename='delete_rule.png') }}" onclick="add_rule()">
+                <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
         {% for subfield in field %}
         <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
