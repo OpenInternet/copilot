@@ -3,7 +3,7 @@
         <div class="one columns">
                 <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
-        {{ field }}
+        {{ field.rules }}
         {% for subfield in field.rules %}
         {{ subfield }}
         {{ subfield.name }}
