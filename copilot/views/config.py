@@ -54,6 +54,7 @@ def config_admin():
 
 @app.route('/config', methods=["GET", "POST"])
 def config():
+    print("Starting")
     trainer_exists = get_trainer()
     #If there is already a trainer setup on the box then provide the admin configuration.
     if trainer_exists:
