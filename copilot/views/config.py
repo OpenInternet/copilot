@@ -63,7 +63,7 @@ def config():
         print("02 trainer DOES NOT exists")
         form = Config()
     if form.validate_on_submit():
-        print("FORM IS VALID")    
+        print("FORM IS VALID")
         #Add any new values to the existing trainer
         if trainer_exists:
             trainer = trainer_exists
@@ -90,4 +90,5 @@ def config():
         print("ERRORS: {0}".format(form.errors))
     status_items = get_status_items()
     buttons = [{"name":"Submit", "submit":True}]
+    print("Rendering config.")
     return render_template('config.html', form=form, trainer_exists=trainer_exists, status_items=status_items, buttons=buttons)
