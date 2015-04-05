@@ -12,9 +12,6 @@
 <link rel="stylesheet" type=text/css media="(orientation: portrait)" href="{{ url_for('static', filename='css/portrait.css') }}">
 <link rel="stylesheet" type=text/css media="(orientation: landscape)" href="{{ url_for('static', filename='css/landscape.css') }}">
 
-<!-- SVG sprite sheet -->
-{% include 'sprites/status_symbol.svg' %}
-
 <head>
     <div class="section">
         {% block status %}{% endblock %}
@@ -34,3 +31,6 @@
         </div>
     </div>
 </body>
+
+<!-- SVG sprite sheet -->
+{% include 'sprites/status_symbol.svg' %}
