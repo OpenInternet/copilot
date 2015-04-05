@@ -116,3 +116,15 @@ li.flashes.success:before {
 .rule.input:focus + div.help {
 	display: block;
 }
+
+svg.icon.on {
+	fill: #b3d78d;
+}
+
+svg.icon.off {
+	fill: #939192;
+}
+
+svg.icon.error {
+	fill: #f25d23;
+}

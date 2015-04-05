@@ -14,7 +14,10 @@
    id="svg7798"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="New document 35">
+   sodipodi:docname="rule_button.svg"
+   inkscape:export-filename="/root/code/co-pilot/copilot/static/images/delete_rule.png"
+   inkscape:export-xdpi="25.199999"
+   inkscape:export-ydpi="25.199999">
   <defs
      id="defs7800" />
   <sodipodi:namedview
@@ -78,7 +81,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="add"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true"
      transform="translate(-352.88051,-327.89136)">
     <path
@@ -89,7 +92,7 @@
        sodipodi:cy="483.79074"
        sodipodi:rx="71.428574"
        sodipodi:ry="71.428574"
-       d="m 460.00002,483.79074 c 0,39.44891 -31.97967,71.42857 -71.42858,71.42857 -39.44891,0 -71.42857,-31.97966 -71.42857,-71.42857 0,-39.44891 31.97966,-71.42857 71.42857,-71.42857 39.44891,0 71.42858,31.97966 71.42858,71.42857 z"
+       d="m 460.00002,483.79074 a 71.428574,71.428574 0 1 1 -142.85715,0 71.428574,71.428574 0 1 1 142.85715,0 z"
        transform="translate(35.737642,-84.470805)" />
     <path
        style="fill:none;stroke:#ffffff;stroke-width:20.6871109;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
