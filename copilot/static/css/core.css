@@ -119,12 +119,18 @@ li.flashes.success:before {
 
 svg.icon.on {
 	fill: #b3d78d;
+	height: 50%;
+	width: 50%;
 }
 
 svg.icon.off {
 	fill: #939192;
+	height: 50%;
+	width: 50%;
 }
 
 svg.icon.error {
 	fill: #f25d23;
+	height: 50%;
+	width: 50%;
 }

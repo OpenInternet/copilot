@@ -23,7 +23,7 @@ def get_status_items():
     """
     print("TODO: get_status_items is currently not implemented")
     status_items = [{"icon":"wifi", "value":"[AP NAME HERE]", "status":"on"},
-                    {"icon":"gears", "value":"Configure", "status":"off"},
+                    {"icon":"config", "value":"Configure", "status":"off"},
                     {"icon":"profile", "value":"[PROFILE NAME]","status":"off"},
                     {"icon":"load", "value":"Load Profile","status":"off"}]
     return status_items
