@@ -1,8 +1,9 @@
-{% macro render_rules(field, field_name) %}
+{% macro render_rules(field) %}
 <div class="row" id="rule_list">
         <div class="one columns">
                 <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
+        {{ field }}
         {% for subfield in field.rules %}
         {{ subfield }}
         {{ subfield.name }}
