@@ -112,6 +112,8 @@ def profile(prof_name):
         profile = models.Profile(prof_name)
         if profile.exist():
             profile.load()
+        else:
+            form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
     form.name = prof_name
     for rule in profile.rules:
         form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
