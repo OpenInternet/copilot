@@ -80,7 +80,10 @@ def config():
         db.session.commit()
         trainer.write_ap_config()
         subprocess.call(["service", "create_ap", "restart"])
+        print("Redirecting to index.")
         return redirect(url_for('index'))
+    else:
+        print("DID NOT VALIDATE")
     status_items = get_status_items()
     buttons = [{"name":"Submit", "submit":True}]
     return render_template('config.html', form=form, trainer_exists=trainer_exists, status_items=status_items, buttons=buttons)
