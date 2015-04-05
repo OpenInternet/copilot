@@ -6,7 +6,7 @@
                 {# https://lincolnloop.com/blog/svg-sprites-and-icon-systems-are-super/  #}
                 {# http://svgpocketguide.com/book/ #}
                 {# http://24ways.org/2014/an-overview-of-svg-sprite-creation-techniques/ #}
-			    <svg class="icon {{ status.status }}"><use height="50%" width="50%" xlink:href="#{{ status.icon }}"></use></svg>
+			    <svg class="icon {{ status.status }}"><use xlink:href="#{{ status.icon }}"></use></svg>
                 <h5>{{ status.value }}</h5>
             </div>
         {% endfor %}
