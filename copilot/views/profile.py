@@ -59,6 +59,28 @@ def profile(prof_name):
                            buttons=buttons)
 
 
+@app.route('/profile/current', methods=["GET", "POST"])
+@login_required
+def profile_current():
+    """Display the profile that is currently being run on the Co-Pilot box. """
+    #Check for profile_edit
+    trainer = get_trainer()
+    #populate from trainer if possible
+    current = trainer.current
+    if current:
+        return redirect(url_for('profile', prof_name=current))
+    else:
+        return redirect(url_for('profile'))
+
+@app.route('/profile/load', methods=["GET", "POST"])
+@login_required
+def profile_load():
+    """Display the profile that is currently being run on the Co-Pilot box. """
+    PROFILE_DIR="/tmp/copilot/profiles/"
+    profiles = [ f for f in listdir(PROFILE_DIR) if isfile(join(PROFILE_DIR,f)) ]
+    return render_template('profile_load.html', profiles=profiles)
+
+
 @app.route('/profile/applied', methods=["GET", "POST"])
 @login_required
 def profile_applied():
@@ -81,19 +103,4 @@ def profile_save():
     """Display the profile that is currently being run on the Co-Pilot box. """
 
     return render_template('profile_save.html', form=form)
-
-@app.route('/profile/load', methods=["GET", "POST"])
-@login_required
-def profile_load():
-    """Display the profile that is currently being run on the Co-Pilot box. """
-    PROFILE_DIR="/tmp/copilot/profiles/"
-    profiles = [ f for f in listdir(PROFILE_DIR) if isfile(join(PROFILE_DIR,f)) ]
-    return render_template('profile_load.html', profiles=profiles)
-
-@app.route('/profile/current', methods=["GET", "POST"])
-@login_required
-def profile_current():
-    """Display the profile that is currently being run on the Co-Pilot box. """
-
-    return render_template('profile_current.html', form=form)
 

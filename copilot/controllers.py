@@ -37,5 +37,5 @@ def get_status_items():
                     {"icon":"load",
                      "value":"Load Profile",
                      "status":"off",
-                     "url":"load"}]
+                     "url":"profile_load"}]
     return status_items
