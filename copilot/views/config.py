@@ -51,9 +51,7 @@ def config_admin():
 
     return render_template('admin_config.html', form=form)
 
-
 @app.route('/config', methods=["GET", "POST"])
-@login_required
 def config():
     trainer_exists = get_trainer()
     #If there is already a trainer setup on the box then provide the admin configuration.
