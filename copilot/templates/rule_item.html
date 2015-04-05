@@ -3,12 +3,10 @@
         <div class="one columns">
                 <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
-        ONE
-        {{ field.short_name }}
-        
         {% for subfield in field %}
-        {{ subfield }}
+        {% if item.short_name != "csrf_token" %}
         {{ subfield.short_name }}
+        {{ subfield }}
         <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
                 {# Deal with Errors First #}
                 {% if subfield.errors %}
@@ -25,6 +23,7 @@
                         {{ subfield.description }}
                 </div>
         </div>
+        {% endif %}
         {% endfor %}
 </div>
 {% endmacro %}
