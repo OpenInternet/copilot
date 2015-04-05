@@ -3,7 +3,8 @@
         <div class="one columns">
                 <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
-        {{ dir(field) }}
+        {{ field }}
+        {{ field_name }}
         {% for subfield in field %}
         <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
                 {# Deal with Errors First #}
