@@ -16,10 +16,8 @@
 {% block body %}
 <form name="profile_form" action="{{ url_for('profile') }}" method=post>
         <div class="container">
-            {% for item in form %}
-            {% if item.short_name != "csrf_token" %}
-            {{ render_rules(item.rules, item.name) }}
-            {% endif %}
+            {% for item in form.rules %}
+            {{ render_rules(item, item.name) }}
             {% endfor %}
             <div class="row" id="rule_list">
                 <div class="one columns">
