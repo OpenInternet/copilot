@@ -114,9 +114,11 @@ def profile(prof_name):
             profile.load()
             for rule in profile.rules:
                 form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
-                print(form.rules)
+            print("Loaded")
+            print(form.rules)
         else:
             form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
+            print("NEW")
             print(form.rules)
     form.name = prof_name
     status_items = get_status_items()
