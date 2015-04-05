@@ -6,9 +6,10 @@
 
 {% block body %}
   <h2>Configure Co-Pilot</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  {% if form.error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
       <form action="{{ url_for('config') }}" method=post>
-
+          {{ form.errors }}
+          {{ form.error }}
           {{ form.csrf_token }}
           <div class="row">
               <div class="six columns">
