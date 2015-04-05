@@ -6,9 +6,9 @@
         ONE
         {{ field.short_name }}
         
-        {% for subfield in field.rules %}
+        {% for subfield in field %}
         {{ subfield }}
-        {{ subfield.name }}
+        {{ subfield.short_name }}
         <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
                 {# Deal with Errors First #}
                 {% if subfield.errors %}
