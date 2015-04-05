@@ -1,0 +1,21 @@
+.body {
+	padding: 3rem 0 2rem;
+}
+
+.submit {
+    padding: 3rem 0 2rem;
+}
+
+.rule {
+	padding: 1rem 0 1rem;
+}
+
+.rule.error {
+	padding-left: 1em;
+}
+
+svg.icon {
+	height: 100%;
+	width: 100%;
+}
+
