@@ -28,10 +28,13 @@ h1 {
 
 .page {
     background: white;
-
 }
 
-.section {
+.body {
+	padding: 3rem 0 2rem;
+}
+
+.submit {
     padding: 3rem 0 2rem;
 }
 
