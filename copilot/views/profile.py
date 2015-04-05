@@ -115,15 +115,15 @@ def profile(prof_name):
     form.name = prof_name
     for rule in profile.rules:
         form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
-        status_items = get_status_items()
-        buttons = [{"name":"Submit", "submit":False},
-                   {"name":"Test", "submit":False},
-                   {"name":"Save", "submit":False},
-                   {"name":"Save & Apply", "submit":True}]
-        return render_template('profile.html',
-                               form=form,
-                               status_items=status_items,
-                               buttons=buttons)
+    status_items = get_status_items()
+    buttons = [{"name":"Submit", "submit":False},
+               {"name":"Test", "submit":False},
+               {"name":"Save", "submit":False},
+               {"name":"Save & Apply", "submit":True}]
+    return render_template('profile.html',
+                           form=form,
+                           status_items=status_items,
+                           buttons=buttons)
 
 
 @app.route('/profile/applied', methods=["GET", "POST"])
