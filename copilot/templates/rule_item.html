@@ -13,7 +13,7 @@
                 {% endfor %}
                 {% endif %}
                 {# Actual data goes here. #}
-                {{ subfield }}
+                {{ subfield(class_="u-full-width "+subfield.short_name) }}
         </div>
         <div class="help">
             {{ subfield.description }}
