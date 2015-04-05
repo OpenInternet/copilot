@@ -1,16 +1,16 @@
 <!doctype html>
 <!-- Core stlesheet -->
-<link rel="stylesheet" href="{{ url_for('static/css', filename='skeleton.css') }}">
-<link rel="stylesheet" href="{{ url_for('static/css', filename='normalize.css') }}">
-<link rel="stylesheet" href="{{ url_for('static/css', filename='core.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
 
 <!-- Responsive stylesheets -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type=text/css media="screen and (max-width: 320px) and (orientation: portrait)" href="{{ url_for('static/css', filename='small.css') }}">
-<link rel="stylesheet" type=text/css media="screen and (min-width: 320px) and (max-width: 640px)" href="{{ url_for('static/css', filename='medium.css') }}">
-<link rel="stylesheet" type=text/css media="screen and (min-width: 640px)" href="{{ url_for('static/css', filename='large.css') }}">
-<link rel="stylesheet" type=text/css media="(orientation: portrait)" href="{{ url_for('static/css', filename='portrait.css') }}">
-<link rel="stylesheet" type=text/css media="(orientation: landscape)" href="{{ url_for('static/css', filename='landscape.css') }}">
+<link rel="stylesheet" type=text/css media="screen and (max-width: 320px) and (orientation: portrait)" href="{{ url_for('static', filename='css/small.css') }}">
+<link rel="stylesheet" type=text/css media="screen and (min-width: 320px) and (max-width: 640px)" href="{{ url_for('static', filename='css/medium.css') }}">
+<link rel="stylesheet" type=text/css media="screen and (min-width: 640px)" href="{{ url_for('static', filename='css/large.css') }}">
+<link rel="stylesheet" type=text/css media="(orientation: portrait)" href="{{ url_for('static', filename='css/portrait.css') }}">
+<link rel="stylesheet" type=text/css media="(orientation: landscape)" href="{{ url_for('static', filename='css/landscape.css') }}">
 
 <!-- SVG sprite sheet -->
 {% include 'static/images/sprites.svg' %}
