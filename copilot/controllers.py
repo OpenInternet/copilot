@@ -16,11 +16,14 @@ def get_trainer():
 
 
 def get_status_items():
-    """Get current status items. """
-    print("get_status_items is currently not implemented")
+    """Get current status items.
+    icon: the ID of the svg to use.
+    value: The text to put under the icon
+    status: [off/on/error] The color of the icon background to use (off=grey, on=green, error=orange)
+    """
+    print("TODO: get_status_items is currently not implemented")
     status_items = [{"icon":"wifi", "value":"[AP NAME HERE]", "status":"on"},
-                    {"icon":"gears", "value":"Configure", "status":"null"},
+                    {"icon":"gears", "value":"Configure", "status":"off"},
                     {"icon":"profile", "value":"[PROFILE NAME]","status":"off"},
-                    {"icon":"load", "value":"Load Profile","status":"load"}]
+                    {"icon":"load", "value":"Load Profile","status":"off"}]
     return status_items
-

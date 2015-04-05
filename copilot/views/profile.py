@@ -14,45 +14,84 @@ from copilot.controllers import get_trainer, get_status_items
 from os import listdir
 from os.path import isfile, join
 
-@app.route('/profile/new', methods=["GET", "POST"])
-@login_required
-def profile_new():
-    """Display an empty profile editor."""
-    form = forms.NewProfileForm()
-    if form.validate_on_submit():
-        profile = models.Profile(form.data['prof_name'])
-        for rule in form.data['rules']:
-            _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
-            profile.add_rule(_rule)
-        profile.save()
-        #Save as current profile for trainer.
-        trainer = get_trainer()
-        trainer.current = form.data['prof_name']
-        db.session.commit()
-        profile.apply_it()
-        flash('Your profile has been saved and Applied!')
-        return redirect(url_for('profile_applied'))
-    else:
-        profile = models.Profile("new")
-        profile.save()
-        form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
-        form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
-        form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
-        form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
-        status_items = get_status_items()
-        buttons = [{"name":"Submit", "submit":False},
-                   {"name":"Test", "submit":False},
-                   {"name":"Save", "submit":False},
-                   {"name":"Save & Apply", "submit":True}]
-        return render_template('profile.html',
-                               form=form,
-                               status_items=status_items,
-                               buttons=buttons)
+# @app.route('/profile/new', methods=["GET", "POST"])
+# @login_required
+# def profile_new():
+#     """Display an empty profile editor."""
+#     form = forms.NewProfileForm()
+#     if form.validate_on_submit():
+#         profile = models.Profile(form.data['prof_name'])
+#         for rule in form.data['rules']:
+#             _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
+#             profile.add_rule(_rule)
+#         profile.save()
+#         #Save as current profile for trainer.
+#         trainer = get_trainer()
+#         trainer.current = form.data['prof_name']
+#         db.session.commit()
+#         profile.apply_it()
+#         flash('Your profile has been saved and Applied!')
+#         return redirect(url_for('profile_applied'))
+#     else:
+#         profile = models.Profile("new")
+#         profile.save()
+#         form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
+#         form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
+#         form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
+#         form.rules.append_entry(data={"target":"dns", "sub_target":"", "action":"block"})
+#         status_items = get_status_items()
+#         buttons = [{"name":"Submit", "submit":False},
+#                    {"name":"Test", "submit":False},
+#                    {"name":"Save", "submit":False},
+#                    {"name":"Save & Apply", "submit":True}]
+#         return render_template('profile.html',
+#                                form=form,
+#                                status_items=status_items,
+#                                buttons=buttons)
 
 
+# @app.route('/profile/edit/<string:prof_name>', methods=["GET", "POST"])
+# @login_required
+# def profile_edit(prof_name):
+#     """Display an existing profle in the profile editor."""
+#     form = forms.ProfileForm()
+#     if form.validate_on_submit():
+#         profile = models.Profile(prof_name)
+#         for rule in form.data['rules']:
+#             _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
+#             profile.add_rule(_rule)
+#         profile.save()
+#         #Save as current profile for trainer.
+#         trainer = get_trainer()
+#         trainer.current = prof_name
+#         db.session.commit()
+#         profile.apply_it()
+#         flash('Your profile has been saved and Applied!')
+#         return redirect(url_for('profile_applied'))
+#     else:
+#         profile = models.Profile(prof_name)
+#         if profile.exist():
+#             profile.load()
+#         else:
+#            return redirect(url_for('profile_new'))
+#     form.name = prof_name
+#     for rule in profile.rules:
+#         form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
+
+#         status_items = get_status_items()
+#         buttons = [{"name":"Submit", "submit":False},
+#                    {"name":"Test", "submit":False},
+#                    {"name":"Save", "submit":False},
+#                    {"name":"Save & Apply", "submit":True}]
+#         return render_template('profile.html',
+#                                form=form,
+#                                status_items=status_items,
+#                                buttons=buttons)
+
+@app.route('/profile', defaults={"prof_name": "new"},  methods=["GET", "POST"])
 @app.route('/profile/edit/<string:prof_name>', methods=["GET", "POST"])
 @login_required
-def profile_edit(prof_name):
+def profile(prof_name):
     """Display an existing profle in the profile editor."""
     form = forms.ProfileForm()
     if form.validate_on_submit():
@@ -62,8 +101,9 @@ def profile_edit(prof_name):
             profile.add_rule(_rule)
         profile.save()
         #Save as current profile for trainer.
+        #TODO make this change depending upon the submit button used
         trainer = get_trainer()
-        trainer.current = prof_name
+        trainer.current = form.data['prof_name']
         db.session.commit()
         profile.apply_it()
         flash('Your profile has been saved and Applied!')
@@ -72,12 +112,9 @@ def profile_edit(prof_name):
         profile = models.Profile(prof_name)
         if profile.exist():
             profile.load()
-        else:
-           return redirect(url_for('profile_new'))
     form.name = prof_name
     for rule in profile.rules:
         form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
-
         status_items = get_status_items()
         buttons = [{"name":"Submit", "submit":False},
                    {"name":"Test", "submit":False},
@@ -100,7 +137,7 @@ def profile_applied():
     print(prof_applied)
     # if none send trainer to create a new one.
     if prof_applied == None:
-        return redirect(url_for('profile_new'))
+        return redirect(url_for('profile'))
     profile = models.Profile(prof_applied)
     profile.load()
     return render_template('profile_applied.html', profile=profile)
