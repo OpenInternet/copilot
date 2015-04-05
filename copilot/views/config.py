@@ -1,6 +1,7 @@
 #Get application content
 from copilot import app, db
-from copilot.controllers import get_trainer
+from copilot.controllers import get_trainer, get_status_items
+
 import subprocess
 #Import forms
 from copilot.views.forms import Config, AdminConfig
