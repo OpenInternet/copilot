@@ -80,8 +80,11 @@ def config():
         else:
             trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
         #Write values and send the user back to main index.
+        print("Committing Session File")
         db.session.commit()
+        print("Writing Config File")
         trainer.write_ap_config()
+        print("Restarting create_ap")
         subprocess.call(["service", "create_ap", "restart"])
         print("Redirecting to index.")
         return redirect(url_for('index'))
