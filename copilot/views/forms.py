@@ -27,6 +27,11 @@ class Config(Form):
         EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Repeat Trainer Administration Password')
 
+def check_old_password(form, field):
+    trainer = Trainer.query.get(1)
+    if not trainer.is_correct_password(field.data):
+        raise ValidationError('You did not enter your old password correctly. Please try again.')
+
 class AdminConfig(Config):
     old_password = PasswordField('Enter your current password to change these values.', validators=[
         Required(message='You must enter your current password to change any values.'),
@@ -46,11 +51,6 @@ class AdminConfig(Config):
 #         Required(message='You must create a trainer password.'),
 #         EqualTo('confirm', message='Passwords must match')])
 #     confirm = PasswordField('Repeat Trainer Administration Password')
-
-def check_old_password(form, field):
-    trainer = Trainer.query.get(1)
-    if not trainer.is_correct_password(field.data):
-        raise ValidationError('You did not enter your old password correctly. Please try again.')
 
 # #Define the admin configuration form
 # class AdminConfig(Form):
