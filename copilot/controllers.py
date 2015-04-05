@@ -22,8 +22,20 @@ def get_status_items():
     status: [off/on/error] The color of the icon background to use (off=grey, on=green, error=orange)
     """
     print("TODO: get_status_items is currently not implemented")
-    status_items = [{"icon":"wifi", "value":"[AP NAME HERE]", "status":"on"},
-                    {"icon":"config", "value":"Configure", "status":"off"},
-                    {"icon":"profile", "value":"[PROFILE NAME]","status":"off"},
-                    {"icon":"load", "value":"Load Profile","status":"off"}]
+    status_items = [{"icon":"wifi",
+                     "value":"[AP NAME HERE]",
+                     "status":"on",
+                     "url":"config"},
+                    {"icon":"config",
+                     "value":"Configure",
+                     "status":"off",
+                     "url":"config"},
+                    {"icon":"profile",
+                     "value":"[PROFILE NAME]",
+                     "status":"off",
+                     "url":"current"},
+                    {"icon":"load",
+                     "value":"Load Profile",
+                     "status":"off",
+                     "url":"load"}]
     return status_items
