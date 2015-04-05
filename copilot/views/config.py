@@ -57,10 +57,13 @@ def config():
     trainer_exists = get_trainer()
     #If there is already a trainer setup on the box then provide the admin configuration.
     if trainer_exists:
+        print("01 trainer exists")
         form = AdminConfig()
     else:
+        print("02 trainer DOES NOT exists")
         form = Config()
     if form.validate_on_submit():
+        print("FORM IS VALID")    
         #Add any new values to the existing trainer
         if trainer_exists:
             trainer = trainer_exists
