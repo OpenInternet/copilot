@@ -4,7 +4,7 @@
                 <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
         ONE
-        {{ field.target }}
+        {{ field.short_name }}
         
         {% for subfield in field.rules %}
         {{ subfield }}
