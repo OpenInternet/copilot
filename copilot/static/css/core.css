@@ -112,6 +112,10 @@ li.flashes.success:before {
 
 .status {
 	text-align: center;
+	border-bottom:1px solid #939192;
+	border-top:1px solid #939192;
+	display: block;
+	z-index: 99;
 }
 
 svg.icon.on {
