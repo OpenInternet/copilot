@@ -4,7 +4,7 @@
                 <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
         </div>
         {% for subfield in field %}
-        {% if item.short_name != "csrf_token" %}
+        {% if subfield.short_name != "csrf_token" %}
         {{ subfield.short_name }}
         {{ subfield }}
         <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
