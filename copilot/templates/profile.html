@@ -16,16 +16,14 @@
 {% block body %}
 <form name="profile_form" action="{{ url_for('profile') }}" method=post>
     {{ form.csrf_token }}
-        <div class="container">
-            {% for item in form.rules %}
-            {{ render_rules(item) }}
-            {% endfor %}
-            <div class="row" id="rule_list">
-                <div class="one columns">
-                    <img src="{{ url_for('static', filename='images/add_rule.png') }}" onclick="add_rule()">
-                </div>
-            </div>
+    {% for item in form.rules %}
+    {{ render_rules(item) }}
+    {% endfor %}
+    <div class="row" id="rule_list">
+        <div class="one columns">
+            <img src="{{ url_for('static', filename='images/add_rule.png') }}" onclick="add_rule()">
         </div>
+    </div>
 {% endblock %}
 
 

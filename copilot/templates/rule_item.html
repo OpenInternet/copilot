@@ -1,12 +1,10 @@
 {% macro render_rules(field) %}
 <div class="row" id="rule_list">
         <div class="one columns">
-                <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="add_rule()">
+                <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="del_rule()">
         </div>
         {% for subfield in field %}
         {% if subfield.short_name != "csrf_token" %}
-        {{ subfield.short_name }}
-        {{ subfield }}
         <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
                 {# Deal with Errors First #}
                 {% if subfield.errors %}
@@ -14,14 +12,12 @@
                 <p class="error">{{ error }}</p>
                 {% endfor %}
                 {% endif %}
-
-                {# Actual Rule Subfield #}
                 {{ subfield.name }}
-                {{ subfield.label.text }}
                 {{ subfield.data }}
-                <div class="help">
-                        {{ subfield.description }}
-                </div>
+                {{ subfield.label.text }}
+        </div>
+        <div class="help">
+            {{ subfield.description }}
         </div>
         {% endif %}
         {% endfor %}
