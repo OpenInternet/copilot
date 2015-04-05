@@ -12,14 +12,8 @@
                 <p class="error">{{ error }}</p>
                 {% endfor %}
                 {% endif %}
-                <span> name </span>
-                {{ subfield.name }}
-                <span> full </span>
-                {{ subfield }}
-                <span> data </span>
+                {# Actual data goes here. #}
                 {{ subfield.data }}
-                <span> label.text </span>
-                {{ subfield.label.text }}
         </div>
         <div class="help">
             {{ subfield.description }}
