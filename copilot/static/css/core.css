@@ -31,6 +31,10 @@ h1 {
 
 }
 
+.section {
+    padding: 8rem 0 7rem;
+}
+
 .indicator {
     
 }
@@ -115,6 +119,10 @@ li.flashes.success:before {
 
 .rule.input:focus + div.help {
 	display: block;
+}
+
+.status {
+	text-align: center;
 }
 
 svg.icon.on {
