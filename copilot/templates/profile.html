@@ -17,6 +17,7 @@
 <form name="profile_form" action="{{ url_for('profile') }}" method=post>
         <div class="container">
             {% for item in form %}
+            {{ item }}
             {% if item.short_name != "csrf_token" %}
             {{ render_rules(item, item.name) }}
             {% endif %}
