@@ -13,7 +13,7 @@
 <link rel="stylesheet" type=text/css media="(orientation: landscape)" href="{{ url_for('static', filename='css/landscape.css') }}">
 
 <!-- SVG sprite sheet -->
-{% include "{{ url_for('static', filename='images/symbol_lib.svg') }}" %}
+{% include 'symbol_lib.svg' %}
 
 <head>
         {% block status %}{% endblock %}
