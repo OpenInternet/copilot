@@ -103,7 +103,10 @@ li.flashes.success:before {
 }
 
 /* Rules and Profiles */
-.rule {}
+.rule {
+	padding: 1rem 0 1rem;
+
+}
 
 .rule.error {
     border-bottom: 1px solid #f25d23;
