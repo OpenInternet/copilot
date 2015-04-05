@@ -3,7 +3,7 @@ from copilot import app, db
 from copilot.controllers import get_trainer
 import subprocess
 #Import forms
-from copilot.views.forms import InitialConfig, AdminConfig
+from copilot.views.forms import Config, AdminConfig
 from copilot.models import Trainer
 
 #Get flask modules
