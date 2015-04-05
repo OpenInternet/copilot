@@ -33,7 +33,7 @@ def get_status_items():
                     {"icon":"profile",
                      "value":"[PROFILE NAME]",
                      "status":"off",
-                     "url":"current"},
+                     "url":"profile_current"},
                     {"icon":"load",
                      "value":"Load Profile",
                      "status":"off",
