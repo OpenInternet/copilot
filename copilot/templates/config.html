@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% from "_formhelpers.html" import render_field %}
+{% from "status.html" import render_status_items %}
+{% from "alert.html" import render_alerts %}
+{% from "submit.html" import render_submit_buttons %}
+
 {% block body %}
   <h2>Configure Co-Pilot</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
