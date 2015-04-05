@@ -13,7 +13,7 @@ def index():
     elif get_trainer():
         return redirect(url_for('login'))
     else:
-        return redirect(url_for('config_initial'))
+        return redirect(url_for('config'))
 
 # HTTP error handling
 @app.errorhandler(404)

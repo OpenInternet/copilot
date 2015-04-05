@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block body %}
+  <h2>Configure Co-Pilot</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+      <form action="{{ url_for('config') }}" method=post>
+
+          {{ form.csrf_token }}
+          <div class="row">
+              <div class="six columns">
+                  {{ render_field(form.ap_name) }}
+              </div>
+          </div>
+          <div class="row">
+              <div class="six columns">
+                  {{ render_field(form.ap_password) }}
+              </div>
+          </div>
+          <div class="row">
+              <div class="six columns">
+                  {{ render_field(form.confirm_ap_pass) }}
+              </div>
+          </div>
+          <div class="row">
+              <div class="six columns">
+                  {{ render_field(form.password) }}
+              </div>
+          </div>
+          <div class="row">
+              <div class="six columns">
+                  {{ render_field(form.confirm) }}
+              </div>
+          </div>
+{% endblock %}
+
+{% block submit %}
+{{ render_submit_buttons(buttons) }}
+</form>
+{% endblock %}
