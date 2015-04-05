@@ -16,12 +16,21 @@
 {% include 'sprites/status_symbol.svg' %}
 
 <head>
+    <div>
         {% block status %}{% endblock %}
+    </div>
+    <div>
         {% block alert %}{% endblock %}
+    </div>
 </head>
+
 <body>
     <div class="container body">
-        {% block body %}{% endblock %}
-        {% block submit %}{% endblock %}
+        <div>
+            {% block body %}{% endblock %}
+        </div>
+        <div>
+            {% block submit %}{% endblock %}
+        </div>
     </div>
 </body>
