@@ -83,4 +83,4 @@ def config():
         return redirect(url_for('index'))
     status_items = get_status_items()
     buttons = [{"name":"Submit", "submit":True}]
-    return render_template('config.html', form=form, trainer_exists=trainer_exists)
+    return render_template('config.html', form=form, trainer_exists=trainer_exists, status_items=status_items, buttons=buttons)
