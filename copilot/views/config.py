@@ -80,6 +80,8 @@ def config():
         #Create the trainer if one does not exist
         else:
             trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
+            db.session.add(trainer)
+
         #Write values and send the user back to main index.
         print("Committing Session File")
         db.session.commit()
@@ -87,6 +89,7 @@ def config():
         trainer.write_ap_config()
         print("Restarting create_ap")
         subprocess.call(["service", "create_ap", "restart"])
+        login_user(trainer)
         print("Redirecting to index.")
         return redirect(url_for('index'))
     else:
