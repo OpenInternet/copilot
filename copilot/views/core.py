@@ -10,7 +10,7 @@ def index():
     print(current_user.is_authenticated())
     if current_user.is_authenticated():
         print("user is authenticated.")
-        return redirect(url_for('menu'))
+        return redirect(url_for('profile'))
     elif get_trainer():
         print("there is a trainer currently")
         return redirect(url_for('login'))
