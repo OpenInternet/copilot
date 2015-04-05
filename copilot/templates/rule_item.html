@@ -2,9 +2,9 @@
 <div class="row">
     <div class="one columns">
         <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="del_rule()">
+    </div>
         {% for subfield in field %}
         {% if subfield.short_name != "csrf_token" %}
-    </div>
     <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
         {# Deal with Errors First #}
         {% if subfield.errors %}
