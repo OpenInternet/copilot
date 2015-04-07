@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/rules.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
 <form name="profile_form" action="{{ url_for('profile') }}" method=post>
     {{ form.csrf_token }}
     <div id="rule_list">
