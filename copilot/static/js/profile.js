@@ -36,15 +36,15 @@ function addRule() {
 
     // Create action rule sub components
     var actionSelector = addRuleSelector(idNum, "action", actionOptions);
-    ruleDiv.appendChild(actionSelector);
+    row.appendChild(actionSelector);
 
     // Create target rule sub components
     var targetSelector = addRuleSelector(idNum, "target", targetOptions);
-    ruleDiv.appendChild(targetSelector);
+    row.appendChild(targetSelector);
 
     // Create sub-target rule sub components
     var subTargetSelector = addRuleSelector(idNum, "sub_target", targetOptions);
-    ruleDiv.appendChild(subTargetSelector);
+    row.appendChild(subTargetSelector);
 
     // Get the list object
     var list = document.getElementById("rule_list");
