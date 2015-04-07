@@ -19,7 +19,7 @@ function addRule() {
 
     // Create the surrounding row div
     var row = document.createElement("div");
-    row.className = "row rules";
+    row.className = "row rule";
     row.id = groupID;
 
 
@@ -126,8 +126,8 @@ function getIdNum() {
     // get list of links with 'rules' class
     var curNum
     var links = document.getElementsByClassName('rule');
-    if (typeof links !== 'undefined') {
-        var last = links[links.length - 1]
+    var last = links[links.length - 1]
+    if (typeof last !== 'undefined') {
         var lastID = last.id
         // Get the  id number for this item
         var idNum = lastID.split("-")[1]
