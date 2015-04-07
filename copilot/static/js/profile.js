@@ -3,6 +3,10 @@
 var actionOptions = ["block"];
 var targetOptions = ["dns", "url"];
 var subTargetDefault = "foxnews.com";
+var helpText = {}
+helpText.action = ""
+helpText.target = ""
+helpText.subTarget = ""
 
 
 //Add a rule to the rule list
@@ -63,19 +67,31 @@ function addRuleSelector(idNum, type, options) {
     var ruleID = "rules-".concat(idNum, "-", type);
 
     //Create span
-    var ruleSpan = document.createElement("span");
-    ruleSpan.className = "rule_object ".concat(type)
+    var ruleDiv = document.createElement("div");
+    ruleDiv.className = "three columns";
 
     // Create Data
     var data = createRuleData(type, ruleID, actionOptions);
 
     // Add table items to span
-    ruleSpan.appendChild(data);
+    ruleDiv.appendChild(data);
 
-    return ruleSpan
+    //create help
+    //<div class="help"> {{help goes here}} </div>
+    var help = document.createElement("div");
+    help.className = "help"
+    //get help text from above
+    var text = document.createTextNode(helpText[type]);
+    help.appendChild(text);
+    ruleDiv.appendChild(help);
+
+    return ruleDiv
 }
 
 //Creates a html rule object
+// <select id="rules-0-action" class="u-full-width action" name="rules-0-action">
+// <option value="block" selected="">block</option>
+// </select>
 function createRuleData(type, ruleID, options) {
     var data;
     if (type == "action" || type == "target") {
@@ -99,6 +115,7 @@ function createRuleData(type, ruleID, options) {
     }
     //Set Generic Properties
     data.id = ruleID
+    data.className = "u-full-width {{ type }}"
     data.name = ruleID
     return data
 }
@@ -106,14 +123,18 @@ function createRuleData(type, ruleID, options) {
 //Gets the id number of the last rule in the rules group.
 function getIdNum() {
     // get list of links with 'rules' class
+    var curNum
     var links = document.getElementsByClassName('rule');
-    var last = links[links.length - 1]
-    var lastID = last.id
-
-    // Get the  id number for this item
-    var idNum = lastID.split("-")[1]
-    // add one to that number
-    var curNum = idNum + 1
+    if (typeof links !== 'undefined') {
+        var last = links[links.length - 1]
+        var lastID = last.id
+        // Get the  id number for this item
+        var idNum = lastID.split("-")[1]
+        // add one to that number
+        curNum = idNum + 1
+    } else {
+        curNum = 0
+    }
     // return that number
     return curNum
 }

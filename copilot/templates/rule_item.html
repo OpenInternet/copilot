@@ -14,9 +14,9 @@
         {% endif %}
         {# Actual data goes here. #}
         {{ subfield(class_="u-full-width "+subfield.short_name) }}
-    </div>
-    <div class="help">
-        {{ subfield.description }}
+        <div class="help">
+            {{ subfield.description }}
+        </div>
     </div>
     {% endif %}
     {% endfor %}
