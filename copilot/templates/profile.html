@@ -21,7 +21,7 @@
         {% for item in form.rules %}
         {{ render_rules(item) }}
         {% endfor %}
-        <div class="row">
+        <div class="row" id="addButton">
             <div class="one columns">
                 <img src="{{ url_for('static', filename='images/add_rule.png') }}" onclick="addRule()">
             </div>

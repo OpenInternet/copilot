@@ -52,7 +52,8 @@ function addRule() {
 
     // Get the list object
     var list = document.getElementById("rule_list");
-    list.appendChild(row);
+    var addButton = document.getElementById("addButton");
+    list.insertBefore(row, addButton);
 }
 
 //This deletes the rule that uses this image.
@@ -126,7 +127,7 @@ function getIdNum() {
     var curNum
     var links = document.getElementsByClassName('rule');
     if (typeof links !== 'undefined') {
-        var last = links[links.length - 2]
+        var last = links[links.length - 1]
         var lastID = last.id
         // Get the  id number for this item
         var idNum = lastID.split("-")[1]
