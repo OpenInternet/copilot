@@ -21,6 +21,7 @@ def login():
             flash(login_user(trainer))
             return redirect(url_for('index'))
         else:
+            buttons = [{"name":"Submit", "submit":True}]
             return redirect(url_for('login'))
 
     return render_template('login.html', form=form)

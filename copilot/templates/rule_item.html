@@ -1,11 +1,11 @@
 {% macro render_rules(field) %}
-<div class="row rule">
+<div class="row rule" id="{{subfield.name}}-group">
     <div class="one columns">
-        <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="del_rule()">
+        <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="delRule('{{subfield.name}}-group')">
     </div>
         {% for subfield in field %}
         {% if subfield.short_name != "csrf_token" %}
-    <div class="three columns {% if subfield.errors %} error_class{% endif %}" id="{{subfield.name}}-group">
+    <div class="three columns {% if subfield.errors %} error_class{% endif %}">
         {# Deal with Errors First #}
         {% if subfield.errors %}
         {% for error in subfield.errors %}
