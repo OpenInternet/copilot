@@ -129,3 +129,7 @@ svg.icon.off {
 svg.icon.error {
 	fill: #f25d23;
 }
+
+.logo {
+    text-align: center;
+}
