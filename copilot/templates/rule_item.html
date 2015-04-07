@@ -1,5 +1,5 @@
 {% macro render_rules(field) %}
-<div class="row rule" id="{{subfield.name}}-group">
+<div class="row rule" id="{{field.name}}-group">
     <div class="one columns">
         <img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="delRule('{{subfield.name}}-group')">
     </div>
