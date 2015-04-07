@@ -33,7 +33,7 @@ function addRule() {
     //create image
     var delImage = document.createElement("img");
     delImage.src = "/static/images/delete_rule.png";
-    delImage.onclick="delRule('".concat(groupID, "')");
+    delImage.onclick = function() { delRule(groupID); };
     //append image to row
     imgDiv.appendChild(delImage);
     row.appendChild(imgDiv);
