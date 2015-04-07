@@ -126,12 +126,13 @@ function getIdNum() {
     var curNum
     var links = document.getElementsByClassName('rule');
     if (typeof links !== 'undefined') {
-        var last = links[links.length - 1]
+        var last = links[links.length - 2]
         var lastID = last.id
         // Get the  id number for this item
         var idNum = lastID.split("-")[1]
+        console.log(idNum)
         // add one to that number
-        curNum = idNum + 1
+        curNum = parseInt(idNum) + 1
     } else {
         curNum = 0
     }
