@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="row">
+    <div class="ten columns">
+        <img src="{{ url_for('static', filename=image) }}">
+    </div>
+</div>
+{% endblock %}
