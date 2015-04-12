@@ -3,7 +3,6 @@
 {% from "alert.html" import render_alerts %}
 {% from "submit.html" import render_submit_buttons %}
 
-
 {% block status %}
 {{ render_status_items(status_items) }}
 {% endblock %}
@@ -27,7 +26,4 @@
         {{ rule.sub_target  }}
     </div>
 </div>
-{% endblock %}
-
-{% block submit %}
 {% endblock %}
