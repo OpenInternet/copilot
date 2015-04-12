@@ -182,7 +182,7 @@ class Profile:
                 dnsc_rule = rule.get_dns()
                 if dnsc_rule:
                     config_file.write(dnsc_rule)
-                    config_file.write("=127.0.0.1")
+                    config_file.write("=192.168.12.1")
                     config_file.write("\n")
         log.info("restarting DNSChef")
         subprocess.call(["service", "dnschef", "restart"], shell=True)

@@ -13,17 +13,11 @@
 
 
 {% block body %}
-<h2>{{ profile.name }}</h2>
-{% for rule in profile.rules %}
+<h2>Load Profiles</h2>
+{% for name in profiles %}
 <div class="row">
     <div class="four columns">
-        {{ rule.action  }}
-    </div>
-    <div class="four columns">
-        {{ rule.target  }}
-    </div>
-    <div class="four columns">
-        {{ rule.sub_target  }}
+        <a href="/profile/edit/{{ name }}">{{ name }}</a>
     </div>
 </div>
 {% endfor %}

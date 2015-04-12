@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "rule_item.html" import render_rules %}
+{% from "status.html" import render_status_items %}
+{% from "alert.html" import render_alerts %}
+{% from "submit.html" import render_submit_buttons %}
+
+
+{% block status %}
+{{ render_status_items(status_items) }}
+{% endblock %}
+
+{% block alert %}
+{{ render_alerts(get_flashed_messages(with_categories=true))}}
+{% endblock %}
+
+{% block body %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<form name="profile_form" action="{{ url_for('profile') }}" method="post">
+    {{ form.csrf_token }}
+    <div id="rule_list">
+        {% if form.prof_name %}
+        <label for="Name">Name</label>
+        {{form.prof_name }}
+        {% endif %}
+        {% for item in form.rules %}
+        {{ render_rules(item) }}
+        {% endfor %}
+        <div class="row" id="addButton">
+            <div class="one columns">
+                <img src="{{ url_for('static', filename='images/add_rule.png') }}" onclick="addRule()">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block submit %}
+{{ render_submit_buttons(buttons) }}
+</form>
+{% endblock %}

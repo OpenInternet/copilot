@@ -21,7 +21,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@app.route('/profile', defaults={"prof_name": "new"},  methods=["GET", "POST"])
+@app.route('/profile', defaults={"prof_name": "null"},  methods=["GET", "POST"])
 @app.route('/profile/edit/<string:prof_name>', methods=["GET", "POST"])
 @login_required
 def profile(prof_name):
@@ -61,7 +61,7 @@ def profile(prof_name):
             log.debug("New profile being created")
             form = forms.NewProfileForm()
             form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
-            form.prof_name.data = prof_name
+            form.prof_name.data = "new"
             log.debug(dir(form.rules))
     status_items = get_status_items()
     buttons = [{"name":"Submit", "submit":False},
@@ -93,7 +93,12 @@ def profile_load():
     """Display the profile that is currently being run on the Co-Pilot box. """
     PROFILE_DIR="/tmp/copilot/profiles/"
     profiles = [ f for f in listdir(PROFILE_DIR) if isfile(join(PROFILE_DIR,f)) ]
-    return render_template('profile_load.html', profiles=profiles)
+    status_items = get_status_items()
+    buttons = [{"name":"Return", "link":url_for('profile')}]
+    return render_template('load.html',
+                           profiles=profiles,
+                           status_items=status_items,
+                           buttons=buttons)
 
 
 @app.route('/profile/applied', methods=["GET", "POST"])
