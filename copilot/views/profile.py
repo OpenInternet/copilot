@@ -102,7 +102,7 @@ def profile_applied():
     trainer = get_trainer()
     #populate from trainer if possible
     prof_applied = trainer.current
-    print(prof_applied)
+    log.debug(prof_applied)
     # if none send trainer to create a new one.
     if prof_applied == None:
         return redirect(url_for('profile'))
