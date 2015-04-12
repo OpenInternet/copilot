@@ -11,13 +11,18 @@
 {{ render_alerts(get_flashed_messages(with_categories=true))}}
 {% endblock %}
 
-
 {% block body %}
-<h2>Load Profiles</h2>
-{% for name in profiles %}
+<h3>Name: {{ profile.name }}</h3>
+{% for rule in profile.rules %}
 <div class="row">
     <div class="four columns">
-        <a href="/profile/edit/{{ name }}">{{ name }}</a>
+        {{ rule.action  }}
+    </div>
+    <div class="four columns">
+        {{ rule.target  }}
+    </div>
+    <div class="four columns">
+        {{ rule.sub_target  }}
     </div>
 </div>
 {% endfor %}
