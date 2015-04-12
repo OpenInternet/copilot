@@ -39,7 +39,6 @@ def profile(prof_name):
         #TODO make this change depending upon the submit button used
         trainer = get_trainer()
         log.debug(form.data)
-        log.debug(dir(form.data))
         trainer.current = form.data['prof_name']
         db.session.commit()
         profile.apply_it()

@@ -130,15 +130,20 @@ class Profile:
                 raise _err
 
     def add_rule(self, rule):
+        log.debug("adding rule {0} {1} {2}".format(rule.action, rule.target, rule.sub_target))
         try:
             _rule = Rule(rule.target, rule.action, rule.sub_target)
         except ValueError as _err:
             raise ValueError(_err) #TODO add real error correction here
         if _rule.is_valid():
+            log.info("Rule is valid")
             self.rules.append(_rule)
-            print("VALID RULE")
+        else:
+            log.info("Rule is NOT valid")
+
 
     def save(self):
+        log.info("saving profile {0}".format(self.name))
         if not os.path.exists(PROFILE_DIR):
             os.makedirs(PROFILE_DIR)
         PROFILE_FILE = (PROFILE_DIR + self.name)
@@ -147,11 +152,15 @@ class Profile:
         #Save rules to file
         for rule in self.rules:
             rule.save(PROFILE_FILE)
+        log.info("Profile {0} saved".format(self.name))
 
     def exist(self):
         PROFILE_FILE = (PROFILE_DIR + self.name)
         if os.path.isfile(PROFILE_FILE):
+            log.info(" profile {0} exists".format(self.name))
             return True
+        else:
+            log.info(" profile {0} does NOT exists".format(self.name))
 
     def load(self):
         PROFILE_FILE = (PROFILE_DIR + self.name)
