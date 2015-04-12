@@ -6,8 +6,9 @@ from flask import Flask
 import logging
 #set logger
 logger = logging.getLogger("blockpage")
-logger.setLevel('DEBUG')
+logger.setLevel(logging.debug)
 logger.logfile = "/var/log/blockpage.log"
+logger.debug("IT STARTS")
 
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 blockpage = Flask('blockpage', instance_relative_config=True)
