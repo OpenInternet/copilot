@@ -5,10 +5,12 @@ from flask import Flask
 
 import logging
 #set logger
-logger = logging.getLogger("blockpage")
+logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
-logger.logfile = "/var/log/blockpage.log"
-logger.debug("IT STARTS")
+lhr = logger.FileHandler("/var/log/blockpage.log")
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+lhr.setFormatter(formatter)
+logger.setHandler(lhr)
 
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 blockpage = Flask('blockpage', instance_relative_config=True)

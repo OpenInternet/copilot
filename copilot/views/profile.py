@@ -16,7 +16,7 @@ from os.path import isfile, join
 
 #stat logging
 import logging
-logger = logging.getLogger("copilot")
+logger = logging.getLogger(__name__)
 
 
 @app.route('/profile', defaults={"prof_name": "new"},  methods=["GET", "POST"])
