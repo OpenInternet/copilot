@@ -53,6 +53,7 @@ def profile(prof_name):
         if profile.exist():
             log.debug("Loading rule {0}".format(prof_name))
             profile.load()
+            form.prof_name = profile.name
             for rule in profile.rules:
                 log.debug("adding rule: action: {0}, target:{1}, subtarget{2}".format(rule.action, rule.target, rule.sub_target))
                 form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
