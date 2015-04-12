@@ -58,7 +58,7 @@ def get_ap_status():
     trainer = get_trainer()
     ap = {}
     current_ap = trainer.ap_name
-    if current_profile:
+    if current_ap:
         ap['status'] = "on"
         ap['value'] = current_ap
     else:
