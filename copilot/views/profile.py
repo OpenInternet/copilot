@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #Get application content
 from copilot import app, db, models
 from copilot.models import get_valid_actions, get_valid_targets
