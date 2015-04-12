@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 def profile(prof_name):
     """Display an existing profle in the profile editor."""
     log.debug("profile received {0}".format(prof_name))
-    form = forms.ProfileForm()
+    form = forms.NewProfileForm()
     if form.validate_on_submit():
         log.info("profile form was validated")
         profile = models.Profile(prof_name)
