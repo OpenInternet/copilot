@@ -60,7 +60,7 @@ def profile(prof_name):
         else:
             log.debug("New profile being created")
             form = forms.NewProfileForm()
-            form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
+            form.rules.append_entry(data={"target":"dns", "sub_target":"internews.org", "action":"block"})
             form.prof_name.data = "new"
             log.debug(dir(form.rules))
     status_items = get_status_items()

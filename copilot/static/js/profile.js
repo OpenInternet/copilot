@@ -1,8 +1,8 @@
 
 //Rule Defaults
 var actionOptions = ["block"];
-var targetOptions = ["dns", "url"];
-var subTargetDefault = "foxnews.com";
+var targetOptions = ["dns"];
+var subTargetDefault = "internews.org";
 var helpText = {}
 helpText.action = ""
 helpText.target = ""
