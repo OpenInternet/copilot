@@ -12,3 +12,17 @@
         {% endfor %}
     </div>
 {% endmacro %}
+
+{% macro render_submit_links(buttons) %}
+<div class="submit">
+    <div class="row">
+        {% for button in buttons %}
+        <div class="two columns">
+            <form method="{{ button.link }}"  action="page1.htm">
+                <input type="submit" value="{{ button.name }}" class="form_button">
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

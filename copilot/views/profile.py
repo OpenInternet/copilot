@@ -108,7 +108,9 @@ def profile_applied():
         return redirect(url_for('profile'))
     profile = models.Profile(prof_applied)
     profile.load()
-    return render_template('profile_applied.html', profile=profile)
+    status_items = get_status_items()
+    buttons = [{"name":"Return", "link":url_for('profile')}]
+    return render_template('profile_applied.html', profile=profile, buttons=buttons, status_items=status_items)
 
 @app.route('/profile/save', methods=["GET", "POST"])
 @login_required
