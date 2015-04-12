@@ -16,7 +16,7 @@ from os.path import isfile, join
 
 #stat logging
 import logging
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 @app.route('/profile', defaults={"prof_name": "new"},  methods=["GET", "POST"])
@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 @login_required
 def profile(prof_name):
     """Display an existing profle in the profile editor."""
-    logger.debug("profile received {0}".format(prof_name))
+    log.debug("profile received {0}".format(prof_name))
     form = forms.ProfileForm()
     if form.validate_on_submit():
-        logger.info("profile form was validated")
+        log.info("profile form was validated")
         profile = models.Profile(prof_name)
         for rule in form.data['rules']:
             _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
@@ -42,19 +42,20 @@ def profile(prof_name):
         flash('Your profile has been saved and Applied!')
         return redirect(url_for('profile_applied'))
     else:
+        log.info("Form was not validated.")
         profile = models.Profile(prof_name)
         if profile.exist():
+            log.debug("Loading rule {0}".format(prof_name)
             profile.load()
             for rule in profile.rules:
+                log.debug("adding rule: action: {0}, target:{1}, subtarget{2}".format(rule.action, rule.target, rule.sub_target)
                 form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
-            print("Loaded")
-            print(form.rules)
         else:
+            log.debug("New profile being created")
+            form = forms.NewProfileForm()
             form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
-            print("NEW")
-            print(form.rules)
             form.name = prof_name
-        print(dir(form.rules))
+            print(dir(form.rules))
     status_items = get_status_items()
     buttons = [{"name":"Submit", "submit":False},
                {"name":"Test", "submit":False},
