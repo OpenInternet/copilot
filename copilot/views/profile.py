@@ -53,7 +53,7 @@ def profile(prof_name):
         if profile.exist():
             log.debug("Loading rule {0}".format(prof_name))
             profile.load()
-            form.prof_name = profile.name
+            form.prof_name.data = profile.name
             for rule in profile.rules:
                 log.debug("adding rule: action: {0}, target:{1}, subtarget{2}".format(rule.action, rule.target, rule.sub_target))
                 form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
@@ -61,7 +61,7 @@ def profile(prof_name):
             log.debug("New profile being created")
             form = forms.NewProfileForm()
             form.rules.append_entry(data={"target":"dns", "sub_target":"foxnews.com", "action":"block"})
-            form.prof_name = prof_name
+            form.prof_name.data = prof_name
             log.debug(dir(form.rules))
     status_items = get_status_items()
     buttons = [{"name":"Submit", "submit":False},
