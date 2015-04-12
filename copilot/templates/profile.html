@@ -19,8 +19,9 @@
     {{ form.csrf_token }}
     <div id="rule_list">
         {% if form.prof_name %}
-          <label for="Name">Name</label>
-          {{form.prof_name }}
+        <label for="Name">Name</label>
+        {{form.prof_name }}
+        {% endif $}
         {% for item in form.rules %}
         {{ render_rules(item) }}
         {% endfor %}
