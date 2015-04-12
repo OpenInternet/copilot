@@ -13,6 +13,9 @@ from copilot.controllers import get_trainer, get_status_items
 
 from os import listdir
 from os.path import isfile, join
+
+#stat logging
+import logging
 logger = logging.getLogger("copilot")
 
 
