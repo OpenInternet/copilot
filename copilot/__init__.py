@@ -13,10 +13,10 @@ import logging
 #set logger
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
-lhr = logger.FileHandler("/var/log/copilot.log")
+lhr = logging.FileHandler("/var/log/copilot.log")
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 lhr.setFormatter(formatter)
-logger.setHandler(lhr)
+logger.addHandler(lhr)
 
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 app = Flask('copilot', instance_relative_config=True)
