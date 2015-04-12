@@ -3,6 +3,12 @@
 #import flask
 from flask import Flask
 
+import logging
+#set logger
+logger = logging.getLogger("blockpage")
+logger.setLevel('DEBUG')
+logger.logfile = "/var/log/blockpage.log"
+
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 blockpage = Flask('blockpage', instance_relative_config=True)
 blockpage.config.from_object('config')

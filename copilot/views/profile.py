@@ -13,14 +13,18 @@ from copilot.controllers import get_trainer, get_status_items
 
 from os import listdir
 from os.path import isfile, join
+logger = logging.getLogger("copilot")
+
 
 @app.route('/profile', defaults={"prof_name": "new"},  methods=["GET", "POST"])
 @app.route('/profile/edit/<string:prof_name>', methods=["GET", "POST"])
 @login_required
 def profile(prof_name):
     """Display an existing profle in the profile editor."""
+    logger.debug("profile received {0}".format(prof_name))
     form = forms.ProfileForm()
     if form.validate_on_submit():
+        logger.info("profile form was validated")
         profile = models.Profile(prof_name)
         for rule in form.data['rules']:
             _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])

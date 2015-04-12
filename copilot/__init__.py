@@ -9,6 +9,12 @@ from flask.ext.sqlalchemy import SQLAlchemy
 #import Bcrypt
 from flask.ext.bcrypt import Bcrypt
 
+import logging
+#set logger
+logger = logging.getLogger("copilot")
+logger.setLevel('DEBUG')
+logger.logfile = "/var/log/copilot.log"
+
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 app = Flask('copilot', instance_relative_config=True)
 app.config.from_object('config')
