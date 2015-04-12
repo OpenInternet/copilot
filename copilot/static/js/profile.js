@@ -72,7 +72,7 @@ function addRuleSelector(idNum, type, options) {
     ruleDiv.className = "three columns";
 
     // Create Data
-    var data = createRuleData(type, ruleID, actionOptions);
+    var data = createRuleData(type, ruleID, options);
 
     // Add table items to span
     ruleDiv.appendChild(data);
