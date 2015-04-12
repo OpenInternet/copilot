@@ -43,6 +43,7 @@ def profile(prof_name):
         return redirect(url_for('profile_applied'))
     else:
         log.info("Form was not validated.")
+        log.debug(form.errors)
         profile = models.Profile(prof_name)
         if profile.exist():
             log.debug("Loading rule {0}".format(prof_name))
