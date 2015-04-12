@@ -28,9 +28,10 @@ def profile(prof_name):
     """Display an existing profle in the profile editor."""
     log.debug("profile received {0}".format(prof_name))
     form = forms.NewProfileForm()
-    log.debug("Form {0} submitted".format(form.prof_name.data))
     if form.validate_on_submit():
         log.info("profile form was validated")
+        log.debug("Form {0} submitted".format(form.prof_name.data))
+        prof_name = form.prof_name.data
         profile = models.Profile(prof_name)
         for rule in form.data['rules']:
             _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
