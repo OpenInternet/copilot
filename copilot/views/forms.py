@@ -74,16 +74,13 @@ class RuleField(Form):
     action = SelectField("Action", choices=zip(get_valid_actions(), get_valid_actions()), default="block")
     target = SelectField("Target", choices=zip(get_valid_targets(), get_valid_targets()), default="dns")
     sub_target = TextField("Sub-Target", default="")
+    def __init__(self, *args, **kwargs):
+        kwargs['csrf_enabled'] = False
+        super(RuleField, self).__init__(*args, **kwargs)
 
 class ProfileForm(Form):
     rules = FieldList(FormField(RuleField))
-    def __init__(self, *args, **kwargs):
-        kwargs['csrf_enabled'] = False
-        super(ProfileForm, self).__init__(*args, **kwargs)
 
 class NewProfileForm(Form):
     prof_name = TextField('Profile Name', default="new")
     rules = FieldList(FormField(RuleField))
-    def __init__(self, *args, **kwargs):
-        kwargs['csrf_enabled'] = False
-        super(NewProfileForm, self).__init__(*args, **kwargs)
