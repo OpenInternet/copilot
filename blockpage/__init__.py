@@ -6,7 +6,7 @@ from flask import Flask
 import logging
 #set logger
 logger = logging.getLogger("blockpage")
-logger.setLevel(logging.debug)
+logger.setLevel("DEBUG")
 logger.logfile = "/var/log/blockpage.log"
 logger.debug("IT STARTS")
 

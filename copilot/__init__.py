@@ -12,7 +12,7 @@ from flask.ext.bcrypt import Bcrypt
 import logging
 #set logger
 logger = logging.getLogger("copilot")
-logger.setLevel(logging.debug)
+logger.setLevel("DEBUG")
 logger.logfile = "/var/log/copilot.log"
 logger.debug("IT STARTS")
 
