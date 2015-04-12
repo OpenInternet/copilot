@@ -1,13 +1,13 @@
 import os, random
 from flask import Flask
-app = Flask(__name__)
+from blockpage import blockpage
+from flask import render_template
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path>')
+
+@blockpage.route('/', defaults={'path': ''})
+@blockpage.route('/<path:path>')
 def catch_all(path):
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    image = random.choice(os.listdir(os.path.join(BASE_DIR, "/static/images/dns/")))
-    print(image)
-    print("IT GOT HERE")
-    return render_template('blockpage.html', image=image)
-    
+    image = random.choice(os.listdir(os.path.join(BASE_DIR, "static/images/dns/")))
+    return render_template('blockpage.html', image="images/dns/{0}".format(image))
+
