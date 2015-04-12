@@ -171,7 +171,7 @@ class Profile:
                     config_file.write(dnsc_rule)
                     config_file.write("=127.0.0.1")
                     config_file.write("\n")
-        subprocess.call(["service", "dnschef", "restart"])
+        subprocess.call(["service", "dnschef", "restart"], shell=True)
 
 class Rule:
 

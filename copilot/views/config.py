@@ -23,7 +23,7 @@ def config_initial():
         db.session.add(trainer)
         db.session.commit()
         trainer.write_ap_config()
-        subprocess.call(["service", "create_ap", "restart"])
+        subprocess.call(["service", "create_ap", "restart"], shell=True)
         login_user(trainer)
         flash('Your configuration has been set!')
         return redirect(url_for('index'))
@@ -47,7 +47,7 @@ def config_admin():
             trainer.ap_password = form.ap_password.data
         db.session.commit()
         trainer.write_ap_config()
-        subprocess.call(["service", "create_ap", "restart"])
+        subprocess.call(["service", "create_ap", "restart"], shell=True)
         return redirect(url_for('index'))
 
     return render_template('admin_config.html', form=form)
@@ -88,7 +88,7 @@ def config():
         print("Writing Config File")
         trainer.write_ap_config()
         print("Restarting create_ap")
-        subprocess.call(["service", "create_ap", "restart"])
+        subprocess.call(["service", "create_ap", "restart"], shell=True)
         login_user(trainer)
         print("Redirecting to index.")
         return redirect(url_for('index'))
