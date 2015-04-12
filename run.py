@@ -9,5 +9,5 @@ if __name__ == '__main__':
     admin_port = int(os.environ.get("PORT", 8080))
     app.run('0.0.0.0', port=admin_port)
     #Start blockpage
-    block_port = int(os.environ.get("PORT", 80))
+    block_port = int(os.environ.get("PORT", 8090))
     blockpage.run('0.0.0.0', port=block_port)
