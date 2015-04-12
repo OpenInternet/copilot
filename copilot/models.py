@@ -7,6 +7,10 @@ import uuid
 from urlparse import urlparse
 import subprocess
 
+#stat logging
+import logging
+log = logging.getLogger(__name__)
+
 COPILOT_DIR="/tmp/copilot/"
 PROFILE_DIR="/tmp/copilot/profiles/"
 
@@ -171,6 +175,7 @@ class Profile:
                     config_file.write(dnsc_rule)
                     config_file.write("=127.0.0.1")
                     config_file.write("\n")
+        log.info("restarting DNSChef")
         subprocess.call(["service", "dnschef", "restart"], shell=True)
 
 class Rule:
