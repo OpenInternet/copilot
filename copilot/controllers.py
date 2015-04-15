@@ -45,7 +45,11 @@ def get_status_items():
 def get_profile_status():
     trainer = get_trainer()
     profile = {}
-    current_profile = trainer.current
+    current_profile = False
+    try:
+        current_profile = trainer.current
+    except:
+        print("FIX THIS SOON")
     if current_profile:
         profile['status'] = "on"
         profile['value'] = current_profile
@@ -57,7 +61,11 @@ def get_profile_status():
 def get_ap_status():
     trainer = get_trainer()
     ap = {}
-    current_ap = trainer.ap_name
+    current_ap = False
+    try:
+        current_ap = trainer.ap_name
+    except:
+        print("FIX THIS SOON")
     if current_ap:
         ap['status'] = "on"
         ap['value'] = current_ap
