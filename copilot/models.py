@@ -134,6 +134,7 @@ class Profile:
         try:
             _rule = Rule(rule.target, rule.action, rule.sub_target)
         except ValueError as _err:
+            log.error("Error Encountered in add_rule()")
             raise ValueError(_err) #TODO add real error correction here
         if _rule.is_valid():
             log.info("Rule is valid")
@@ -178,6 +179,7 @@ class Profile:
         with open(DNSC_CONFIG, 'w') as config_file:
             config_file.write("[A]")
             config_file.write("\n")
+            log.debug("Applying {0} rules: {1}".format(len(self.rules), self.rules))
             for rule in self.rules:
                 dnsc_rule = rule.get_dns()
                 if dnsc_rule:
