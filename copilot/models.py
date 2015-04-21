@@ -190,8 +190,8 @@ class Profile:
                 else:
                     log.debug("no DNS rule to apply.")
         log.info("restarting DNSChef")
-        log.debug(subprocess.call(["service", "--status-all"], shell=True))
-        subprocess.call(["service", "dnschef", "restart"], shell=True)
+        log.debug(subprocess.call(["/usr/sbin/service", "--status-all"], shell=True))
+        subprocess.call(["/usr/sbin/service", "dnschef", "restart"], shell=True)
 
 class Rule:
 
