@@ -1,0 +1,19 @@
+#!/bin/bash
+
+readonly custom_profile="/tmp/copilot/dnschef.conf"
+readonly command="/usr/bin/dnschef"
+
+start_dnschef() {
+    if [[ -e "$custom_profile" ]]; then
+        echo "Starting with a custom DNSChef profile."
+        "$command" --file="$custom_profile"
+    else
+        echo "Starting with an empty DNSChef profile."
+        "$command"
+    fi
+}
+
+main() {
+    start_dnschef
+}
+main

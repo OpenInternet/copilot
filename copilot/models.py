@@ -183,14 +183,14 @@ class Profile:
             for rule in self.rules:
                 dnsc_rule = rule.get_dns()
                 if dnsc_rule:
+                    log.info("restarting DNSChef")
                     log.debug("Applying DNS rule {0}".format(dnsc_rule))
                     config_file.write(dnsc_rule)
                     config_file.write("=192.168.12.1")
                     config_file.write("\n")
                 else:
                     log.debug("no DNS rule to apply.")
-        log.info("restarting DNSChef")
-        subprocess.call(["/usr/sbin/service", "dnschef", "restart"], shell=True)
+        #subprocess.call(["/usr/sbin/service", "dnschef", "restart"], shell=True)
 
 class Rule:
 

@@ -1,0 +1,42 @@
+# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+
+import time
+from watchdog.observers import Observer
+from watchdog.events import LoggingEventHandler
+
+
+class ConfigHandler(FileSystemEventHandler):
+
+    def set_process(process):
+        self.process = process
+
+    def on_modified(self, event):
+        subprocess.call(["supervisorctl", "restart", self.process])
+
+    def on_created(self, event):
+        subprocess.call(["supervisorctl", "restart", self.process])
+
+
+    def on_deleted(self, event):
+        subprocess.call(["supervisorctl", "restart", self.process])
+
+def get_conf_watcher(process, config):
+    _observer = Observer()
+    config_handle = ConfigHandler(process)
+    _observer.schedule(config_handle, path)
+    return _observer
+
+if __name__ == "__main__":
+    dnschef_obs = get_conf_watcher("/tmp/copilot/dnschef.conf")
+    ap_obs = get_conf_watcher("/tmp/copilot/ap.conf")
+    dnschef_obs.start()
+    ap_obs.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        dnschef_obs.stop()
+        ap_obs.stop()
+    dnschef_obs.join()
+    ap_obs.join()
