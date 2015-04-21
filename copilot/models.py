@@ -215,7 +215,7 @@ class Rule:
         if len(split_sub) > 3:
             raise ValueError("invalid url")
         elif len(split_sub) == 3:
-            return _parsed
+            return parsed
         elif len(split_sub) == 1:
             return "*.{0}.*".format(split_sub[0])
         elif (len(split_sub) == 2 and split_sub[1] not in tld):
