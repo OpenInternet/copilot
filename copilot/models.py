@@ -215,7 +215,7 @@ class Rule:
         log.debug("sub target is {0}".format(_sub))
         if _sub == "":
             return None
-            parsed = urlparse(_sub)
+        parsed = urlparse(_sub)
         log.debug("parsed url is {0}".format(parsed))
         split_sub = string.split(parsed.path, ".")
         log.debug("split up sub target is {0}".format(split_sub))
