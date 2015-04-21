@@ -280,7 +280,3 @@ class Rule:
             self._action = plaintext
         except ValueError:
             raise ValueError("The action \"{0}\" is invalid.".format(plaintext))
-            
-
-    def __repr__(self):
-        return '<Ap Name %r Solo %r>' % (self.ap_name, self.solo)
