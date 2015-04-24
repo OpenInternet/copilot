@@ -1,0 +1,19 @@
+#!/bin/bash
+
+readonly default_profile='wlan0 eth0 copilot copilot_pass'
+
+start_create_ap() {
+    if [[ -e "$custom_profile" ]]; then
+        echo "Starting with a custom create_ap profile."
+        chmod +x /tmp/copilot/ap.conf
+        /tmp/copilot/ap.conf
+    else
+        echo "Starting with the default create_ap profile."
+        /usr/bin/create_ap ${default_profile}
+    fi
+}
+
+main() {
+    start_create_ap
+}
+main
