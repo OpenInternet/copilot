@@ -13,33 +13,42 @@ class ConfigHandler(FileSystemEventHandler):
         super(FileSystemEventHandler, self).__init__()
         self.configs = {}
 
-    def add_config(self, process, config):
-        self.configs[config] = process
+    def add_config(self, config, command):
+        self.configs[config] = command
 
     def on_modified(self, event):
         base = path.basename(event.src_path)
         if base in self.configs:
-            subprocess.call(["supervisorctl", "restart", self.configs[base]])
+            self.configs[base]()
 
     def on_created(self, event):
         base = path.basename(event.src_path)
         if base in self.configs:
-            subprocess.call(["supervisorctl", "restart", self.configs[base]])
+            self.configs[base]()
 
     def on_deleted(self, event):
         base = path.basename(event.src_path)
         if base in self.configs:
-            subprocess.call(["supervisorctl", "restart", self.configs[base]])
+            self.configs[base]()
 
 def prep_directory(config_dir):
     if not path.exists(config_dir):
         makedirs(config_dir)
 
+def restart_dnschef():
+    subprocess.call(["supervisorctl", "restart", "dnschef"])
+
+def restart_create_ap():
+    listing = subprocess.call(["create_ap", "--list"], stdout=subprocess.PIPE)
+    out, err = listing.communicate()
+    ps = out.split(" ")
+    subprocess.call(["create_ap", "--stop", ps[0]])
+
 if __name__ == "__main__":
     observer = Observer()
     config_handle = ConfigHandler()
-    config_handle.add_config("dnschef", "dnschef.conf")
-    config_handle.add_config("create_ap", "ap.conf")
+    config_handle.add_config("dnschef.conf", restart_dnschef)
+    config_handle.add_config("ap.conf", restart_create_ap)
     prep_directory("/tmp/copilot/")
     observer.schedule(config_handle, "/tmp/copilot/")
     observer.start()
