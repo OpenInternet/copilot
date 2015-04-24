@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-from os.path import basename
+from os import makedirs, path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -16,7 +16,7 @@ class ConfigHandler(FileSystemEventHandler):
         self.configs[config] = process
 
     def on_modified(self, event):
-        base = basename(event.src_path)
+        base = path.basename(event.src_path)
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
@@ -31,8 +31,8 @@ class ConfigHandler(FileSystemEventHandler):
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
 def prep_directory(config_dir):
-    if not os.path.exists(config_dir):
-        os.makedirs(config_dir)
+    if not path.exists(config_dir):
+        makedirs(config_dir)
 
 if __name__ == "__main__":
     observer = Observer()
