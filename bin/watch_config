@@ -30,11 +30,16 @@ class ConfigHandler(FileSystemEventHandler):
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
+def prep_directory(config_dir):
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir)
+
 if __name__ == "__main__":
     observer = Observer()
     config_handle = ConfigHandler()
     config_handle.add_config("dnschef", "dnschef.conf")
     config_handle.add_config("create_ap", "ap.conf")
+    prep_directory("/tmp/copilot/")
     observer.schedule(config_handle, "/tmp/copilot/")
     observer.start()
     try:
