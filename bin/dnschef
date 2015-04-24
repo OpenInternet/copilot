@@ -3,6 +3,12 @@
 readonly custom_profile="/tmp/copilot/dnschef.conf"
 readonly command="/usr/bin/dnschef"
 
+kill_old_chef() {
+    child=pgrep -P $(bin/supervisorctl status | grep RUNNING | awk -F' ' '{print $4}' | sed -e 's/,$//' | paste -sd' ')
+    echo "Killing child ${child}"
+    kill child
+}
+
 start_dnschef() {
     if [[ -e "$custom_profile" ]]; then
         echo "Starting with a custom DNSChef profile."
@@ -14,6 +20,7 @@ start_dnschef() {
 }
 
 main() {
+    kill_old_chef
     start_dnschef
 }
 main
