@@ -7,7 +7,7 @@ from watchdog.events import FileSystemEventHandler
 
 class ConfigHandler(FileSystemEventHandler):
 
-    def set_process(process):
+    def set_process(self, process):
         self.process = process
 
     def on_modified(self, event):
