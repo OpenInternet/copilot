@@ -2,41 +2,44 @@
 # -*- coding: utf-8 -*-
 
 import time
+from os.path import basename
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class ConfigHandler(FileSystemEventHandler):
 
-    def set_process(self, process):
-        self.process = process
+    def __init__(self):
+        super(FileSystemEventHandler, self).__init__()
+        self.configs = {}
+
+    def add_config(self, process, config):
+        self.configs[config] = process
 
     def on_modified(self, event):
-        subprocess.call(["supervisorctl", "restart", self.process])
+        base = basename(event.src_path)
+        if base in self.configs:
+            subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
     def on_created(self, event):
-        subprocess.call(["supervisorctl", "restart", self.process])
-
+        base = basename(event.src_path)
+        if base in self.configs:
+            subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
     def on_deleted(self, event):
-        subprocess.call(["supervisorctl", "restart", self.process])
-
-def get_conf_watcher(process, config):
-    _observer = Observer()
-    config_handle = ConfigHandler()
-    config_handle.set_process(process)
-    _observer.schedule(config_handle, config)
-    return _observer
+        base = basename(event.src_path)
+        if base in self.configs:
+            subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
 if __name__ == "__main__":
-    dnschef_obs = get_conf_watcher("dnschef", "/tmp/copilot/dnschef.conf")
-    ap_obs = get_conf_watcher("create_ap", "/tmp/copilot/ap.conf")
-    dnschef_obs.start()
-    ap_obs.start()
+     observer = Observer()
+    config_handle = ConfigHandler()
+    config_handle.add_config("dnschef", "dnschef.conf")
+    config_handle.add_config("create_ap", "ap.conf")
+    observer.schedule(config_handle, "/tmp/copilot/")
+    observer.start()
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        dnschef_obs.stop()
-        ap_obs.stop()
-    dnschef_obs.join()
-    ap_obs.join()
+        observer.stop()
+    observer.join()
