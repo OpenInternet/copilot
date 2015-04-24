@@ -5,8 +5,8 @@ readonly default_profile='wlan0 eth0 copilot copilot_pass'
 start_create_ap() {
     if [[ -e /tmp/copilot/ap.conf ]]; then
         echo "Starting with a custom create_ap profile."
-        chmod +x /tmp/copilot/ap.conf
-        /tmp/copilot/ap.conf
+        commands=${cat /tmp/copilot/ap.conf}
+        /tmp/copilot/ap.conf ${commands}
     else
         echo "Starting with the default create_ap profile."
         /usr/bin/create_ap ${default_profile}
