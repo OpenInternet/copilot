@@ -31,7 +31,7 @@ class ConfigHandler(FileSystemEventHandler):
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
 if __name__ == "__main__":
-     observer = Observer()
+    observer = Observer()
     config_handle = ConfigHandler()
     config_handle.add_config("dnschef", "dnschef.conf")
     config_handle.add_config("create_ap", "ap.conf")
