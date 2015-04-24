@@ -27,8 +27,8 @@ def get_conf_watcher(process, config):
     return _observer
 
 if __name__ == "__main__":
-    dnschef_obs = get_conf_watcher("/tmp/copilot/dnschef.conf")
-    ap_obs = get_conf_watcher("/tmp/copilot/ap.conf")
+    dnschef_obs = get_conf_watcher("dnschef", "/tmp/copilot/dnschef.conf")
+    ap_obs = get_conf_watcher("create_ap", "/tmp/copilot/ap.conf")
     dnschef_obs.start()
     ap_obs.start()
     try:
