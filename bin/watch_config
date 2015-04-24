@@ -24,7 +24,7 @@ def get_conf_watcher(process, config):
     _observer = Observer()
     config_handle = ConfigHandler()
     config_handle.set_process(process)
-    _observer.schedule(config_handle, path)
+    _observer.schedule(config_handle, config)
     return _observer
 
 if __name__ == "__main__":
