@@ -36,13 +36,17 @@ def profile(prof_name):
         for rule in form.data['rules']:
             _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
             profile.add_rule(_rule)
+        log.debug("Saving profile {0}".format(prof_name))
         profile.save()
         #Save as current profile for trainer.
         #TODO make this change depending upon the submit button used
+        #First should look for a Save and Apply flag.
         trainer = get_trainer()
-        log.debug(form.data)
+        log.debug("Applying form data to trainer {0}".format(form.data))
         trainer.current = form.data['prof_name']
         db.session.commit()
+        #This should be used for any wioth an apply flag
+        log.debug("Applying profile {0}".format(prof_name))
         profile.apply_it()
         flash('Your profile has been saved and Applied!')
         return redirect(url_for('profile_applied'))
