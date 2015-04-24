@@ -21,12 +21,12 @@ class ConfigHandler(FileSystemEventHandler):
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
     def on_created(self, event):
-        base = basename(event.src_path)
+        base = path.basename(event.src_path)
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
     def on_deleted(self, event):
-        base = basename(event.src_path)
+        base = path.basename(event.src_path)
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
