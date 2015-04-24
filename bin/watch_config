@@ -39,10 +39,11 @@ def restart_dnschef():
     subprocess.call(["supervisorctl", "restart", "dnschef"])
 
 def restart_create_ap():
-    listing = subprocess.call(["create_ap", "--list"], stdout=subprocess.PIPE)
+    listing = subprocess.Popen(["create_ap", "--list"], stdout=subprocess.PIPE)
     out, err = listing.communicate()
     ps = out.split(" ")
     subprocess.call(["create_ap", "--stop", ps[0]])
+    
 
 if __name__ == "__main__":
     observer = Observer()
