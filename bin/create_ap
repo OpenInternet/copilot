@@ -15,6 +15,7 @@ start_create_ap() {
 
 kill_all() {
     create_ap --stop $(create_ap --list)
+    exit
 }
 
 

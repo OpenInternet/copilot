@@ -15,6 +15,7 @@ start_dnschef() {
 
 kill_all() {
     kill $(pgrep -f python.*dnschef)
+    exit
 }
 
 main() {
