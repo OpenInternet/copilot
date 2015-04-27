@@ -13,7 +13,13 @@ start_create_ap() {
     fi
 }
 
+kill_all() {
+    create_ap --stop $(create_ap --list)
+}
+
+
 main() {
     start_create_ap
 }
+trap 'kill_all "caught signal"' TERM HUP KILL QUIT
 main

@@ -13,7 +13,12 @@ start_dnschef() {
     fi
 }
 
+kill_all() {
+    kill $(pgrep -f python.*dnschef)
+}
+
 main() {
     start_dnschef
 }
+trap 'kill_all "caught signal"' TERM HUP KILL QUIT
 main
