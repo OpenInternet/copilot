@@ -14,8 +14,11 @@ start_create_ap() {
 }
 
 kill_all() {
+    echo ${1}
+    set -x
     create_ap --stop $(create_ap --list| cut -d " " -f 1)
-    exit
+    set +x
+    exit 0
 }
 
 
