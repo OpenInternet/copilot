@@ -25,5 +25,5 @@ kill_all() {
 main() {
     start_create_ap
 }
-trap 'kill_all "caught signal"' TERM HUP KILL QUIT
+trap 'kill_all "caught signal"' SIGHUP SIGINT SIGTERM
 main
