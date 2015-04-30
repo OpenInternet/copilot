@@ -5,7 +5,7 @@ from copilot.controllers import get_trainer, get_status_items
 import subprocess
 #Import forms
 from copilot.views.forms import Config, AdminConfig
-from copilot.models import Trainer
+from copilot.models.trainer import Trainer
 
 #Get flask modules
 from flask import redirect, url_for, render_template, flash

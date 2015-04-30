@@ -1,6 +1,6 @@
 from copilot import app
 from flask.ext.login import LoginManager
-from copilot.models import Trainer
+from copilot.models.trainer import Trainer
 
 #stat logging
 import logging
@@ -28,7 +28,6 @@ def load_user(userid):
 def get_trainer():
     """Only allow one trainer account. """
     return Trainer.query.first()
-
 
 def get_status_items():
     """Get current status items.

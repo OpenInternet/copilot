@@ -1,6 +1,6 @@
 #Get application content
 from copilot import app, db
-from copilot.models import Trainer
+from copilot.models.trainer import Trainer
 #Import forms
 from copilot.views.forms import LoginForm
 
@@ -30,5 +30,3 @@ def logout():
     logout_user()
 
     return redirect(url_for('index'))
-
-

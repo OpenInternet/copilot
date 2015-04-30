@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 #Get application content
-from copilot import app, db, models
+from copilot import app, db
+from copilot.models import profile as mdl_prof
 from copilot.views import forms
 from flask.ext.wtf import Form
 from copilot.controllers import get_trainer, get_status_items, get_valid_actions, get_valid_targets
@@ -31,9 +32,9 @@ def profile(prof_name):
         log.info("profile form was validated")
         log.debug("Form {0} submitted".format(form.prof_name.data))
         prof_name = form.prof_name.data
-        profile = models.Profile(prof_name)
+        profile = mdl_prof.Profile(prof_name)
         for rule in form.data['rules']:
-            _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
+            _rule = mdl_prof.Rule(rule['target'], rule['action'], rule['sub_target'])
             profile.add_rule(_rule)
         log.debug("Saving profile {0}".format(prof_name))
         profile.save()
@@ -52,7 +53,7 @@ def profile(prof_name):
     else:
         log.info("Form was not validated.")
         log.debug(form.errors)
-        profile = models.Profile(prof_name)
+        profile = mdl_prof.Profile(prof_name)
         if profile.exist():
             log.debug("Loading rule {0}".format(prof_name))
             profile.load()
@@ -116,7 +117,7 @@ def profile_applied():
     # if none send trainer to create a new one.
     if prof_applied == None:
         return redirect(url_for('profile'))
-    profile = models.Profile(prof_applied)
+    profile = mdl_prof.Profile(prof_applied)
     profile.load()
     status_items = get_status_items()
     buttons = [{"name":"Return", "link":url_for('profile')}]
