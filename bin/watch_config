@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import time
+import subprocess
+from os import makedirs, path
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+class ConfigHandler(FileSystemEventHandler):
+
+    def __init__(self):
+        super(FileSystemEventHandler, self).__init__()
+        self.configs = {}
+
+    def add_config(self, config, process):
+        self.configs[config] = process
+
+    def on_modified(self, event):
+        base = path.basename(event.src_path)
+        if base in self.configs:
+            subprocess.call(["supervisorctl", "restart", self.configs[base]])
+
+    def on_created(self, event):
+        base = path.basename(event.src_path)
+        if base in self.configs:
+            subprocess.call(["supervisorctl", "restart", self.configs[base]])
+
+    def on_deleted(self, event):
+        base = path.basename(event.src_path)
+        if base in self.configs:
+            subprocess.call(["supervisorctl", "restart", self.configs[base]])
+
+def prep_directory(config_dir):
+    if not path.exists(config_dir):
+        makedirs(config_dir)
+
+
+if __name__ == "__main__":
+    observer = Observer()
+    config_handle = ConfigHandler()
+    config_handle.add_config("dnschef.conf", "dnschef")
+    config_handle.add_config("ap.conf", "create_ap")
+    prep_directory("/tmp/copilot/")
+    observer.schedule(config_handle, "/tmp/copilot/")
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()

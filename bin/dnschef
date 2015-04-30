@@ -1,0 +1,28 @@
+#!/bin/bash
+
+readonly custom_profile="/tmp/copilot/dnschef.conf"
+readonly command="/usr/bin/dnschef"
+
+start_dnschef() {
+    if [[ -e "$custom_profile" ]]; then
+        echo "Starting with a custom DNSChef profile."
+        "$command" --file="$custom_profile"
+    else
+        echo "Starting with an empty DNSChef profile."
+        "$command"
+    fi
+}
+
+kill_all() {
+    echo ${1}
+    set -x
+    kill $(pgrep -f python.*dnschef)
+    set +x
+    exit 0
+}
+
+main() {
+    start_dnschef
+}
+trap 'kill_all' EXIT
+main

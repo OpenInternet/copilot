@@ -111,8 +111,7 @@ class Trainer(Base, UserMixin):
             os.makedirs(COPILOT_DIR)
         AP_CONFIG = "/tmp/copilot/ap.conf"
         with open(AP_CONFIG, 'w') as config_file:
-            config_file.write("#!/bin/bash \n")
-            config_file.write("/usr/bin/create_ap  wlan0 eth0 {0} {1}".format(self._ap_name, self._ap_password))
+            config_file.write("wlan0 eth0 {0} {1}".format(self._ap_name, self._ap_password))
 
     def __repr__(self):
         return '<Ap Name %r Solo %r>' % (self.ap_name, self.solo)
@@ -183,14 +182,14 @@ class Profile:
             for rule in self.rules:
                 dnsc_rule = rule.get_dns()
                 if dnsc_rule:
+                    log.info("restarting DNSChef")
                     log.debug("Applying DNS rule {0}".format(dnsc_rule))
                     config_file.write(dnsc_rule)
                     config_file.write("=192.168.12.1")
                     config_file.write("\n")
                 else:
                     log.debug("no DNS rule to apply.")
-        log.info("restarting DNSChef")
-        subprocess.call(["service", "dnschef", "restart"], shell=True)
+        #subprocess.call(["/usr/sbin/service", "dnschef", "restart"], shell=True)
 
 class Rule:
 
