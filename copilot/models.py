@@ -6,13 +6,12 @@ import os
 import uuid
 from urlparse import urlparse
 import subprocess
+from controller import get_config_dir, get_config_file
+from config import DNSConfig
 
 #stat logging
 import logging
 log = logging.getLogger(__name__)
-
-COPILOT_DIR="/tmp/copilot/"
-PROFILE_DIR="/tmp/copilot/profiles/"
 
 def get_valid_targets():
     VALID_TARGETS=["dns"]
@@ -106,10 +105,8 @@ class Trainer(Base, UserMixin):
             raise ValueError("Access Point names must be between 1 and 31 characters long.")
 
     def write_ap_config(self):
-        #TODO remove this repeat code later
-        if not os.path.exists(COPILOT_DIR):
-            os.makedirs(COPILOT_DIR)
-        AP_CONFIG = "/tmp/copilot/ap.conf"
+        #TODO Replace with config obj
+        AP_CONFIG = get_config_file("create_ap")
         with open(AP_CONFIG, 'w') as config_file:
             config_file.write("wlan0 eth0 {0} {1}".format(self._ap_name, self._ap_password))
 
@@ -141,7 +138,6 @@ class Profile:
         else:
             log.info("Rule is NOT valid")
 
-
     def save(self):
         log.info("saving profile {0}".format(self.name))
         if not os.path.exists(PROFILE_DIR):
@@ -170,12 +166,19 @@ class Profile:
                 _rule=Rule(row[0], row[1], row[2])
                 self.add_rule(_rule)
 
+    def write_config(self, config):
+        """Writes a config file.
+
+        config (str): the type of config to write.
+        """
+        #TODO Rewrite this function using a config class
+        log.debug("writing config.")
+
+    #TODO Rewrite this function using the config class
     def apply_it(self):
         #TODO remove this repeat code later
-        if not os.path.exists(COPILOT_DIR):
-            os.makedirs(COPILOT_DIR)
-        DNSC_CONFIG = "/tmp/copilot/dnschef.conf"
-        with open(DNSC_CONFIG, 'w') as config_file:
+        _dnsc_config = get_config_file("dnschef")
+        with open(_dnsc_config, 'w') as config_file:
             config_file.write("[A]")
             config_file.write("\n")
             log.debug("Applying {0} rules: {1}".format(len(self.rules), self.rules))
@@ -190,6 +193,7 @@ class Profile:
                 else:
                     log.debug("no DNS rule to apply.")
         #subprocess.call(["/usr/sbin/service", "dnschef", "restart"], shell=True)
+
 
 class Rule:
 
@@ -207,30 +211,6 @@ class Rule:
         self.valid_sub_targets = {
             url : True,
             dns : True}
-
-    def get_dns(self):
-        tld = ["ac", "ad", "ae", "aero", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "arpa", "as", "asia", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "biz", "bj", "bl", "bm", "bn", "bo", "bq", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cat", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "com", "coop", "cr", "cs", "cu", "cv", "cw", "cx", "cy", "cz", "dd", "de", "dj", "dk", "dm", "do", "dz", "ec", "edu", "ee", "eg", "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gov", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "info", "int", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jobs", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "local", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "me", "mf", "mg", "mh", "mil", "mk", "ml", "mm", "mn", "mo", "mobi", "mp", "mq", "mr", "ms", "mt", "mu", "museum", "mv", "mw", "mx", "my", "mz", "na", "name", "nato", "nc", "ne", "net", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "onion", "org", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "pro", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "su", "sv", "sx", "sy", "sz", "tc", "td", "tel", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tp", "tr", "travel", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "xxx", "ye", "yt", "yu", "za", "zm", "zr", "zw"]
-        _sub = self.sub_target
-        log.debug("sub target is {0}".format(_sub))
-        if _sub == "":
-            return None
-        parsed = urlparse(_sub).path
-        log.debug("parsed url is {0}".format(parsed))
-        split_sub = string.split(parsed, ".")
-        log.debug("split up sub target is {0}".format(split_sub))
-        #TODO the below is a monstrosity
-        if len(split_sub) > 3:
-            raise ValueError("invalid url")
-        elif len(split_sub) == 3:
-            return parsed
-        elif len(split_sub) == 1:
-            return "*.{0}.*".format(split_sub[0])
-        elif (len(split_sub) == 2 and split_sub[1] not in tld):
-            return "{0}.{1}.*".format(split_sub[0], split_sub[1])
-        elif split_sub[1] in tld:
-            return "*.{0}.{1}".format(split_sub[0], split_sub[1])
-        #todo add just TLD.
-
 
     def save(self, save_file):
         with open(save_file, 'a') as csvfile:

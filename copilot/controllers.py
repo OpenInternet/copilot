@@ -11,6 +11,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view =  "login"
 
+
+CP_PACKAGES = {"dns":{"name": "dnschef",
+                      "config_file": "dnschef.conf",
+                      "actions": ["block", "redirect"]},
+               "ap":{"name": "create_ap",
+                     "config_file": "ap.conf"}}
+
 @login_manager.user_loader
 def load_user(userid):
     return get_trainer()
@@ -78,3 +85,25 @@ def get_ap_status():
         ap['status'] = "off"
         ap['value'] = "NONE"
     return ap
+
+
+
+
+def get_config_dir(directory):
+    directories = {"main","/tmp/copilot/",
+                   "profiles", "/tmp/copilot/profiles"}
+    if directory in directories:
+        return directories[directory]
+    else:
+        raise ValueError("That config directory is not valid.")
+
+def get_config_file(config):
+    _copilot_dir = get_config_dir("main")
+    configs = {}
+    for item in CP_PACKAGES:
+        if CP_PACKAGES[item]["config"]:
+            configs[CP_PACKAGES[item]["name"]] = CP_PACKAGES[item]["config"]
+    if config in configs:
+        return configs[config]
+    else:
+        raise ValueError("That config file is not valid.")
