@@ -6,20 +6,12 @@ import os
 import uuid
 from urlparse import urlparse
 import subprocess
-from controller import get_config_dir, get_config_file
+from controller import get_config_dir, get_config_file, get_valid_targets, get_valid_actions
 from config import DNSConfig
 
 #stat logging
 import logging
 log = logging.getLogger(__name__)
-
-def get_valid_targets():
-    VALID_TARGETS=["dns"]
-    return VALID_TARGETS
-
-def get_valid_actions():
-    VALID_ACTIONS=['block']
-    return VALID_ACTIONS
 
 class Base(db.Model):
 
@@ -166,33 +158,27 @@ class Profile:
                 _rule=Rule(row[0], row[1], row[2])
                 self.add_rule(_rule)
 
-    def write_config(self, config):
+    def write_config(self, config_type):
         """Writes a config file.
 
         config (str): the type of config to write.
         """
-        #TODO Rewrite this function using a config class
         log.debug("writing config.")
+        _config = create_config_obj(config_type)
+        for r in self.rules:
+            if r.action == config_type:
+                _config.add_rule([r.target, r.sub_target])
+        _config.write_config()
 
-    #TODO Rewrite this function using the config class
-    def apply_it(self):
-        #TODO remove this repeat code later
-        _dnsc_config = get_config_file("dnschef")
-        with open(_dnsc_config, 'w') as config_file:
-            config_file.write("[A]")
-            config_file.write("\n")
-            log.debug("Applying {0} rules: {1}".format(len(self.rules), self.rules))
-            for rule in self.rules:
-                dnsc_rule = rule.get_dns()
-                if dnsc_rule:
-                    log.info("restarting DNSChef")
-                    log.debug("Applying DNS rule {0}".format(dnsc_rule))
-                    config_file.write(dnsc_rule)
-                    config_file.write("=192.168.12.1")
-                    config_file.write("\n")
-                else:
-                    log.debug("no DNS rule to apply.")
-        #subprocess.call(["/usr/sbin/service", "dnschef", "restart"], shell=True)
+    def apply(self):
+        _configs = []
+        log.info("looking for config files that need to be written.")
+        for r in self.rules():
+            if r.action not in _configs:
+                _configs.append(r.action)
+        log.debug("{0} configs found:\n {1}".format(len(_configs), _configs))
+        for c in _configs:
+            self.write_config(c)
 
 
 class Rule:

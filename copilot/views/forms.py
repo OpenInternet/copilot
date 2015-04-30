@@ -5,7 +5,8 @@ from wtforms import PasswordField, TextField, SelectField, FieldList, FormField
 
 # Import Form validators
 from wtforms.validators import Required, Length, EqualTo, ValidationError, Optional
-from copilot.models import Trainer, get_valid_actions, get_valid_targets
+from copilot.models import Trainer
+from copilot.controllers import Trainer, get_valid_actions, get_valid_targets
 
 # Define the login form
 class LoginForm(Form):

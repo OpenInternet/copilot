@@ -2,16 +2,15 @@
 
 #Get application content
 from copilot import app, db, models
-from copilot.models import get_valid_actions, get_valid_targets
 from copilot.views import forms
 from flask.ext.wtf import Form
+from copilot.controllers import get_trainer, get_status_items, get_valid_actions, get_valid_targets
 
 
 #Get flask modules
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, login_required
 from wtforms import FormField
-from copilot.controllers import get_trainer, get_status_items
 
 from os import listdir
 from os.path import isfile, join
@@ -47,7 +46,7 @@ def profile(prof_name):
         db.session.commit()
         #This should be used for any wioth an apply flag
         log.debug("Applying profile {0}".format(prof_name))
-        profile.apply_it()
+        profile.apply()
         flash('Your profile has been saved and Applied!')
         return redirect(url_for('profile_applied'))
     else:
@@ -129,4 +128,3 @@ def profile_save():
     """Display the profile that is currently being run on the Co-Pilot box. """
 
     return render_template('profile_save.html', form=form)
-
