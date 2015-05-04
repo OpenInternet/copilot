@@ -15,7 +15,7 @@ class Config:
     def config_type(self):
         return self._config_type
 
-    @target.setter
+    @config_type.setter
     def config_file(self, config_type):
         try:
             config_file = get_config_file(config_type)
