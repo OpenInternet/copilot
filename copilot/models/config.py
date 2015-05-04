@@ -1,4 +1,4 @@
-from controllers import get_config_dir, get_config_file
+from copilot.controllers import get_config_dir, get_config_file
 import os
 
 #stat logging
