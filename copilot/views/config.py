@@ -11,6 +11,10 @@ from copilot.models.trainer import Trainer
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, login_required
 
+#stat logging
+import logging
+log = logging.getLogger(__name__)
+
 @app.route('/config/initial', methods=["GET", "POST"])
 def config_initial():
     """The iniital configuration menu for  """
@@ -20,6 +24,7 @@ def config_initial():
         return redirect(url_for('index'))
     if form.validate_on_submit():
         trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
+        log.debug(trainer)
         db.session.add(trainer)
         db.session.commit()
         trainer.write_ap_config()
@@ -58,15 +63,16 @@ def config():
     trainer_exists = get_trainer()
     #If there is already a trainer setup on the box then provide the admin configuration.
     if trainer_exists:
-        print("01 trainer exists")
+        log.info("Trainer exists")
         form = AdminConfig()
     else:
-        print("02 trainer DOES NOT exists")
+        log.info("Trainer DOES NOT exists")
         form = Config()
     if form.validate_on_submit():
         print("FORM IS VALID")
         #Add any new values to the existing trainer
         if trainer_exists:
+            log.debug("found a trainer. Modifying existing configuration.")
             trainer = trainer_exists
             if form.password.data != "":
                 flash("set password")
@@ -79,6 +85,7 @@ def config():
                 trainer.ap_password = form.ap_password.data
         #Create the trainer if one does not exist
         else:
+            log.debug("No trainer found. Creating a new configuration.")
             trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
             db.session.add(trainer)
 

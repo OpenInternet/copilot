@@ -23,11 +23,17 @@ CP_ACTIONS = ['block']
 
 @login_manager.user_loader
 def load_user(userid):
-    return get_trainer()
+    _user = get_trainer()
+    if not _user:
+        log.info("No trainer object found. Assuming a new user.")
+    return _user
 
 def get_trainer():
     """Only allow one trainer account. """
-    return Trainer.query.first()
+    _trainer = Trainer.query.first()
+    if not _trainer:
+        log.info("No trainer found.")
+    return _trainer
 
 def get_status_items():
     """Get current status items.
@@ -35,7 +41,7 @@ def get_status_items():
     value: The text to put under the icon
     status: [off/on/error] The color of the icon background to use (off=grey, on=green, error=orange)
     """
-    print("TODO: get_status_items is currently not implemented")
+    log.warn("TODO: get_status_items is currently not fully implemented")
     profile = get_profile_status()
     access_point = get_ap_status()
     status_items = [{"icon":"wifi",
@@ -63,7 +69,7 @@ def get_profile_status():
     try:
         current_profile = trainer.current
     except:
-        print("FIX THIS SOON")
+        log.warn("FIX THIS SOON (function get_profile_status)")
     if current_profile:
         profile['status'] = "on"
         profile['value'] = current_profile
@@ -79,7 +85,7 @@ def get_ap_status():
     try:
         current_ap = trainer.ap_name
     except:
-        print("FIX THIS SOON")
+        log.warn("FIX THIS SOON (function get_ap_status)")
     if current_ap:
         ap['status'] = "on"
         ap['value'] = current_ap

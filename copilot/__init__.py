@@ -36,6 +36,5 @@ from copilot.models import config, profile, trainer
 from copilot import controllers
 from copilot.views import admin, config, core, forms, profile
 
-
 # Build the database
 db.create_all()
