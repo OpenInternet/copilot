@@ -1,5 +1,6 @@
 import string
 from flask.ext.login import LoginManager
+from copilot import app
 from copilot import bcrypt, db
 from flask.ext.login import UserMixin
 from copilot.models.config import get_config_file

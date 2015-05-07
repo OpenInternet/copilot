@@ -1,4 +1,3 @@
-from copilot import app
 from copilot.models.trainer import get_ap_status
 from copilot.models.profile import get_profile_status
 
