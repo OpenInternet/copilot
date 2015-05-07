@@ -1,8 +1,7 @@
 from copilot import app
 from flask.ext.login import LoginManager
-from copilot.models.trainer import get_trainer, get_ap_status
+from copilot.models.trainer import get_ap_status
 from copilot.models.profile import get_profile_status
-
 
 #stat logging
 import logging
@@ -14,14 +13,6 @@ login_manager.init_app(app)
 login_manager.login_view =  "login"
 
 
-CP_PACKAGES = {"dns":{"name": "dnschef",
-                      "config_file": "dnschef.conf",
-                      "target" : "dns",
-                      "actions": ["block", "redirect"]},
-               "ap":{"name": "create_ap",
-                     "config_file": "ap.conf"}}
-
-CP_ACTIONS = ['block']
 
 def get_status_items():
     """Get current status items.
@@ -49,32 +40,3 @@ def get_status_items():
                      "status":"off",
                      "url":"profile_load"}]
     return status_items
-
-def get_config_dir(directory):
-    directories = {"main","/tmp/copilot/",
-                   "profiles", "/tmp/copilot/profiles"}
-    if directory in directories:
-        return directories[directory]
-    else:
-        raise ValueError("That config directory is not valid.")
-
-def get_config_file(config):
-    _copilot_dir = get_config_dir("main")
-    configs = {}
-    for item in CP_PACKAGES:
-        if "config" in CP_PACKAGES[item]:
-            configs[CP_PACKAGES[item]["name"]] = CP_PACKAGES[item]["config"]
-    if config in configs:
-        return configs[config]
-    else:
-        raise ValueError("That config file is not valid.")
-
-def get_valid_targets():
-    _targets = []
-    for item in CP_PACKAGES:
-        if "target" in CP_PACKAGES[item]:
-            _targets.append([CP_PACKAGES[item]["target"]])
-    return _targets
-
-def get_valid_actions():
-    return CP_ACTIONS

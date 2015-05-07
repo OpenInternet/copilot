@@ -1,7 +1,7 @@
 import string
 from copilot import bcrypt, db
 from flask.ext.login import UserMixin
-from copilot.controllers import get_config_file
+from copilot.models.config import get_config_file
 
 #stat logging
 import logging
