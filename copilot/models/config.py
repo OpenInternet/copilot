@@ -25,7 +25,7 @@ def get_config_file(config):
     _copilot_dir = get_config_dir("main")
     configs = {}
     for item in CP_PACKAGES:
-        if "config" in CP_PACKAGES[item]:
+        if "config_file" in CP_PACKAGES[item]:
             configs[CP_PACKAGES[item]["name"]] = CP_PACKAGES[item]["config"]
     if config in configs:
         return configs[config]
