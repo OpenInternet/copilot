@@ -11,7 +11,7 @@ class Base(db.Model):
     __abstract__  = True
 
     id            = db.Column(db.Integer, primary_key=True)
-    date_created  = db.Column(db.DateTime,  default=db.func.curent_timestamp())
+    date_created  = db.Column(db.DateTime,  default=db.func.current_timestamp())
     date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
                                            onupdate=db.func.current_timestamp())
 
@@ -32,6 +32,8 @@ class Trainer(Base, UserMixin):
     _current = db.Column(db.String(192),  nullable=True)
 
     def __init__(self, trainer_pass, ap_name="copilot", ap_password="copilot"):
+        log.debug("Creating new trainer object.")
+        log.debug("Trainer AP: {0}".format(ap_name))
         self.password = trainer_pass
         self.ap_name = ap_name
         self.ap_password = ap_password
