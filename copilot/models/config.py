@@ -26,7 +26,7 @@ def get_config_file(config):
     configs = {}
     for item in CP_PACKAGES:
         if "config_file" in CP_PACKAGES[item]:
-            configs[CP_PACKAGES[item]["name"]] = CP_PACKAGES[item]["config"]
+            configs[CP_PACKAGES[item]["name"]] = CP_PACKAGES[item]["config_file"]
     if config in configs:
         return configs[config]
     else:
