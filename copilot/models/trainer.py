@@ -130,7 +130,7 @@ class Trainer(Base, UserMixin):
 
     def write_ap_config(self):
         #TODO Replace with config obj
-        AP_CONFIG = get_config_file("ap")
+        AP_CONFIG = get_config_file("create_ap")
         with open(AP_CONFIG, 'w') as config_file:
             config_file.write("wlan0 eth0 {0} {1}".format(self._ap_name, self._ap_password))
 
