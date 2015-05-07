@@ -32,6 +32,7 @@ def get_profile_status():
 class Profile:
     def __init__(self, name, description=None, rules={}):
         self.rules = []
+        self._profile_dir = get_config_dir("profiles")
         self.name = name
         self.description = description
         if rules:
@@ -56,27 +57,27 @@ class Profile:
 
     def save(self):
         log.info("saving profile {0}".format(self.name))
-        if not os.path.exists(PROFILE_DIR):
-            os.makedirs(PROFILE_DIR)
-        PROFILE_FILE = (PROFILE_DIR + self.name)
+        if not os.path.exists(self._profile_dir):
+            os.makedirs(self._profile_dir)
+        profile_file = (self._profile_dir + self.name)
         #Empty the file
-        open(PROFILE_FILE, 'w').close()
+        open(profile_file, 'w').close()
         #Save rules to file
         for rule in self.rules:
-            rule.save(PROFILE_FILE)
+            rule.save(profile_file)
         log.info("Profile {0} saved".format(self.name))
 
     def exist(self):
-        PROFILE_FILE = (PROFILE_DIR + self.name)
-        if os.path.isfile(PROFILE_FILE):
+        profile_file = (self._profile_dir + self.name)
+        if os.path.isfile(profile_file):
             log.info(" profile {0} exists".format(self.name))
             return True
         else:
             log.info(" profile {0} does NOT exists".format(self.name))
 
     def load(self):
-        PROFILE_FILE = (PROFILE_DIR + self.name)
-        with open(PROFILE_FILE, 'r') as csvfile:
+        profile_file = (self._profile_dir + self.name)
+        with open(profile_file, 'r') as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
             for row in csv_reader:
                 _rule=Rule(row[0], row[1], row[2])
