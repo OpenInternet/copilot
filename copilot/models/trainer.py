@@ -1,4 +1,5 @@
 import string
+from flask.ext.login import LoginManager
 from copilot import bcrypt, db
 from flask.ext.login import UserMixin
 from copilot.models.config import get_config_file
@@ -6,6 +7,10 @@ from copilot.models.config import get_config_file
 #stat logging
 import logging
 log = logging.getLogger(__name__)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view =  "login"
 
 @login_manager.user_loader
 def load_user(userid):

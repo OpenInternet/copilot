@@ -1,18 +1,10 @@
 from copilot import app
-from flask.ext.login import LoginManager
 from copilot.models.trainer import get_ap_status
 from copilot.models.profile import get_profile_status
 
 #stat logging
 import logging
 log = logging.getLogger(__name__)
-
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view =  "login"
-
-
 
 def get_status_items():
     """Get current status items.
