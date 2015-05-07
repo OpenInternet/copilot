@@ -14,8 +14,8 @@ CP_PACKAGES = {"dns":{"name": "dnschef",
 CP_ACTIONS = ['block']
 
 def get_config_dir(directory):
-    directories = {"main","/tmp/copilot/",
-                   "profiles", "/tmp/copilot/profiles"}
+    directories = {"main":"/tmp/copilot/",
+                   "profiles": "/tmp/copilot/profiles"}
     if directory in directories:
         return directories[directory]
     else:
