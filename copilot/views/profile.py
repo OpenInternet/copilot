@@ -5,7 +5,8 @@ from copilot import app, db
 from copilot.models import profile as mdl_prof
 from copilot.views import forms
 from flask.ext.wtf import Form
-from copilot.controllers import get_status_items, get_valid_actions, get_valid_targets
+from copilot.controllers import get_status_items
+from copilot.models.config import get_valid_actions, get_valid_targets
 from copilot.models.trainer import get_trainer
 
 
