@@ -36,7 +36,7 @@ def get_valid_targets():
     _targets = []
     for item in CP_PACKAGES:
         if "target" in CP_PACKAGES[item]:
-            _targets.append([CP_PACKAGES[item]["target"]])
+            _targets.append(CP_PACKAGES[item]["target"])
     return _targets
 
 def get_valid_actions():
