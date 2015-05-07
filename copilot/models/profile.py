@@ -13,6 +13,22 @@ from config import DNSConfig
 import logging
 log = logging.getLogger(__name__)
 
+def get_profile_status():
+    trainer = get_trainer()
+    profile = {}
+    current_profile = False
+    try:
+        current_profile = trainer.current
+    except:
+        log.warn("FIX THIS SOON (function get_profile_status)")
+    if current_profile:
+        profile['status'] = "on"
+        profile['value'] = current_profile
+    else:
+        profile['status'] = "off"
+        profile['value'] = "NONE"
+    return profile
+
 class Profile:
     def __init__(self, name, description=None, rules={}):
         self.rules = []

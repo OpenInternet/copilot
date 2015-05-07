@@ -1,6 +1,8 @@
 from copilot import app
 from flask.ext.login import LoginManager
-from copilot.models.trainer import Trainer
+from copilot.models.trainer import get_trainer, get_ap_status
+from copilot.models.profile import get_profile_status
+
 
 #stat logging
 import logging
@@ -20,20 +22,6 @@ CP_PACKAGES = {"dns":{"name": "dnschef",
                      "config_file": "ap.conf"}}
 
 CP_ACTIONS = ['block']
-
-@login_manager.user_loader
-def load_user(userid):
-    _user = get_trainer()
-    if not _user:
-        log.info("No trainer object found. Assuming a new user.")
-    return _user
-
-def get_trainer():
-    """Only allow one trainer account. """
-    _trainer = Trainer.query.first()
-    if not _trainer:
-        log.info("No trainer found.")
-    return _trainer
 
 def get_status_items():
     """Get current status items.
@@ -61,39 +49,6 @@ def get_status_items():
                      "status":"off",
                      "url":"profile_load"}]
     return status_items
-
-def get_profile_status():
-    trainer = get_trainer()
-    profile = {}
-    current_profile = False
-    try:
-        current_profile = trainer.current
-    except:
-        log.warn("FIX THIS SOON (function get_profile_status)")
-    if current_profile:
-        profile['status'] = "on"
-        profile['value'] = current_profile
-    else:
-        profile['status'] = "off"
-        profile['value'] = "NONE"
-    return profile
-
-def get_ap_status():
-    trainer = get_trainer()
-    ap = {}
-    current_ap = False
-    try:
-        current_ap = trainer.ap_name
-    except:
-        log.warn("FIX THIS SOON (function get_ap_status)")
-    if current_ap:
-        ap['status'] = "on"
-        ap['value'] = current_ap
-    else:
-        ap['status'] = "off"
-        ap['value'] = "NONE"
-    return ap
-
 
 def get_config_dir(directory):
     directories = {"main","/tmp/copilot/",

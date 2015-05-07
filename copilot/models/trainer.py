@@ -1,10 +1,41 @@
 import string
 from copilot import bcrypt, db
 from flask.ext.login import UserMixin
+from copilot.controllers import get_config_file
 
 #stat logging
 import logging
 log = logging.getLogger(__name__)
+
+@login_manager.user_loader
+def load_user(userid):
+    _user = get_trainer()
+    if not _user:
+        log.info("No trainer object found. Assuming a new user.")
+    return _user
+
+def get_trainer():
+    """Only allow one trainer account. """
+    _trainer = Trainer.query.first()
+    if not _trainer:
+        log.info("No trainer found.")
+    return _trainer
+
+def get_ap_status():
+    trainer = get_trainer()
+    ap = {}
+    current_ap = False
+    try:
+        current_ap = trainer.ap_name
+    except:
+        log.warn("FIX THIS SOON (function get_ap_status)")
+    if current_ap:
+        ap['status'] = "on"
+        ap['value'] = current_ap
+    else:
+        ap['status'] = "off"
+        ap['value'] = "NONE"
+    return ap
 
 class Base(db.Model):
 
