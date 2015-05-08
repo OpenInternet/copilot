@@ -62,13 +62,14 @@ class Config(object):
         return self._config_type
 
     @config_type.setter
-    def config_file(self, config_type):
+    def config_type(self, config_type):
         try:
             config_file = get_config_file(config_type)
         except ValueError as err:
-            log.error("An invalid config type was passed. Please check \"get_config_file\" in the controllers scripts for the valid types of config files.")
+            log.error("An invalid config type was passed. Please check \"get_config_file\" in the models/config.py scripts for the valid types of config files.")
             raise ValueError(err)
-        self._config_file = config_file
+        self._config_type = config_type
+        self.config_file = config_file
 
     def make_main(self):
         log.debug("creating the main config directory if it does not exist.")
@@ -94,18 +95,17 @@ class Config(object):
             self.write_rule(rule)
 
     def prepare(self):
-        with open(self._config_file, 'w+') as config_file:
+        with open(self.config_file, 'w+') as config_file:
             config_file.write("")
 
-
     def write_rule(self, rule):
-        with open(self._config_file, 'a') as config_file:
+        with open(self.config_file, 'a') as config_file:
             log.debug("writing rule {0}".format(rule))
             config_file.write(rule)
 
     def write_header(self):
         log.debug("writing header info {0}".format(self._header))
-        with open(self._config_file, 'a') as config_file:
+        with open(self.config_file, 'a') as config_file:
             if self._header:
                 log.debug("Found header. Writing to config file {0}".format(config_file))
                 config_file.write(self._header)
@@ -118,7 +118,7 @@ class DNSConfig(Config):
 
     def __init__(self):
         super(DNSConfig, self).__init__()
-        self._config_type = "dnschef"
+        self.config_type = "dnschef"
         self._header = "[A]\n"
 
     def add_rule(self, rule):
@@ -173,7 +173,7 @@ class APConfig(Config):
         self.ap_password = ap_password
         self.add_rule(self.ap_name)
         self.add_rule(self.ap_password)
-        self._config_type = "create_ap"
+        self.config_type = "create_ap"
 
     @property
     def ap_password(self):
