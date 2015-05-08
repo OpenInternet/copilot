@@ -3,7 +3,7 @@ from flask.ext.login import LoginManager
 from copilot import app
 from copilot import bcrypt, db
 from flask.ext.login import UserMixin
-from copilot.models.config import get_config_file
+from copilot.models.config import get_config_file, APConfig
 
 #stat logging
 import logging
@@ -61,9 +61,9 @@ class Trainer(Base, UserMixin):
     # Ensure Solo account
     _solo  = db.Column(db.Boolean,  default=True, nullable=False)
     # AP Name
-    _ap_name   = db.Column(db.String(128),  nullable=False)
+#    _ap_name   = db.Column(db.String(128),  nullable=False)
     # AP password
-    _ap_password = db.Column(db.String(192),  nullable=False)
+#    _ap_password = db.Column(db.String(192),  nullable=False)
     # Trainer password
     _password = db.Column(db.String(192),  nullable=False)
     _current = db.Column(db.String(192),  nullable=True)
@@ -72,10 +72,9 @@ class Trainer(Base, UserMixin):
         log.debug("Creating new trainer object.")
         log.debug("Trainer AP: {0}".format(ap_name))
         self.password = trainer_pass
-        self.ap_name = ap_name
-        self.ap_password = ap_password
         self.solo = True
         self.current = False
+        self.ap_config = APConfig(ap_name, ap_password)
 
     @property
     def solo(self):
@@ -103,36 +102,6 @@ class Trainer(Base, UserMixin):
 
     def is_correct_password(self, plaintext):
         return bcrypt.check_password_hash(self._password, plaintext)
-
-    @property
-    def ap_password(self):
-        return self._ap_pass
-
-    @password.setter
-    def ap_password(self, plaintext):
-        if (8 < len(str(plaintext)) <= 63 and
-            all(char in string.printable for char in plaintext)):
-            self._ap_password = plaintext
-        else:
-            print(plaintext)
-            raise ValueError("Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.")
-
-    @property
-    def ap_name(self):
-        return self._ap_name
-
-    @ap_name.setter
-    def ap_name(self, name):
-        if 0 < len(str(name)) <= 31:
-            self._ap_name = name
-        else:
-            raise ValueError("Access Point names must be between 1 and 31 characters long.")
-
-    def write_ap_config(self):
-        #TODO Replace with config obj
-        AP_CONFIG = get_config_file("create_ap")
-        with open(AP_CONFIG, 'w+') as config_file:
-            config_file.write("wlan0 eth0 {0} {1}".format(self._ap_name, self._ap_password))
 
     def __repr__(self):
         return '<Ap Name %r Solo %r>' % (self.ap_name, self.solo)

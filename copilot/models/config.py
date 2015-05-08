@@ -86,10 +86,16 @@ class Config:
         log.debug("adding rule {0}".format(rule))
         self._rules.append(rule)
 
-    def write_config(self):
+    def write(self):
+        self.prepare()
         self.write_header()
         for rule in self._rules:
             self.write_rule(rule)
+
+    def prepare():
+        with open(self._config_file, 'w+') as config_file:
+            config_file.write("")
+
 
     def write_rule(self, rule):
         with open(self._config_file, 'a') as config_file:
@@ -98,7 +104,7 @@ class Config:
 
     def write_header(self):
         log.debug("writing header info {0}".format(self._header))
-        with open(self._config_file, 'w') as config_file:
+        with open(self._config_file, 'a') as config_file:
             if self._header:
                 log.debug("Found header. Writing to config file {0}".format(config_file))
                 config_file.write(self._header)
@@ -153,3 +159,43 @@ class DNSConfig(Config):
         elif split_sub[1] in tld:
             return "*.{0}.{1}".format(split_sub[0], split_sub[1])
         #todo add just TLD.
+
+class APConfig(Config):
+
+    def __init__(self, ap_name, ap_password, iface_in="eth0", iface_out="wlan0"):
+        super(APConfig, self).__init__()
+        self._config_type = "create_ap"
+        self.iface_in = iface_in
+        self.iface_out = iface_out
+        self.header = "{0} {1} ".format(self.iface_in, self.iface_out)
+        self.ap_name = ap_name
+        self.ap_password = ap_password
+        self.add_rule(self.ap_name)
+        self.add_rule(self.ap_password)
+
+    @property
+    def ap_password(self):
+        return self._ap_pass
+
+    @ap_password.setter
+    def ap_password(self, plaintext):
+        if (8 < len(str(plaintext)) <= 63 and
+            all(char in string.printable for char in plaintext)):
+            self._ap_password = plaintext
+        else:
+            raise ValueError("Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.")
+
+    @property
+    def ap_name(self):
+        return self._ap_name
+
+    @ap_name.setter
+    def ap_name(self, name):
+        if 0 < len(str(name)) <= 31:
+            self._ap_name = name
+        else:
+            raise ValueError("Access Point names must be between 1 and 31 characters long.")
+
+    def add_rule(self, rule):
+        log.debug("adding rule {0}".format(rule))
+        self._rules.append("{0} ".format(rule))

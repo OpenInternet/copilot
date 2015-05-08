@@ -28,7 +28,7 @@ def config_initial():
         log.debug(trainer)
         db.session.add(trainer)
         db.session.commit()
-        trainer.write_ap_config()
+        trainer.ap_config.write()
         subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
         login_user(trainer)
         flash('Your configuration has been set!')
@@ -52,7 +52,7 @@ def config_admin():
             flash("set ap password")
             trainer.ap_password = form.ap_password.data
         db.session.commit()
-        trainer.write_ap_config()
+        trainer.ap_config.write()
         subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
         return redirect(url_for('index'))
 
@@ -94,7 +94,7 @@ def config():
         print("Committing Session File")
         db.session.commit()
         print("Writing Config File")
-        trainer.write_ap_config()
+        trainer.ap_config.write()
         print("Restarting create_ap")
         subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
         login_user(trainer)
