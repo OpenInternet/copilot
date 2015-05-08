@@ -51,7 +51,7 @@ def get_valid_actions():
     return CP_ACTIONS
 
 
-class Config:
+class Config(object):
 
     def __init__(self):
         self._rules = []
