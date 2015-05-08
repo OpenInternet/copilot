@@ -27,8 +27,7 @@ def get_config_dir(directory):
 def get_config_file(config):
     """ return the path to a config file."""
     _copilot_dir = get_config_dir("main")
-    configs = {}
-    if config in configs:
+    if config in CP_PACKAGES:
         if "config_file" in CP_PACKAGES[config]:
             try:
                 _directory = get_config_dir(CP_PACKAGES[config]["directory"])
