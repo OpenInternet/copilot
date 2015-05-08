@@ -93,7 +93,7 @@ class Config(object):
         for rule in self._rules:
             self.write_rule(rule)
 
-    def prepare():
+    def prepare(self):
         with open(self._config_file, 'w+') as config_file:
             config_file.write("")
 
