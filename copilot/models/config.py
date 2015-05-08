@@ -1,4 +1,5 @@
 import os
+import string
 
 #stat logging
 import logging
