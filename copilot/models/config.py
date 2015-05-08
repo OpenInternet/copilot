@@ -173,6 +173,7 @@ class APConfig(Config):
         self.ap_password = ap_password
         self.add_rule(self.ap_name)
         self.add_rule(self.ap_password)
+        self._config_type = "create_ap"
 
     @property
     def ap_password(self):
