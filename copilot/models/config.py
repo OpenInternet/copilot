@@ -31,11 +31,12 @@ def get_config_file(config):
         if "config_file" in CP_PACKAGES[config]:
             try:
                 _directory = get_config_dir(CP_PACKAGES[config]["directory"])
+                _path = os.path.join(_directory, CP_PACKAGES[config]["config_file"])
+                log.debug("Returning config path {0}".format(_path))
+                return _path
             except ValueError as err:
                 log.error("Directory found in CP_PACKAGES under the {0} package was invalid.".format(config))
                 raise ValueError(err)
-            log.debug("Returning config path")
-            return os.path.join(_directory, CP_PACKAGES[config]["config_file"])
     else:
         raise ValueError("That config file is not valid.")
 
