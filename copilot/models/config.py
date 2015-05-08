@@ -4,12 +4,12 @@ import os
 import logging
 log = logging.getLogger(__name__)
 
-CP_PACKAGES = {"dns":{"name": "dnschef",
+CP_PACKAGES = {"dnschef":{"name": "dnschef",
                       "config_file": "dnschef.conf",
                       "target" : "dns",
                       "actions": ["block", "redirect"],
                       "directory":"main"},
-               "ap":{"name": "create_ap",
+               "create_ap":{"name": "create_ap",
                      "config_file": "ap.conf",
                      "directory":"profiles"}}
 
