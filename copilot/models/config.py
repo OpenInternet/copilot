@@ -7,9 +7,11 @@ log = logging.getLogger(__name__)
 CP_PACKAGES = {"dns":{"name": "dnschef",
                       "config_file": "dnschef.conf",
                       "target" : "dns",
-                      "actions": ["block", "redirect"]},
+                      "actions": ["block", "redirect"],
+                      "directory":"main"},
                "ap":{"name": "create_ap",
-                     "config_file": "ap.conf"}}
+                     "config_file": "ap.conf",
+                     "directory":"profiles"}}
 
 CP_ACTIONS = ['block']
 
@@ -17,18 +19,24 @@ def get_config_dir(directory):
     directories = {"main":"/tmp/copilot/",
                    "profiles": "/tmp/copilot/profiles"}
     if directory in directories:
+        log.debug("Directory {0} found and being returned.".format(directory))
         return directories[directory]
     else:
         raise ValueError("That config directory is not valid.")
 
 def get_config_file(config):
+    """ return the path to a config file."""
     _copilot_dir = get_config_dir("main")
     configs = {}
-    for item in CP_PACKAGES:
-        if "config_file" in CP_PACKAGES[item]:
-            configs[CP_PACKAGES[item]["name"]] = CP_PACKAGES[item]["config_file"]
     if config in configs:
-        return configs[config]
+        if "config_file" in CP_PACKAGES[config]:
+            try:
+                _directory = get_config_dir(CP_PACKAGES[config]["directory"])
+            except ValueError as err:
+                log.error("Directory found in CP_PACKAGES under the {0} package was invalid.".format(config))
+                raise ValueError(err)
+            log.debug("Returning config path")
+            return os.path.join(_directory, CP_PACKAGES[config]["config_file"])
     else:
         raise ValueError("That config file is not valid.")
 
