@@ -176,7 +176,7 @@ class APConfig(Config):
 
     @property
     def ap_password(self):
-        return self._ap_pass
+        return self._ap_password
 
     @ap_password.setter
     def ap_password(self, plaintext):
