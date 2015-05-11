@@ -96,14 +96,16 @@ class Profile:
                 _config.add_rule([r.target, r.sub_target])
         _config.write_config()
 
-    def apply(self):
+    def apply_config(self):
         _configs = []
         log.info("looking for config files that need to be written.")
-        for r in self.rules():
+        for r in self.rules:
             if r.action not in _configs:
+                log.debug("Adding a {0} config to be applied.".format(r.action))
                 _configs.append(r.action)
         log.debug("{0} configs found:\n {1}".format(len(_configs), _configs))
         for c in _configs:
+            log.debug("Writing config {0}.".format(c))
             self.write_config(c)
 
 

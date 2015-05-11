@@ -49,7 +49,7 @@ def profile(prof_name):
         db.session.commit()
         #This should be used for any wioth an apply flag
         log.debug("Applying profile {0}".format(prof_name))
-        profile.apply()
+        profile.apply_config()
         flash('Your profile has been saved and Applied!')
         return redirect(url_for('profile_applied'))
     else:
