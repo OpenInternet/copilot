@@ -1,24 +1,9 @@
-from copilot import app
-from flask.ext.login import LoginManager
-from copilot.models import Trainer
+from copilot.models.trainer import get_ap_status
+from copilot.models.profile import get_profile_status
 
 #stat logging
 import logging
 log = logging.getLogger(__name__)
-
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view =  "login"
-
-@login_manager.user_loader
-def load_user(userid):
-    return get_trainer()
-
-def get_trainer():
-    """Only allow one trainer account. """
-    return Trainer.query.first()
-
 
 def get_status_items():
     """Get current status items.
@@ -26,7 +11,7 @@ def get_status_items():
     value: The text to put under the icon
     status: [off/on/error] The color of the icon background to use (off=grey, on=green, error=orange)
     """
-    print("TODO: get_status_items is currently not implemented")
+    log.warn("TODO: get_status_items is currently not fully implemented")
     profile = get_profile_status()
     access_point = get_ap_status()
     status_items = [{"icon":"wifi",
@@ -46,35 +31,3 @@ def get_status_items():
                      "status":"off",
                      "url":"profile_load"}]
     return status_items
-
-def get_profile_status():
-    trainer = get_trainer()
-    profile = {}
-    current_profile = False
-    try:
-        current_profile = trainer.current
-    except:
-        print("FIX THIS SOON")
-    if current_profile:
-        profile['status'] = "on"
-        profile['value'] = current_profile
-    else:
-        profile['status'] = "off"
-        profile['value'] = "NONE"
-    return profile
-
-def get_ap_status():
-    trainer = get_trainer()
-    ap = {}
-    current_ap = False
-    try:
-        current_ap = trainer.ap_name
-    except:
-        print("FIX THIS SOON")
-    if current_ap:
-        ap['status'] = "on"
-        ap['value'] = current_ap
-    else:
-        ap['status'] = "off"
-        ap['value'] = "NONE"
-    return ap

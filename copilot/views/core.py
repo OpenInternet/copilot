@@ -1,6 +1,6 @@
 #Get application content
 from copilot import app
-from copilot.controllers import get_trainer
+from copilot.models.trainer import get_trainer
 
 from flask import render_template, redirect, url_for
 from flask.ext.login import login_required, current_user

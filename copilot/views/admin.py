@@ -1,13 +1,13 @@
 #Get application content
 from copilot import app, db
-from copilot.models import Trainer
+from copilot.models.trainer import Trainer
 #Import forms
 from copilot.views.forms import LoginForm
 
 #Get flask modules
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, logout_user, login_required
-from copilot.controllers import get_trainer
+from copilot.models.trainer import get_trainer
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -30,5 +30,3 @@ def logout():
     logout_user()
 
     return redirect(url_for('index'))
-
-

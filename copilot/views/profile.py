@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
 #Get application content
-from copilot import app, db, models
-from copilot.models import get_valid_actions, get_valid_targets
+from copilot import app, db
+from copilot.models import profile as mdl_prof
 from copilot.views import forms
 from flask.ext.wtf import Form
+from copilot.controllers import get_status_items
+from copilot.models.config import get_valid_actions, get_valid_targets
+from copilot.models.trainer import get_trainer
 
 
 #Get flask modules
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, login_required
 from wtforms import FormField
-from copilot.controllers import get_trainer, get_status_items
 
 from os import listdir
 from os.path import isfile, join
@@ -32,9 +34,9 @@ def profile(prof_name):
         log.info("profile form was validated")
         log.debug("Form {0} submitted".format(form.prof_name.data))
         prof_name = form.prof_name.data
-        profile = models.Profile(prof_name)
+        profile = mdl_prof.Profile(prof_name)
         for rule in form.data['rules']:
-            _rule = models.Rule(rule['target'], rule['action'], rule['sub_target'])
+            _rule = mdl_prof.Rule(rule['target'], rule['action'], rule['sub_target'])
             profile.add_rule(_rule)
         log.debug("Saving profile {0}".format(prof_name))
         profile.save()
@@ -47,13 +49,13 @@ def profile(prof_name):
         db.session.commit()
         #This should be used for any wioth an apply flag
         log.debug("Applying profile {0}".format(prof_name))
-        profile.apply_it()
+        profile.apply_config()
         flash('Your profile has been saved and Applied!')
         return redirect(url_for('profile_applied'))
     else:
         log.info("Form was not validated.")
         log.debug(form.errors)
-        profile = models.Profile(prof_name)
+        profile = mdl_prof.Profile(prof_name)
         if profile.exist():
             log.debug("Loading rule {0}".format(prof_name))
             profile.load()
@@ -64,7 +66,7 @@ def profile(prof_name):
         else:
             log.debug("New profile being created")
             form = forms.NewProfileForm()
-            form.rules.append_entry(data={"target":"dns", "sub_target":"internews.org", "action":"block"})
+            form.rules.append_entry(data={"target":get_valid_targets(), "sub_target":"internews.org", "action":get_valid_actions()})
             form.prof_name.data = "new"
             log.debug(dir(form.rules))
     status_items = get_status_items()
@@ -117,7 +119,7 @@ def profile_applied():
     # if none send trainer to create a new one.
     if prof_applied == None:
         return redirect(url_for('profile'))
-    profile = models.Profile(prof_applied)
+    profile = mdl_prof.Profile(prof_applied)
     profile.load()
     status_items = get_status_items()
     buttons = [{"name":"Return", "link":url_for('profile')}]
@@ -129,4 +131,3 @@ def profile_save():
     """Display the profile that is currently being run on the Co-Pilot box. """
 
     return render_template('profile_save.html', form=form)
-

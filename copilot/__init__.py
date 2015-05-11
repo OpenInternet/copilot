@@ -31,12 +31,10 @@ bcrypt = Bcrypt(app)
 # by modules and controllers
 db = SQLAlchemy(app)
 
-#Putting the import at the end avoids the circular import error.
-from copilot import models
+# Putting the import at the end avoids the circular import error.
+from copilot.models import config, profile, trainer
 from copilot import controllers
-from copilot.views import core, admin, config, profile
-
+from copilot.views import admin, config, core, forms, profile
 
 # Build the database
 db.create_all()
-

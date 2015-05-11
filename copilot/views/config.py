@@ -1,15 +1,20 @@
 #Get application content
 from copilot import app, db
-from copilot.controllers import get_trainer, get_status_items
+from copilot.controllers import get_status_items
+from copilot.models.trainer import get_trainer
 
 import subprocess
 #Import forms
 from copilot.views.forms import Config, AdminConfig
-from copilot.models import Trainer
+from copilot.models.trainer import Trainer
 
 #Get flask modules
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, login_required
+
+#stat logging
+import logging
+log = logging.getLogger(__name__)
 
 @app.route('/config/initial', methods=["GET", "POST"])
 def config_initial():
@@ -20,9 +25,10 @@ def config_initial():
         return redirect(url_for('index'))
     if form.validate_on_submit():
         trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
+        log.debug(trainer)
         db.session.add(trainer)
         db.session.commit()
-        trainer.write_ap_config()
+        trainer.ap_config.write()
         subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
         login_user(trainer)
         flash('Your configuration has been set!')
@@ -46,7 +52,7 @@ def config_admin():
             flash("set ap password")
             trainer.ap_password = form.ap_password.data
         db.session.commit()
-        trainer.write_ap_config()
+        trainer.ap_config.write()
         subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
         return redirect(url_for('index'))
 
@@ -58,15 +64,16 @@ def config():
     trainer_exists = get_trainer()
     #If there is already a trainer setup on the box then provide the admin configuration.
     if trainer_exists:
-        print("01 trainer exists")
+        log.info("Trainer exists")
         form = AdminConfig()
     else:
-        print("02 trainer DOES NOT exists")
+        log.info("Trainer DOES NOT exists")
         form = Config()
     if form.validate_on_submit():
         print("FORM IS VALID")
         #Add any new values to the existing trainer
         if trainer_exists:
+            log.debug("found a trainer. Modifying existing configuration.")
             trainer = trainer_exists
             if form.password.data != "":
                 flash("set password")
@@ -79,6 +86,7 @@ def config():
                 trainer.ap_password = form.ap_password.data
         #Create the trainer if one does not exist
         else:
+            log.debug("No trainer found. Creating a new configuration.")
             trainer = Trainer(trainer_pass=form.password.data, ap_name=form.ap_name.data, ap_password=form.ap_password.data)
             db.session.add(trainer)
 
@@ -86,7 +94,7 @@ def config():
         print("Committing Session File")
         db.session.commit()
         print("Writing Config File")
-        trainer.write_ap_config()
+        trainer.ap_config.write()
         print("Restarting create_ap")
         subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
         login_user(trainer)
