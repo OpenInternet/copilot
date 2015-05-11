@@ -7,13 +7,13 @@ readonly pid_file="/tmp/dnschef.pid"
 start_dnschef() {
     if [[ -e "$custom_profile" ]]; then
         echo "Starting with a custom DNSChef profile."
-        #Write PID to custom file in five seconds for later killing
-        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file")
+        #Write PID to custom file in 5 seconds for later killing
+        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
         "$command" --file="$custom_profile"
     else
         echo "Starting with an empty DNSChef profile."
-        #Write PID to custom file in five seconds for later killing
-        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file")
+        #Write PID to custom file in 5 seconds for later killing
+        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
         "$command"
 
     fi
