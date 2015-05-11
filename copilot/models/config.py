@@ -77,13 +77,6 @@ class Config(object):
         else:
             return False
 
-    def check_dir(self):
-        _dir = get_config_dir("main")
-        if os.path.exists(_dir):
-            return True
-        else:
-            return False
-
     def add_rule(self, rule):
         log.debug("adding rule {0}".format(rule))
         self._rules.append(rule)
@@ -97,11 +90,13 @@ class Config(object):
                 self.write_rule(config_file, rule)
 
     def prepare(self):
-        if not self.check_dir():
-            log.info("Creating the main config directory if it does not exist.")
-            _dir = get_config_dir("main")
-            if not os.path.exists(_dir):
-                os.makedirs(_dir)
+        log.info("Creating the config directory if it does not exist.")
+        _dir = get_config_dir("main")
+        if not os.path.exists(_dir):
+            log.info("Creating the main config directory {0}.".format(_dir))
+            os.makedirs(_dir)
+        else:
+            log.info("The config directory {0} exists and will not be created.".format(_dir))
 
     def write_rule(self, config_file, rule):
         log.debug("writing rule {0}".format(rule))
