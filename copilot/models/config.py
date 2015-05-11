@@ -12,7 +12,7 @@ CP_PACKAGES = {"dnschef":{"name": "dnschef",
                       "directory":"main"},
                "create_ap":{"name": "create_ap",
                      "config_file": "ap.conf",
-                     "directory":"profiles"}}
+                     "directory":"main"}}
 
 CP_ACTIONS = ['block']
 
@@ -56,6 +56,7 @@ class Config(object):
 
     def __init__(self):
         self._rules = []
+        self.config_dir = "main"
 
     @property
     def config_type(self):
@@ -71,20 +72,11 @@ class Config(object):
         self._config_type = config_type
         self.config_file = config_file
 
-
     def check_file(self):
         if os.path.exists(self._config_file):
             return True
         else:
             return False
-
-    def check_dir(self):
-        _dir = get_config_dir("main")
-        if os.path.exists(_dir):
-            return True
-        else:
-            return False
-
 
     def add_rule(self, rule):
         log.debug("adding rule {0}".format(rule))
@@ -92,43 +84,39 @@ class Config(object):
 
     def write(self):
         self.prepare()
-        self.write_header()
-        for rule in self._rules:
-            self.write_rule(rule)
+        log.debug("Opening config file {0} for writing.".format(self.config_file))
+        with open(self.config_file, 'w+') as config_file:
+            self.write_header(config_file)
+            for rule in self._rules:
+                self.write_rule(config_file, rule)
 
     def prepare(self):
-        if not self.check_dir():
-            log.info("Creating the main config directory if it does not exist.")
-            _dir = get_config_dir("main")
-            if not os.path.exists(_dir):
-                os.makedirs(_dir)
-        if not self.check_file():
-            log.info("Creating and emptying the current config file.")
-            with open(self.config_file, 'w+') as config_file:
-                config_file.write("")
+        log.info("Creating the config directory if it does not exist.")
+        _dir = get_config_dir(self.config_dir)
+        if not os.path.exists(_dir):
+            log.info("Creating the main config directory {0}.".format(_dir))
+            os.makedirs(_dir)
+        else:
+            log.info("The config directory {0} exists and will not be created.".format(_dir))
 
-    def write_rule(self, rule):
-        with open(self.config_file, 'a') as config_file:
-            log.debug("writing rule {0}".format(rule))
-            config_file.write(rule)
+    def write_rule(self, config_file, rule):
+        log.debug("writing rule {0}".format(rule))
+        config_file.write(rule)
 
-    def write_header(self):
-        log.debug("writing header info {0}".format(self._header))
-        with open(self.config_file, 'a') as config_file:
-            if self._header:
-                log.debug("Found header. Writing to config file {0}".format(config_file))
-                config_file.write(self._header)
-            else:
-                log.debug("No header found. Overwriting config file {0}".format(config_file))
-                config_file.write("")
-
+    def write_header(self, config_file):
+        log.debug("writing header info {0}".format(self.header))
+        if self.header:
+            log.debug("Found header. Writing to config file {0}".format(config_file))
+            config_file.write(self.header)
+        else:
+            log.debug("No header found.")
 
 class DNSConfig(Config):
 
     def __init__(self):
         super(DNSConfig, self).__init__()
         self.config_type = "dnschef"
-        self._header = "[A]\n"
+        self.header = "[A]\n"
 
     def add_rule(self, rule):
         _rule = ""
@@ -177,7 +165,7 @@ class APConfig(Config):
         self._config_type = "create_ap"
         self.iface_in = iface_in
         self.iface_out = iface_out
-        self.header = "{0} {1} ".format(self.iface_in, self.iface_out)
+        self.header = "{0} {1} ".format(self.iface_out, self.iface_in)
         self.ap_name = ap_name
         self.ap_password = ap_password
         self.add_rule(self.ap_name)
