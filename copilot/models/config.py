@@ -12,7 +12,7 @@ CP_PACKAGES = {"dnschef":{"name": "dnschef",
                       "directory":"main"},
                "create_ap":{"name": "create_ap",
                      "config_file": "ap.conf",
-                     "directory":"profiles"}}
+                     "directory":"main"}}
 
 CP_ACTIONS = ['block']
 
@@ -56,6 +56,7 @@ class Config(object):
 
     def __init__(self):
         self._rules = []
+        self.config_dir = "main"
 
     @property
     def config_type(self):
@@ -91,7 +92,7 @@ class Config(object):
 
     def prepare(self):
         log.info("Creating the config directory if it does not exist.")
-        _dir = get_config_dir("main")
+        _dir = get_config_dir(self.config_dir)
         if not os.path.exists(_dir):
             log.info("Creating the main config directory {0}.".format(_dir))
             os.makedirs(_dir)
