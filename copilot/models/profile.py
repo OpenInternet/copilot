@@ -100,8 +100,8 @@ class Profile:
                     log.debug("Adding a rule ({0} {1}) to dnschef config.".format(r.action, r.sub_target))
                     _configs["dnschef"].add_rule(r.target, r.action, r.sub_target)
         for c in _configs:
-            log.debug("Writing config {0}.".format(c))
-            c.write()
+            log.debug("Writing {0} config.".format(c))
+            _configs[c].write()
 
 class Rule:
 
