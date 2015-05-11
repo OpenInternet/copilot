@@ -4,7 +4,6 @@ from flask.ext.login import UserMixin
 import csv
 import os
 import uuid
-from urlparse import urlparse
 import subprocess
 from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions
 from copilot.models.trainer import get_trainer

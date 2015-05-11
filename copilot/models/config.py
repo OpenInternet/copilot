@@ -1,5 +1,6 @@
 import os
 import string
+from urlparse import urlparse
 
 #stat logging
 import logging
