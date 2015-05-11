@@ -104,10 +104,10 @@ class Config(object):
         config_file.write(rule)
 
     def write_header(self, config_file):
-        log.debug("writing header info {0}".format(self._header))
-        if self._header:
+        log.debug("writing header info {0}".format(self.header))
+        if self.header:
             log.debug("Found header. Writing to config file {0}".format(config_file))
-            config_file.write(self._header)
+            config_file.write(self.header)
         else:
             log.debug("No header found.")
 
@@ -116,7 +116,7 @@ class DNSConfig(Config):
     def __init__(self):
         super(DNSConfig, self).__init__()
         self.config_type = "dnschef"
-        self._header = "[A]\n"
+        self.header = "[A]\n"
 
     def add_rule(self, rule):
         _rule = ""
