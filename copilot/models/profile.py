@@ -92,13 +92,13 @@ class Profile:
                 #TODO This needs to be replaced with some sort of config file that checks the proper config object to instantiate when a specific config type is passed.
                 if r.target == "dns":
                     log.debug("Creating a {0} config".format("dnschef"))
-                    _configs["dnschef"] = DNSConfig()
+                    _configs["dns"] = DNSConfig()
                     log.debug("Adding a rule ({0} {1}) to dnschef config.".format(r.action, r.sub_target))
-                    _configs["dnschef"].add_rule(r.target, r.action, r.sub_target)
+                    _configs["dns"].add_rule(r.target, r.action, r.sub_target)
             else:
                 if r.target == "dns":
                     log.debug("Adding a rule ({0} {1}) to dnschef config.".format(r.action, r.sub_target))
-                    _configs["dnschef"].add_rule(r.target, r.action, r.sub_target)
+                    _configs["dns"].add_rule(r.target, r.action, r.sub_target)
         for c in _configs:
             log.debug("Writing {0} config.".format(c))
             _configs[c].write()
