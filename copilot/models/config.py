@@ -165,7 +165,7 @@ class APConfig(Config):
         self._config_type = "create_ap"
         self.iface_in = iface_in
         self.iface_out = iface_out
-        self.header = "{0} {1} ".format(self.iface_in, self.iface_out)
+        self.header = "{0} {1} ".format(self.iface_out, self.iface_in)
         self.ap_name = ap_name
         self.ap_password = ap_password
         self.add_rule(self.ap_name)
