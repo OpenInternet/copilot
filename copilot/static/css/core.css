@@ -1,15 +1,15 @@
 /*
 Color Palette
 
-Dark Blue : 002e62
-Light Blue : 005baa
-Grey Blue : 96a3c3
-Light Grey : 939192
-Dark Grey : 626264
-Green : 6db33
-Light Green : b3d78d
-Orange : fbb033
-Yellow : fbb033
+Dark Blue : #002e62
+Light Blue : #005baa
+Grey Blue : #96a3c3
+Light Grey : #939192
+Dark Grey : #626264
+Green : #6db33
+Light Green : #b3d78d
+Orange : #fbb033
+Yellow : #fbb033
 */
 
 body {
@@ -99,7 +99,7 @@ li.flashes.success:before {
 
 .rule.error:before {
     content: "• ";
-	color: #f25d23;
+        color: #f25d23;
 }
 
 .help {
@@ -107,25 +107,25 @@ li.flashes.success:before {
 }
 
 .rule.input:focus + div.help {
-	display: block;
+        display: block;
 }
 
 .status {
-	text-align: center;
-	border-bottom:1px solid #939192;
-	border-top:1px solid #939192;
-	display: block;
-	z-index: 99;
+        text-align: center;
+        border-bottom:1px solid #939192;
+        border-top:1px solid #939192;
+        display: block;
+        z-index: 99;
 }
 
 svg.icon.on {
-	fill: #b3d78d;
+        fill: #b3d78d;
 }
 
 svg.icon.off {
-	fill: #939192;
+        fill: #939192;
 }
 
 svg.icon.error {
-	fill: #f25d23;
+        fill: #f25d23;
 }
