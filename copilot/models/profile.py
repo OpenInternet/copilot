@@ -32,7 +32,7 @@ def get_profile_status():
 class Profile:
     def __init__(self, name, description=None, rules={}):
         self.rules = []
-        self._profile_dir = get_config_dir("profiles")
+        self.profile_dir = "profiles"
         self.name = name
         self.description = description
         if rules:
@@ -41,6 +41,17 @@ class Profile:
                     self.add_rule(rule)
             except ValueError as _err: #TODO add real error correction here
                 raise _err
+    @property
+    def profile_dir(self):
+        return self._profile_dir
+
+    @profile_dir.setter
+    def profile_dir(self, plaintext):
+        try:
+            _dir = get_config_dir(plaintext)
+            self._profile_dir = _dir
+        except ValueError:
+            raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
     def add_rule(self, rule):
         log.debug("adding rule {0} {1} {2}".format(rule.action, rule.target, rule.sub_target))
@@ -57,9 +68,9 @@ class Profile:
 
     def save(self):
         log.info("saving profile {0}".format(self.name))
-        if not os.path.exists(self._profile_dir):
-            os.makedirs(self._profile_dir)
-        profile_file = (self._profile_dir + self.name)
+        if not os.path.exists(self.profile_dir):
+            os.makedirs(self.profile_dir)
+        profile_file = (self.profile_dir + self.name)
         #Empty the file
         open(profile_file, 'w').close()
         #Save rules to file
@@ -68,15 +79,22 @@ class Profile:
         log.info("Profile {0} saved".format(self.name))
 
     def exist(self):
-        profile_file = (self._profile_dir + self.name)
+        profile_file = (self.profile_dir + self.name)
         if os.path.isfile(profile_file):
             log.info(" profile {0} exists".format(self.name))
             return True
         else:
             log.info(" profile {0} does NOT exists".format(self.name))
 
+    def refresh(self):
+        """Reload all values from file."""
+        #TODO
+        log.info("Refreshing profile from file.")
+        if _NOT_VALID:
+            raise ValueError("Config file is not valid")
+
     def load(self):
-        profile_file = (self._profile_dir + self.name)
+        profile_file = os.path.join(self.profile_dir, self.name)
         with open(profile_file, 'r') as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
             for row in csv_reader:
@@ -84,6 +102,11 @@ class Profile:
                 self.add_rule(_rule)
 
     def apply_config(self):
+        log.info("Applying profile {0}".format(self.name))
+        trainer = get_trainer() #Save as current profile for trainer.
+        trainer.current = self.name
+        db.session.commit()
+
         _configs = {}
         log.info("looking for config files that need to be written.")
         _targets = get_valid_targets()

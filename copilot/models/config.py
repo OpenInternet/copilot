@@ -1,7 +1,7 @@
 import os
 import string
 from urlparse import urlparse
-
+from copilot.utils.file_sys import get_usb_dirs
 #stat logging
 import logging
 log = logging.getLogger(__name__)
@@ -26,7 +26,8 @@ CP_PACKAGES = {"dnschef":{"name": "dnschef",
 
 def get_config_dir(directory):
     directories = {"main" : "/tmp/copilot/",
-           "profiles" : "/tmp/copilot/profiles"}
+                   "profiles" : "/tmp/copilot/profiles",
+                   "temporary" : "/tmp/copilot/tmp/"}
     if directory in directories:
         log.debug("Directory {0} found and being returned.".format(directory))
         return directories[directory]

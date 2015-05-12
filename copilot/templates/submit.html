@@ -4,9 +4,9 @@
         {% for button in buttons %}
         <div class="two columns">
             {% if button.submit == True  %}
-            <input type="submit" value="{{ button.name }}" class="form_button">
+            <input type="submit" name="submit_action" value="{{ button.name }}" class="form_button">
             {% else %}
-            <input type="button" value="{{ button.name }}" class="form_button">
+            <input type="button" name="submit_action" value="{{ button.name }}" class="form_button">
             {% endif %}
         </div>
         {% endfor %}
@@ -19,7 +19,7 @@
         {% for button in buttons %}
         <div class="two columns">
             <form method="post"  action="{{ button.link }}">
-                <input type="submit" value="{{ button.name }}" class="form_button">
+                <input type="submit" name="submit_action" value="{{ button.name }}" class="form_button">
             </form>
         </div>
         {% endfor %}
