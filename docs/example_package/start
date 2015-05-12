@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+start_create_ap() {
+    if [[ -e /tmp/copilot/example.conf ]]; then
+        echo "Starting example configuration"
+        while true: do
+              sleep 10000000000000
+        done
+    else
+        while true: do
+              sleep 10000000000000
+        done
+    fi
+}
+
+kill_all() {
+    echo "I am cleaning up after myself here."
+    exit 0
+}
+
+
+main() {
+    start_create_ap
+}
+trap 'clean_up' EXIT
+main

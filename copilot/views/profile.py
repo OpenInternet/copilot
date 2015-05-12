@@ -8,7 +8,6 @@ from flask.ext.wtf import Form
 from copilot.controllers import get_status_items
 from copilot.models.config import get_valid_actions, get_valid_targets
 from copilot.models.trainer import get_trainer
-from copilot.utils.file_sys import get_usb_dirs
 
 #Get flask modules
 from flask import redirect, url_for, render_template, flash, make_response, request
@@ -139,14 +138,7 @@ def profile_load():
         tmp_profile.apply_config()
         return redirect(url_for('profile', prof_name=tmp_profile.name))
 
-    #TODO Add usb directories here.
-    _profile_dirs = get_usb_dirs()
-    _profile_dirs.append(get_config_dir("profiles"))
-    profiles = []
-    for _dir in _profile_dirs:
-        for _prof in listdir(_profile_dir):
-            if isfile(join(_profile_dir, _prof)):
-                profiles.append(_prof)
+    profiles = mdl_prof.get_all_profiles()
     status_items = get_status_items()
     buttons = [{"name":"Return", "link":url_for('profile')}]
     return render_template('load.html',

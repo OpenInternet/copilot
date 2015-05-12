@@ -1,0 +1,17 @@
+
+## Required package files
+
+* package.conf
+The configuration file for the package.
+
+* supervisor.conf
+The supervisor program configuration that you want added to the final supervisor.conf
+
+* config.py
+The python file that contains the ```ConfigWriter``` object used to write and validate configs.
+
+* install
+The executable script that is used to install and configure the package.
+
+* start
+The executable script that is used to start and clean up after the package.

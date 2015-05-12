@@ -1,7 +1,7 @@
 import os
-import string
 from urlparse import urlparse
 from copilot.utils.file_sys import get_usb_dirs
+from ConfigParser import SafeConfigParser
 #stat logging
 import logging
 log = logging.getLogger(__name__)
@@ -50,8 +50,13 @@ def get_config_file(config):
     else:
         raise ValueError("That config file is not valid.")
 
-def get_valid_actions():
-    _valid_actions = ["block", "redirect"]
+def get_valid_actions(package=None):
+    if not package:
+        _valid_actions = ["block", "redirect"]
+    else:
+        for item in CP_PACKAGES:
+            if "target" in CP_PACKAGES[item] and "target" == package:
+                _valid_actions = CP_PACKAGES[item]["actions"]
     return _valid_actions
 
 def get_valid_targets():
@@ -121,58 +126,6 @@ class Config(object):
         else:
             log.debug("No header found.")
 
-class DNSConfig(Config):
-
-    def __init__(self):
-        super(DNSConfig, self).__init__()
-        self.config_type = "dnschef"
-        self.header = "[A]\n"
-
-    def add_rule(self, target, action, sub):
-        _rule = ""
-        _domain = ""
-        _address = ""
-        try:
-            _domain = self.get_dns(sub)
-        except ValueError as err:
-            log.warn("Could not add rule. Invalid Target.")
-        if action == "block":
-            log.debug("Found a blocking role. Setting address to localhost (127.0.0.1).")
-            _address = "127.0.0.1"
-        elif action == "redirect":
-            log.debug("Found a redirection role. Setting address to default AP address (192.168.12.1).")
-            _address = "192.168.12.1"
-        _rule = "{0} = {1}\n".format(_domain, _address)
-        self._rules.append(_rule)
-
-    def get_dns(self, sub):
-        tld = ["ac", "ad", "ae", "aero", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "arpa", "as", "asia", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "biz", "bj", "bl", "bm", "bn", "bo", "bq", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cat", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "com", "coop", "cr", "cs", "cu", "cv", "cw", "cx", "cy", "cz", "dd", "de", "dj", "dk", "dm", "do", "dz", "ec", "edu", "ee", "eg", "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gov", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "info", "int", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jobs", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "local", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "me", "mf", "mg", "mh", "mil", "mk", "ml", "mm", "mn", "mo", "mobi", "mp", "mq", "mr", "ms", "mt", "mu", "museum", "mv", "mw", "mx", "my", "mz", "na", "name", "nato", "nc", "ne", "net", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "onion", "org", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "pro", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "su", "sv", "sx", "sy", "sz", "tc", "td", "tel", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tp", "tr", "travel", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "xxx", "ye", "yt", "yu", "za", "zm", "zr", "zw"]
-        _sub = sub
-        log.debug("sub target is {0}".format(_sub))
-        if _sub == "":
-            return None
-        parsed = urlparse(_sub).path
-        log.debug("parsed url is {0}".format(parsed))
-        split_sub = string.split(parsed, ".")
-        log.debug("split up sub target is {0}".format(split_sub))
-        #TODO the below is a monstrosity it needs to be made to actually work
-        if len(split_sub) > 3:
-            log.error("The domain {0} has too many parts and cannot be processed. Use a simpler domain with MAX 3 parts.".format(_sub))
-            raise ValueError("invalid url")
-        elif len(split_sub) == 3:
-            log.debug("The domain {0} has exactly three parts.".format(_sub))
-            return parsed
-        elif len(split_sub) == 1:
-            log.debug("The domain {0} has exactly one part. Interpreting as a domain name only.".format(_sub))
-            return "*.{0}.*".format(split_sub[0])
-        elif (len(split_sub) == 2 and split_sub[1] not in tld):
-            log.debug("The domain {0} has exactly two parts, and the second part is NOT a top level domain I recognize. Interpreting as a host + a domain name.".format(_sub))
-            return "{0}.{1}.*".format(split_sub[0], split_sub[1])
-        elif split_sub[1] in tld:
-            log.debug("The domain {0} has exactly two parts, and the second part IS a top level domain I recognize. Interpreting as a domain name with a top level domain.".format(_sub))
-            return "*.{0}.{1}".format(split_sub[0], split_sub[1])
-        #todo add just TLD.
-
 class APConfig(Config):
 
     def __init__(self, ap_name, ap_password, iface_in="eth0", iface_out="wlan0"):
@@ -213,3 +166,77 @@ class APConfig(Config):
     def add_rule(self, rule):
         log.debug("adding rule {0}".format(rule))
         self._rules.append("{0} ".format(rule))
+
+
+class ProfileParser(SafeConfigParser):
+    def get_list(self,section,option):
+        value = self.get(section,option)
+        return list(filter(None, (x.strip() for x in value.splitlines())))
+
+class ProfileWriter(ProfileParser):
+    def set_rule(self, rule):
+        action = rule[0]
+        target = rule[1]
+        sub = rule[2]
+        rule_list = []
+        if not self.has_section(action):
+            self.add_section(action)
+        if self.has_option(action, target):
+            rule_list = self.get_list(action, target)
+        rule_list.append(sub)
+        text_rules = "\n\t".join(rule_list)
+        self.set(action, target, text_rules)
+
+
+class ProfileConfig(object):
+    def __init__(self, path):
+        self.path = os.path.abspath(path)
+        self.parser = ProfileParser()
+        if self.valid():
+            self.data = self.build_map()
+        self.rules = self.get_rules()
+
+    def get_rules(self):
+        """
+        Returns a list of rules.
+        [["block", "dns", "www.internews.org"],["redirect", "dns", "info.internews"]]
+        """
+        rules = []
+        _val_targets = get_valid_targets()
+        for target in self.data:
+            if target in _val_targets:
+                for action in self.data[target]:
+                    if action in get_valid_actions(target):
+                        for sub in self.data[target][action]:
+                            rules.append([action, target, sub])
+        return rules
+
+    def valid(self):
+        try:
+            _data = self.parser.read(self.path)
+        except as e:
+            log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.debug(e)
+            return False
+        if _data == []:
+            log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            return False
+        if not self.parser.has_option("info", "name"):
+            log.warn("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
+            return False
+        #TODO Add config file format values for each module
+        log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
+        return True
+
+    def build_map(self):
+        _dict = {}
+        _data = self.parser.read(self.path)
+        _sections = self.parser.sections()
+        log.debug("Config file has the following sections {0}.".format(_sections))
+        for sect in _sections:
+            _dict[sect] = {}
+            _options = self.parser.options(sect)
+            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
+            for opt in _options:
+                _dict[sect][opt] = self.parser.getlist("sect", "opt")
+        return _dict
