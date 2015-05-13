@@ -7,7 +7,7 @@ import uuid
 import subprocess
 from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions
 from copilot.models.trainer import get_trainer
-from config import DNSConfig
+from config import get_config_writer
 from copilot.utils.file_sys import get_usb_dirs
 from werkzeug import secure_filename
 
@@ -72,16 +72,14 @@ class Profile(object):
 
     def add_rule(self, rule):
         log.debug("adding rule {0} {1} {2}".format(rule.action, rule.target, rule.sub_target))
+        config_obj = get_config_writer(rule[1])
         try:
-            rule_obj = Rule(rule.target, rule.action, rule.sub_target)
+            config_obj.add_rule(rule.target, rule.action, rule.sub_target)
         except ValueError as _err:
             log.error("Error Encountered in add_rule()")
-            raise ValueError(_err) #TODO add real error correction here
-        if rule_obj.is_valid():
-            log.info("Rule is valid")
-            self.rules.append(rule_obj)
-        else:
             log.info("Rule is NOT valid")
+            raise ValueError(_err) #TODO add real error correction here
+        self.rules.append([rule.action, rule.target, rule.sub_target])
 
     def save(self):
         log.info("Saving profile {0} to {1}".format(self.name, self.profile_file))
@@ -93,7 +91,7 @@ class Profile(object):
             _prof.set("info", "name", self.name)
             _prof.set("info", "description", self.description)
             for rule in self.rules:
-                _prof.set_rule(rule.action, rule.target, rule.sub_target)
+                _prof.set_rule(rule)
             _prof.write(config_file)
         log.info("Profile {0} saved".format(self.name))
 
@@ -161,89 +159,21 @@ class Profile(object):
         trainer.current = self.name
         db.session.commit()
 
-        _configs = {}
+        configs = {}
         log.info("looking for config files that need to be written.")
-        _targets = get_valid_targets()
+        targets = get_package_configs("target")
         for r in self.rules:
-            if r.target not in _configs:
-                #TODO This needs to be replaced with some sort of config file that checks the proper config object to instantiate when a specific config type is passed.
-                if r.target == "dns":
-                    log.debug("Creating a {0} config".format("dnschef"))
-                    _configs["dns"] = DNSConfig()
-                    log.debug("Adding a rule ({0} {1}) to dnschef config.".format(r.action, r.sub_target))
-                    _configs["dns"].add_rule(r.target, r.action, r.sub_target)
+            _action = r[0]
+            _tar = r[1]
+            _sub = r[2]
+            if _tar not in _configs:
+                log.debug("Creating a {0} config".format(_tar))
+                configs[r.target] = get_config_writer(_tar)
+                log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
+                configs[r.target].add_rule(_tar, _action, _sub)
             else:
-                if r.target == "dns":
-                    log.debug("Adding a rule ({0} {1}) to dnschef config.".format(r.action, r.sub_target))
-                    _configs["dns"].add_rule(r.target, r.action, r.sub_target)
-        for c in _configs:
+                log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
+                configs[r.target].add_rule(_tar, _action, _sub)
+        for c in configs:
             log.debug("Writing {0} config.".format(c))
-            _configs[c].write()
-
-class Rule(object):
-
-    def __init__(self, target, action, sub_target=""):
-        self.valid_actions = get_valid_actions()
-        self.valid_targets = get_valid_targets()
-        self.errors = {}
-        self.target = target
-        self.action = action
-        self.sub_target = sub_target
-        self.uuid = uuid.uuid4()
-
-    def init_validators(self):
-        """TODO Make these actually validate address'"""
-        self.valid_sub_targets = {
-            url : True,
-            dns : True}
-
-    def save(self, save_file):
-        with open(save_file, 'a') as csvfile:
-            csv_writer = csv.writer(csvfile, delimiter=' ',
-                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([self.target,  self.action, self.sub_target])
-
-    def is_valid(self):
-        if self.errors:
-            return False
-        else:
-            return True
-
-    @property
-    def target(self):
-        return self._target
-
-    @target.setter
-    def target(self, plaintext):
-        try:
-            value_to_set = self.valid_targets.index(string.lower(plaintext))
-            self._target = plaintext
-        except ValueError:
-            raise ValueError("The target \"{0}\" is invalid.".format(plaintext))
-
-    @property
-    def sub_target(self):
-        return self._sub_target
-
-    @sub_target.setter
-    def sub_target(self, plaintext):
-        #If a target is not set then we cannot check the sub-target against it.
-        if not self._target:
-            raise ValueError("The sub-target \"{0}\" cannot be set without a valid target.".format(plaintext))
-        print("TODO Validate sub-targets.")
-        self._sub_target = plaintext
-
-    @property
-    def action(self):
-        return self._action
-
-    @action.setter
-    def action(self, plaintext):
-        try:
-            value_to_set = self.valid_actions.index(string.lower(plaintext))
-            self._action = plaintext
-        except ValueError:
-            raise ValueError("The action \"{0}\" is invalid.".format(plaintext))
-
-    def __repr__(self):
-        return "{0} {1} {3}".format(self.action, self.target, self.sub_target)
+            configs[c].write()

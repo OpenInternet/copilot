@@ -2,70 +2,93 @@ import os
 from urlparse import urlparse
 from copilot.utils.file_sys import get_usb_dirs
 from ConfigParser import SafeConfigParser
+from utils.plugin import Plugin, is_plugin, get_plugins
+
 #stat logging
 import logging
 log = logging.getLogger(__name__)
 
-"""
-CP_PACKAGES = { "SERVICE NAME" : {
-                   "name" : "SERVICE NAME",
-                   "config_file": "CONFIG FILE NAME",
-                   "target" : "TARGET NAME",
-                   "actions": ["ACTION 001", "ACTION 002", "ACTION ETC"],
-                   "directory":"DIRECTORY HEADING FROM CP_DIRS VAR"}
-"""
-#TODO Remove this variable and pull package configs from some sort of config file
-CP_PACKAGES = {"dnschef":{"name": "dnschef",
-                          "config_file": "dnschef.conf",
-                          "target" : "dns",
-                          "actions": ["block", "redirect"],
-                          "directory":"main"},
-               "create_ap":{"name": "create_ap",
-                     "config_file": "ap.conf",
-                     "directory":"main"}}
 
 def get_config_dir(directory):
     directories = {"main" : "/tmp/copilot/",
                    "profiles" : "/tmp/copilot/profiles",
                    "temporary" : "/tmp/copilot/tmp/"}
-    if directory in directories:
-        log.debug("Directory {0} found and being returned.".format(directory))
-        return directories[directory]
+    plugins = get_value_dict("directory")
+    for p in plugins:
+        directories[p] = plugins[p][0]
+    if _dir in directories:
+        log.debug("Directory {0} found and being returned.".format(_dir))
+        return directories[_dir]
     else:
         raise ValueError("That config directory is not valid.")
 
 def get_config_file(config):
     """ return the path to a config file."""
-    _copilot_dir = get_config_dir("main")
-    if config in CP_PACKAGES:
-        if "config_file" in CP_PACKAGES[config]:
-            try:
-                _directory = get_config_dir(CP_PACKAGES[config]["directory"])
-                _path = os.path.join(_directory, CP_PACKAGES[config]["config_file"])
-                log.debug("Returning config path {0}".format(_path))
-                return _path
-            except ValueError as err:
-                log.error("Directory found in CP_PACKAGES under the {0} package was invalid.".format(config))
-                raise ValueError(err)
-    else:
-        raise ValueError("That config file is not valid.")
+    directory = get_option("directory", config)[0]
+    config_file = get_option("config_file", config)[0]
+    path = os.path.join(directory, config_file)
 
 def get_valid_actions(package=None):
+        """ Returns the valid actions for a package, or all packages as a list"""
     if not package:
-        _valid_actions = ["block", "redirect"]
+        return get_unique_values("actions")
     else:
-        for item in CP_PACKAGES:
-            if "target" in CP_PACKAGES[item] and "target" == package:
-                _valid_actions = CP_PACKAGES[item]["actions"]
-    return _valid_actions
+        return get_option("actions", package)
 
 def get_valid_targets():
-    _targets = []
-    for item in CP_PACKAGES:
-        if "target" in CP_PACKAGES[item]:
-            _targets.append(CP_PACKAGES[item]["target"])
-    return _targets
+    return get_unique_values("target")
 
+def get_config_writer(name):
+    """
+    Get a plugins config writer object
+    """
+    if not is_plugin(name):
+        raise ValueError("{0} is not a plugin.".format(name))
+    plugin = Plugin(name)
+    writer = plugin.get_config_writer()
+    return writer
+
+def get_option(option, plugin):
+    """Get an option from a plugin config file as a list."""
+    if not is_plugin(name):
+        raise ValueError("{0} is not a plugin.".format(name))
+    plugin = PluginConfig(plugin)
+    return plugin.data['info'][option]
+
+def get_unique_values(option):
+    """Returns a list of a specific key's value across all plugins config files with no repeats."""
+    if not is_plugin(name):
+        raise ValueError("{0} is not a plugin.".format(name))
+    values = []
+    val_list = get_value_list()
+    for i in val_dict:
+        # All values are returned as a list
+        for j in i:
+            if j not in values:
+                values.append(j)
+    return values
+
+def get_value_list(option):
+    """Returns a list of (plugin,[value1, value2, value3]) tuples of a specific key's value across all plugins config files."""
+    if not is_plugin(name):
+        raise ValueError("{0} is not a plugin.".format(name))
+    plugins = get_plugins
+    plist = []
+    for p in plugins:
+        _plugin = PluginConfig(p)
+        plist.append((p, _plugin.data['info'][option]))
+    return plist
+
+def get_value_dict(option):
+    """Returns a dictionary of {plugin: [value1, value2, value3]} of a specific key's value across all plugins config files."""
+    if not is_plugin(name):
+        raise ValueError("{0} is not a plugin.".format(name))
+    plugins = get_plugins
+    pdict = {}
+    for p in plugins:
+        _plugin = PluginConfig(p)
+        pdict[p] = _plugin.data['info'][option]
+    return pdict
 
 class Config(object):
 
@@ -240,3 +263,96 @@ class ProfileConfig(object):
             for opt in _options:
                 _dict[sect][opt] = self.parser.getlist("sect", "opt")
         return _dict
+
+
+class ProfileConfig(object):
+    def __init__(self, path):
+        self.path = os.path.abspath(path)
+        self.parser = ProfileParser()
+        if self.valid():
+            self.data = self.build_map()
+        self.rules = self.get_rules()
+
+    def get_rules(self):
+        """
+        Returns a list of rules.
+        [["block", "dns", "www.internews.org"],["redirect", "dns", "info.internews"]]
+        """
+        rules = []
+        _val_targets = get_valid_targets()
+        for target in self.data:
+            if target in _val_targets:
+                for action in self.data[target]:
+                    if action in get_valid_actions(target):
+                        for sub in self.data[target][action]:
+                            rules.append([action, target, sub])
+        return rules
+
+    def valid(self):
+        try:
+            _data = self.parser.read(self.path)
+        except as e:
+            log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.debug(e)
+            return False
+        if _data == []:
+            log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            return False
+        if not self.parser.has_option("info", "name"):
+            log.warn("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
+            return False
+        #TODO Add config file format values for each module
+        log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
+        return True
+
+    def build_map(self):
+        _dict = {}
+        _data = self.parser.read(self.path)
+        _sections = self.parser.sections()
+        log.debug("Config file has the following sections {0}.".format(_sections))
+        for sect in _sections:
+            _dict[sect] = {}
+            _options = self.parser.options(sect)
+            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
+            for opt in _options:
+                _dict[sect][opt] = self.parser.getlist("sect", "opt")
+        return _dict
+
+
+class PluginConfig(object):
+    def __init__(self, name):
+        self.path = os.path.abspath(os.path.join("./", name, "plugin.conf"))
+        self.parser = ProfileParser()
+        if self.valid():
+            self.data = self.build_map()
+
+    def build_map(self):
+        _dict = {}
+        _data = self.parser.read(self.path)
+        _sections = self.parser.sections()
+        log.debug("Config file has the following sections {0}.".format(_sections))
+        for sect in _sections:
+            _dict[sect] = {}
+            _options = self.parser.options(sect)
+            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
+            for opt in _options:
+                _dict[sect][opt] = self.parser.getlist("sect", "opt")
+        return _dict
+
+    def valid(self):
+        try:
+            _data = self.parser.read(self.path)
+        except as e:
+            log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.debug(e)
+            return False
+        if _data == []:
+            log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            return False
+        required = ["name", "config_file", "target", "actions", "directory"]
+        for r in required:
+            if not self.parser.has_option("info", r):
+                log.warn("Config file at {0} has no {1} and therefore cannot be used. Marking as invalid.".format(self.path, r))
+                return False
+        log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
+        return True
