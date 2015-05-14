@@ -29,7 +29,7 @@ def get_config_file(config):
     path = os.path.join(directory, config_file)
 
 def get_valid_actions(package=None):
-        """ Returns the valid actions for a package, or all packages as a list"""
+    """ Returns the valid actions for a package, or all packages as a list"""
     if not package:
         return get_unique_values("actions")
     else:
