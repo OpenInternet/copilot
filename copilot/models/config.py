@@ -2,7 +2,7 @@ import os
 from urlparse import urlparse
 from copilot.utils.file_sys import get_usb_dirs
 from ConfigParser import SafeConfigParser
-from utils.plugin import Plugin, is_plugin, get_plugins
+from copilot.utils.plugin import Plugin, is_plugin, get_plugins
 
 #stat logging
 import logging
