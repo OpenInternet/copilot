@@ -5,9 +5,8 @@ import csv
 import os
 import uuid
 import subprocess
-from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions
+from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions, get_config_writer
 from copilot.models.trainer import get_trainer
-from config import get_config_writer
 from copilot.utils.file_sys import get_usb_dirs
 from werkzeug import secure_filename
 
