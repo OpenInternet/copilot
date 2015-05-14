@@ -50,15 +50,13 @@ def get_config_writer(name):
 
 def get_option(option, plugin):
     """Get an option from a plugin config file as a list."""
-    if not is_plugin(name):
-        raise ValueError("{0} is not a plugin.".format(name))
+    if not is_plugin(plugin):
+        raise ValueError("{0} is not a plugin.".format(plugin))
     plugin = PluginConfig(plugin)
     return plugin.data['info'][option]
 
 def get_unique_values(option):
     """Returns a list of a specific key's value across all plugins config files with no repeats."""
-    if not is_plugin(name):
-        raise ValueError("{0} is not a plugin.".format(name))
     values = []
     val_list = get_value_list()
     for i in val_dict:
@@ -70,8 +68,6 @@ def get_unique_values(option):
 
 def get_value_list(option):
     """Returns a list of (plugin,[value1, value2, value3]) tuples of a specific key's value across all plugins config files."""
-    if not is_plugin(name):
-        raise ValueError("{0} is not a plugin.".format(name))
     plugins = get_plugins
     plist = []
     for p in plugins:
@@ -81,8 +77,6 @@ def get_value_list(option):
 
 def get_value_dict(option):
     """Returns a dictionary of {plugin: [value1, value2, value3]} of a specific key's value across all plugins config files."""
-    if not is_plugin(name):
-        raise ValueError("{0} is not a plugin.".format(name))
     plugins = get_plugins
     pdict = {}
     for p in plugins:
