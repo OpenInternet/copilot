@@ -237,9 +237,8 @@ class ProfileConfig(object):
     def valid(self):
         try:
             _data = self.parser.read(self.path)
-        except as e:
+        except:
             log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
-            log.debug(e)
             return False
         if _data == []:
             log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
@@ -291,9 +290,8 @@ class ProfileConfig(object):
     def valid(self):
         try:
             _data = self.parser.read(self.path)
-        except as e:
+        except:
             log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
-            log.debug(e)
             return False
         if _data == []:
             log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
@@ -342,9 +340,8 @@ class PluginConfig(object):
     def valid(self):
         try:
             _data = self.parser.read(self.path)
-        except as e:
+        except:
             log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
-            log.debug(e)
             return False
         if _data == []:
             log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
