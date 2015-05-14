@@ -40,7 +40,7 @@ def get_all_profiles():
             for _prof in listdir(_profile_dir):
                 p_path = join(_profile_dir, _prof)
                 if isfile(p_path):
-                    _test = = ProfileConfig(p_path)
+                    _test = ProfileConfig(p_path)
                     if _test.valid():
                         profiles.append(_prof)
     return profiles
