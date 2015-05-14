@@ -58,7 +58,7 @@ def get_option(option, plugin):
 def get_unique_values(option):
     """Returns a list of a specific key's value across all plugins config files with no repeats."""
     values = []
-    val_list = get_value_list()
+    val_list = get_value_list(option)
     for i in val_dict:
         # All values are returned as a list
         for j in i:
