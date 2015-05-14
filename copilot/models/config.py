@@ -68,7 +68,7 @@ def get_unique_values(option):
 
 def get_value_list(option):
     """Returns a list of (plugin,[value1, value2, value3]) tuples of a specific key's value across all plugins config files."""
-    plugins = get_plugins
+    plugins = get_plugins()
     plist = []
     for p in plugins:
         _plugin = PluginConfig(p)
@@ -77,7 +77,7 @@ def get_value_list(option):
 
 def get_value_dict(option):
     """Returns a dictionary of {plugin: [value1, value2, value3]} of a specific key's value across all plugins config files."""
-    plugins = get_plugins
+    plugins = get_plugins()
     pdict = {}
     for p in plugins:
         _plugin = PluginConfig(p)
