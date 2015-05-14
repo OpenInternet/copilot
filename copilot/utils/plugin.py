@@ -1,10 +1,17 @@
 from pluginbase import PluginBase
+from functools import partial
 import os
 
 
 # stat logging
 import logging
 log = logging.getLogger(__name__)
+
+
+# For easier usage calculate the path relative to here.
+# See: https://github.com/mitsuhiko/pluginbase/blob/master/example/example.py
+here = os.path.abspath(os.path.dirname(__file__))
+get_path = partial(os.path.join, here)
 
 plugin_base = PluginBase(package='copilot.plugins',
                          searchpath=[get_path("/home/www/co-pilot/copilot/plugins")])
