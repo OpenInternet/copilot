@@ -34,15 +34,16 @@ def get_profile_status():
 def get_all_profiles():
     _profile_dirs = get_usb_dirs()
     _profile_dirs.append(get_config_dir("profiles"))
-    possible_profiles = []
+    profiles = []
     for _dir in _profile_dirs:
         if os.path.isdir(_profile_dir):
             for _prof in listdir(_profile_dir):
-                if isfile(join(_profile_dir, _prof)):
-                    possible_profiles.append(_prof)
-    profiles = []
-    for pp in possible_profiles:
-
+                p_path = join(_profile_dir, _prof)
+                if isfile(p_path):
+                    _test = = ProfileConfig(p_path)
+                    if _test.valid():
+                        profiles.append(_prof)
+    return profiles
 
 
 class Profile(object):
