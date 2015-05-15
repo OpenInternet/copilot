@@ -11,8 +11,7 @@ log = logging.getLogger(__name__)
 here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 
-plugin_base = PluginBase(package='copilot.plugins',
-                         searchpath=[get_path("/home/www/copilot/copilot/plugins")])
+plugin_base = PluginBase(package='copilot.plugins')
 
 class Plugin(object):
     def __init__(self, name):
