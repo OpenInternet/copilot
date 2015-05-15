@@ -60,7 +60,9 @@ def get_option(option, plugin):
     plugin = PluginConfig(plugin)
     if plugin.valid():
         try:
-            return plugin.data['info'][option]
+            option_found = plugin.data['info'][option]
+            log.debug("returning {0} option.".format(option_found))
+            return option_found
         except KeyError as err:
             log.warning("Plugin {0} does not have a {1} key.".format(p, option))
             return []
