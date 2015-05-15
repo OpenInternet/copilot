@@ -174,26 +174,21 @@ def profile_applied():
 @login_required
 def profile_save(prof_name):
     """Choose where to save the current profile."""
-    #Get what submit button the user pressed
-    _usb = False
-    _device = False
-    log.info("Checking users submission choice.")
-    if request.form['submit_action'] == 'Save to USB':
-        _usb = True
-    elif request.form['submit_action'] == 'Save on Co-Pilot':
-        _device = True
 
     form = forms.SavePeofileForm()
     if form.validate_on_submit():
         log.info("save form is valid")
         log.info("identifying the directory to save to.")
-        if _usb:
-            save_dir = form.usb.data
-            if not save_dir in get_usb_dirs():
-                log.debug("See! This is why we don't accept user input. I gave you just fine USB directories, and you give me this. What do you want me to do with this?")
-                raise ValueError("USB drive {0} does not exist. Cannot save a profile to a non-existant, or non mounted USB drive. Did you unplug the usb between page loads?".format(save_dir))
-        elif _device:
+        save_loc = form.location.data
+        if save_loc == "Co-Pilot":
             save_dir = get_config_dir("profiles")
+        elif save_dir in get_usb_dirs():
+            save_dir = form.location.data
+        else:
+            log.debug("See! This is why we don't accept user input. I gave you just fine USB directories, and you give me this. What do you want me to do with this?")
+            flash("Directory {0} does not exist. Cannot save a profile to a non-existant folder, non mounted USB drive, or un-allowed folder. Did you unplug the usb between page loads?".format(save_loc), "error")
+            redirect(url_for('error'))
+
         prof_name = form.prof_name.data
         profile = mdl_prof.Profile(prof_name)
         profile.profile_dir = "temporary"
@@ -208,8 +203,7 @@ def profile_save(prof_name):
             redirect(url_for('error'))
 
     status_items = get_status_items()
-    buttons = [{"name":"Save to USB", "submit":False},
-               {"name":"Save on Co-Pilot", "submit":True}]
+    buttons = [{"name":"Save", "submit":True}]
     return render_template('profile.html',
                            status_items=status_items,
                            buttons=buttons)

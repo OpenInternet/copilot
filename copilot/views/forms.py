@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 
 # Import Form elements
-from wtforms import PasswordField, TextField, SelectField, FieldList, FormField
+from wtforms import PasswordField, TextField, SelectField, FieldList, FormField, RadioField, HiddenField
 
 # Import Form validators
 from wtforms.validators import Required, Length, EqualTo, ValidationError, Optional
@@ -87,7 +87,6 @@ class NewProfileForm(Form):
     prof_name = TextField('Profile Name', default="new")
     rules = FieldList(FormField(RuleField))
 
-
 class SaveProfileField(Form):
-    usb = RadioField("USB's", choices=(get_usb_dirs() + ["None"]), default="None")
-    prof_name = TextField('Profile Name', default="new")
+    prof_name = HiddenField('Profile Name', default="new")
+    location = RadioField("Save Location", choices=(get_usb_dirs() + ["Co-Pilot"]), default="Co-Pilot")
