@@ -297,7 +297,7 @@ class PluginConfig(object):
             _options = self.parser.options(sect)
             log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
             for opt in _options:
-                _dict[sect][opt] = self.parser.getlist("sect", "opt")
+                _dict[sect][opt] = self.parser.get_list("sect", "opt")
         return _dict
 
     def valid(self):
