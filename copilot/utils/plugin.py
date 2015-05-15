@@ -33,7 +33,8 @@ class Plugin(object):
             plugin.setup(self)
 
     def get_config_writer(self):
-        config = self.source.load_plugin('config')
+        log.debug("sub-plugins available in the {0} plugin: {1}".format(self.name, self.source.list_plugins()))
+        config = self.source.load_plugin("config")
         config_writer = config.ConfigWriter()
         return config_writer
 
