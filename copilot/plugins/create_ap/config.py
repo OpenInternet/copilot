@@ -43,4 +43,5 @@ class ConfigWriter(Config):
 
 
 def setup(app):
-    app.get_config_writer(ConfigWriter)
+    new_writer = ConfigWriter()
+    app.get_config_writer(new_writer)
