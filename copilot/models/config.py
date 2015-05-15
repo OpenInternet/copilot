@@ -260,12 +260,11 @@ class PluginConfig(object):
         _sections = self.parser.sections()
         log.debug("Config file has the following sections {0}.".format(_sections))
         for sect in _sections:
-            _dict[sect] = {}
             log.debug("getting options for section {0}".format(sect))
             _options = self.parser.options(sect)
             log.debug("It has the following options {0}.".format(_options))
             for opt in _options:
-                _dict[sect][opt] = self.parser.get_list(sect, opt)
+                _dict[opt] = self.parser.get_list(sect, opt)
         log.debug("Created below plugin data map. \n {0}".format(_dict))
         return _dict
 
