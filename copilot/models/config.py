@@ -121,10 +121,13 @@ class Config(object):
     def config_type(self, config_type):
         try:
             config_file = get_config_file(config_type)
+            log.debug("config file {0} found".format(config_file))
         except ValueError as err:
             log.error("An invalid config type was passed. Please check \"get_config_file\" in the models/config.py scripts for the valid types of config files.")
             raise ValueError(err)
+        log.debug("setting config type.")
         self._config_type = config_type
+        log.debug("setting config file {0}.".format(config_file))
         self.config_file = config_file
 
     def check_file(self):

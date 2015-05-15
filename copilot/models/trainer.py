@@ -75,6 +75,7 @@ class Trainer(Base, UserMixin):
         self.solo = True
         self.current = False
         self.ap_config = get_config_writer("create_ap")
+        log.debug(dir(self.ap_config))
         self.ap_config.add_rule(ap_name, ap_password)
 
     @property
