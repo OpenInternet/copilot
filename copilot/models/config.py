@@ -231,59 +231,6 @@ class ProfileConfig(object):
         return _dict
 
 
-class ProfileConfig(object):
-    def __init__(self, path):
-        self.path = os.path.abspath(path)
-        self.parser = ProfileParser()
-        if self.valid():
-            self.data = self.build_map()
-        self.rules = self.get_rules()
-
-    def get_rules(self):
-        """
-        Returns a list of rules.
-        [["block", "dns", "www.internews.org"],["redirect", "dns", "info.internews"]]
-        """
-        rules = []
-        _val_targets = get_valid_targets()
-        for target in self.data:
-            if target in _val_targets:
-                for action in self.data[target]:
-                    if action in get_valid_actions(target):
-                        for sub in self.data[target][action]:
-                            rules.append([action, target, sub])
-        return rules
-
-    def valid(self):
-        try:
-            _data = self.parser.read(self.path)
-        except:
-            log.warning("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
-            return False
-        if _data == []:
-            log.warning("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
-            return False
-        if not self.parser.has_option("info", "name"):
-            log.warning("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
-            return False
-        #TODO Add config file format values for each module
-        log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
-        return True
-
-    def build_map(self):
-        _dict = {}
-        _data = self.parser.read(self.path)
-        _sections = self.parser.sections()
-        log.debug("Config file has the following sections {0}.".format(_sections))
-        for sect in _sections:
-            _dict[sect] = {}
-            _options = self.parser.options(sect)
-            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
-            for opt in _options:
-                _dict[sect][opt] = self.parser.getlist("sect", "opt")
-        return _dict
-
-
 class PluginConfig(object):
     def __init__(self, name):
         self.path = os.path.abspath(os.path.join("./", name, "plugin.conf"))
