@@ -45,7 +45,7 @@ def get_plugins():
     return [x[0][2:] for x in os.walk(plugin_dir) if x[0] != "."]
 
 def is_plugin(name):
-    plugins = get_plugins
+    plugins = get_plugins()
     if name in plugins:
         return True
     else:
