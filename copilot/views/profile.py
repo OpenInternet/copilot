@@ -29,25 +29,28 @@ def profile(prof_name):
     """Display an existing profle in the profile editor."""
     log.debug("profile received {0}".format(prof_name))
 
-    #Get what submit button the user pressed
-    _save = False
-    _apply = False
-    _download = False
-    log.info("Checking users submission choice.")
-    if request.form['submit_action'] == 'Save':
-        _save = True
-    elif request.form['submit_action'] == 'Save & Apply':
-        _save = True
-        _apply = True
-    elif request.form['submit_action'] == 'Apply':
-        _apply = True
-    elif request.form['submit_action'] == 'Download':
-        _download = True
-    elif request.form['submit_action'] == 'Load':
-        return redirect(url_for('profile_load'))
-
     form = forms.NewProfileForm()
+    log.debug("Parsing form.")
     if form.validate_on_submit():
+        #Get what submit button the user pressed
+        _save = False
+        _apply = False
+        _download = False
+        log.info("Checking users submission choice.")
+        if form['submit_action'] == 'Save':
+            _save = True
+        elif form['submit_action'] == 'Save & Apply':
+            _save = True
+            _apply = True
+        elif form['submit_action'] == 'Apply':
+            _apply = True
+        elif form['submit_action'] == 'Download':
+            _download = True
+        elif form['submit_action'] == 'Load':
+            return redirect(url_for('profile_load'))
+        else:
+            log.debug("No submission selected.")
+
         log.info("profile form is valid")
         log.debug("Form {0} submitted".format(form.prof_name.data))
         prof_name = form.prof_name.data
