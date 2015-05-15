@@ -9,7 +9,7 @@ class ConfigWriter(Config):
 
     def __init__(self):
         super(ConfigWriter, self).__init__()
-        self._config_type = "create_ap"
+        self.config_type = "create_ap"
 
     @property
     def ap_password(self):
