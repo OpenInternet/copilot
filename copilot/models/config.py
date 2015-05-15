@@ -234,7 +234,7 @@ class ProfileConfig(object):
 
 class PluginConfig(object):
     def __init__(self, name):
-        self.path = os.path.abspath(os.path.join("./", "plugins", name, "plugin.conf"))
+        self.path = os.path.abspath(os.path.join("/home/www/copilot/copilot/plugins/", name, "plugin.conf"))
         self.parser = ProfileParser()
         if self.valid():
             self.data = self.build_map()
