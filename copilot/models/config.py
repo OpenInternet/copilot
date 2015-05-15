@@ -58,7 +58,10 @@ def get_option(option, plugin):
     if not is_plugin(plugin):
         raise ValueError("{0} is not a plugin.".format(plugin))
     plugin = PluginConfig(plugin)
-    return plugin.data['info'][option]
+    if plugin.valid():
+        return plugin.data['info'][option]
+    else:
+        return []
 
 def get_unique_values(option):
     """Returns a list of a specific key's value across all plugins config files with no repeats."""
@@ -90,7 +93,8 @@ def get_value_dict(option):
     pdict = {}
     for p in plugins:
         _plugin = PluginConfig(p)
-        pdict[p] = _plugin.data['info'][option]
+        if _plugin.valid():
+            pdict[p] = _plugin.data['info'][option]
     return pdict
 
 class Config(object):
