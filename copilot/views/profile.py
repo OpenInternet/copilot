@@ -124,7 +124,7 @@ def profile_load():
         tmp_profile = mdl_prof.Profile("tmp")
         tmp_profile.profile_dir = "temporary"
         user_file = request.files['Profile']
-        _profile_loc = os.path.join(tmp_profile.profile_dir, tmp_profile.name)
+        _profile_loc = join(tmp_profile.profile_dir, tmp_profile.name)
         log.debug("Saving user supplied configuration in {0}".format(_profile_loc))
         user_file.save(_profile_loc)
         try:
@@ -139,7 +139,7 @@ def profile_load():
         return redirect(url_for('profile', prof_name=tmp_profile.name))
 
     profiles = mdl_prof.get_all_profiles()
-    if profiles = []:
+    if profiles == []:
         flash('You don\'t seem to have any profiles saved on this device.', 'error')
         flash('You can still create a new profile!', 'success')
         redirect(url_for('error', face="suprise"))
