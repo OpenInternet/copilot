@@ -7,17 +7,9 @@ import string
 
 class ConfigWriter(Config):
 
-    def __init__(self, ap_name, ap_password, iface_in="eth0", iface_out="wlan0"):
+    def __init__(self):
         super(ConfigWriter, self).__init__()
         self._config_type = "create_ap"
-        self.iface_in = iface_in
-        self.iface_out = iface_out
-        self.header = "{0} {1} ".format(self.iface_out, self.iface_in)
-        self.ap_name = ap_name
-        self.ap_password = ap_password
-        self.add_rule(self.ap_name)
-        self.add_rule(self.ap_password)
-        self.config_type = "create_ap"
 
     @property
     def ap_password(self):
@@ -42,6 +34,9 @@ class ConfigWriter(Config):
         else:
             raise ValueError("Access Point names must be between 1 and 31 characters long.")
 
-    def add_rule(self, rule):
-        log.debug("adding rule {0}".format(rule))
-        self._rules.append("{0} ".format(rule))
+    def add_rule(self, ap_name="copilot", ap_password="copilot_pass", iface_in="eth0", iface_out="wlan0"):
+        log.debug("adding create ap rule  {0} {1} {2} {3}".format(iface_out, iface_in, ap_name, ap_password))
+        self._rules.append("{0} ".format(iface_out))
+        self._rules.append("{0} ".format(iface_in))
+        self._rules.append("{0} ".format(ap_name))
+        self._rules.append("{0} ".format(ap_password))

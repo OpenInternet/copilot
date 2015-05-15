@@ -3,7 +3,7 @@ from flask.ext.login import LoginManager
 from copilot import app
 from copilot import bcrypt, db
 from flask.ext.login import UserMixin
-from copilot.models.config import get_config_file, APConfig
+from copilot.models.config import get_config_file, get_config_writer
 
 #stat logging
 import logging
@@ -68,13 +68,14 @@ class Trainer(Base, UserMixin):
     _password = db.Column(db.String(192),  nullable=False)
     _current = db.Column(db.String(192),  nullable=True)
 
-    def __init__(self, trainer_pass, ap_name="copilot", ap_password="copilot"):
+    def __init__(self, trainer_pass, ap_name="copilot", ap_password="copilot_pass"):
         log.debug("Creating new trainer object.")
         log.debug("Trainer AP: {0}".format(ap_name))
         self.password = trainer_pass
         self.solo = True
         self.current = False
-        self.ap_config = APConfig(ap_name, ap_password)
+        self.ap_config = get_config_writer("create_ap")
+        self.ap_config.add_rule(ap_name, ap_password)
 
     @property
     def solo(self):
