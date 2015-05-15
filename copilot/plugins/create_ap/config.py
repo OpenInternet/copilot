@@ -40,3 +40,7 @@ class ConfigWriter(Config):
         self._rules.append("{0} ".format(iface_in))
         self._rules.append("{0} ".format(ap_name))
         self._rules.append("{0} ".format(ap_password))
+
+
+def setup(app):
+    app.register_formatter('ConfigWriter', ConfigWriter)

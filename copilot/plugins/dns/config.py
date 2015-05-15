@@ -58,3 +58,7 @@ class ConfigWriter(Config):
             log.debug("The domain {0} has exactly two parts, and the second part IS a top level domain I recognize. Interpreting as a domain name with a top level domain.".format(_sub))
             return "*.{0}.{1}".format(split_sub[0], split_sub[1])
         #todo add just TLD.
+
+
+def setup(app):
+    app.register_formatter('ConfigWriter', ConfigWriter)

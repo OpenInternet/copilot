@@ -29,7 +29,7 @@ class Plugin(object):
         # and the use the "setup" function provided by the plugin to
         # initialize the plugin.
         for plugin_name in self.source.list_plugins():
-            log.debug("Loading sub-plugin {0} from plugin: {1}".format(self.name, plugin_name))
+            log.debug("Loading sub-plugin {0} from plugin: {1}".format(plugin_name, self.name))
             plugin = self.source.load_plugin(plugin_name)
             plugin.setup(self)
 
