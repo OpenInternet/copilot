@@ -219,13 +219,13 @@ class ProfileConfig(object):
         try:
             _data = self.parser.read(self.path)
         except:
-            log.warning("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.debug("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
             return False
         if _data == []:
-            log.warning("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            log.debug("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
             return False
         if not self.parser.has_option("info", "name"):
-            log.warning("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
+            log.debug("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
             return False
         #TODO Add config file format values for each module
         log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
@@ -256,13 +256,14 @@ class PluginConfig(object):
 
     def build_map(self):
         _dict = {}
-        _data = self.parser.read(self.path)
+        _data = self.parser.readfp(self.path)
         _sections = self.parser.sections()
         log.debug("Config file has the following sections {0}.".format(_sections))
         for sect in _sections:
             _dict[sect] = {}
+            log.debug("getting options for section {0}".format(sect))
             _options = self.parser.options(sect)
-            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
+            log.debug("It has the following options {0}.".format(_options))
             for opt in _options:
                 _dict[sect][opt] = self.parser.get_list(sect, opt)
         return _dict
@@ -271,19 +272,19 @@ class PluginConfig(object):
         try:
             _data = self.parser.read(self.path)
         except:
-            log.warning("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.info("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
             return False
         if _data == []:
-            log.warning("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            log.info("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
             return False
         required = ["name", "config_file", "directory"]
         desired = ["target", "actions"]
         for r in required:
             if not self.parser.has_option("info", r):
-                log.warning("Config file at {0} has no {1} and therefore cannot be used. Marking as invalid.".format(self.path, r))
+                log.info("Config file at {0} has no {1} and therefore cannot be used. Marking as invalid.".format(self.path, r))
                 return False
         for r in desired:
             if not self.parser.has_option("info", r):
-                log.warning("Config file at {0} has no {1} and will not generate rules.".format(self.path, r))
+                log.info("Config file at {0} has no {1} and will not generate rules.".format(self.path, r))
         log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
         return True
