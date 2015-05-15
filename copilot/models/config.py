@@ -256,7 +256,7 @@ class PluginConfig(object):
 
     def build_map(self):
         _dict = {}
-        _data = self.parser.readfp(self.path)
+        _data = self.parser.readfp(open(self.path))
         _sections = self.parser.sections()
         log.debug("Config file has the following sections {0}.".format(_sections))
         for sect in _sections:
