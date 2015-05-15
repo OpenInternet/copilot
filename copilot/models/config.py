@@ -270,6 +270,5 @@ class PluginConfig(object):
         for r in desired:
             if not self.parser.has_option("info", r):
                 log.warning("Config file at {0} has no {1} and will not generate rules.".format(self.path, r))
-                return False
         log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
         return True
