@@ -61,4 +61,4 @@ class ConfigWriter(Config):
 
 
 def setup(app):
-    app.register_formatter('ConfigWriter', ConfigWriter)
+    app.get_config_writer(ConfigWriter)
