@@ -1,4 +1,5 @@
 import os
+import string
 from urlparse import urlparse
 from copilot.utils.file_sys import get_usb_dirs
 from ConfigParser import SafeConfigParser
@@ -16,9 +17,9 @@ def get_config_dir(directory):
     plugins = get_value_dict("directory")
     for p in plugins:
         directories[p] = plugins[p][0]
-    if _dir in directories:
-        log.debug("Directory {0} found and being returned.".format(_dir))
-        return directories[_dir]
+    if directory in directories:
+        log.debug("Directory {0} found and being returned.".format(directory))
+        return directories[directory]
     else:
         raise ValueError("That config directory is not valid.")
 
@@ -59,7 +60,7 @@ def get_unique_values(option):
     """Returns a list of a specific key's value across all plugins config files with no repeats."""
     values = []
     val_list = get_value_list(option)
-    for i in val_dict:
+    for i in val_list:
         # All values are returned as a list
         for j in i:
             if j not in values:
