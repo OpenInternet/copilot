@@ -27,8 +27,11 @@ def get_config_file(config):
     """ return the path to a config file."""
     log.info("getting {0} config file.".format(config))
     directory = get_option("directory", config)[0]
+    log.debug("found directory {0}".format(directory))
     config_file = get_option("config_file", config)[0]
+    log.debug("found config file {0}".format(config_file))
     path = os.path.join(directory, config_file)
+    return path
 
 def get_valid_actions(package=None):
     """ Returns the valid actions for a package, or all packages as a list"""
@@ -260,11 +263,12 @@ class PluginConfig(object):
         _sections = self.parser.sections()
         log.debug("Config file has the following sections {0}.".format(_sections))
         for sect in _sections:
+            _dict[sect] = {}
             log.debug("getting options for section {0}".format(sect))
             _options = self.parser.options(sect)
             log.debug("It has the following options {0}.".format(_options))
             for opt in _options:
-                _dict[opt] = self.parser.get_list(sect, opt)
+                _dict[sect][opt] = self.parser.get_list(sect, opt)
         log.debug("Created below plugin data map. \n {0}".format(_dict))
         return _dict
 
