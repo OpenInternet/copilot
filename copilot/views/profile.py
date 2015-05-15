@@ -123,23 +123,24 @@ def profile_load():
     """Display the profile that is currently being run on the Co-Pilot box. """
 
     log.info("Checking users submission choice.")
-    if request.form['submit_action'] == 'Upload Profile':
-        tmp_profile = mdl_prof.Profile("tmp")
-        tmp_profile.profile_dir = "temporary"
-        user_file = request.files['Profile']
-        _profile_loc = join(tmp_profile.profile_dir, tmp_profile.name)
-        log.debug("Saving user supplied configuration in {0}".format(_profile_loc))
-        user_file.save(_profile_loc)
-        try:
-            #get correct info (and name) from file.
-            tmp_profile.refresh()
-        except ValueError as err:
-            flash("That is not a valid co-pilot config file.", "error")
-            return redirect(url_for('profile_load'))
-        tmp_profile.profile_dir = "profiles"
-        tmp_profile.save()
-        tmp_profile.apply_config()
-        return redirect(url_for('profile', prof_name=tmp_profile.name))
+    if form.validate_on_submit():
+        if form['submit_action'] == 'Upload Profile':
+            tmp_profile = mdl_prof.Profile("tmp")
+            tmp_profile.profile_dir = "temporary"
+            user_file = request.files['Profile']
+            _profile_loc = join(tmp_profile.profile_dir, tmp_profile.name)
+            log.debug("Saving user supplied configuration in {0}".format(_profile_loc))
+            user_file.save(_profile_loc)
+            try:
+                #get correct info (and name) from file.
+                tmp_profile.refresh()
+            except ValueError as err:
+                flash("That is not a valid co-pilot config file.", "error")
+                return redirect(url_for('profile_load'))
+            tmp_profile.profile_dir = "profiles"
+            tmp_profile.save()
+            tmp_profile.apply_config()
+            return redirect(url_for('profile', prof_name=tmp_profile.name))
 
     profiles = mdl_prof.get_all_profiles()
     if profiles == []:
