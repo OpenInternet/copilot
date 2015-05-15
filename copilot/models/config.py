@@ -266,6 +266,7 @@ class PluginConfig(object):
             log.debug("It has the following options {0}.".format(_options))
             for opt in _options:
                 _dict[sect][opt] = self.parser.get_list(sect, opt)
+        log.debug("Created below plugin data map. \n {0}".format(_dict))
         return _dict
 
     def valid(self):
