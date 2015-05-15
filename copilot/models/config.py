@@ -59,7 +59,11 @@ def get_option(option, plugin):
         raise ValueError("{0} is not a plugin.".format(plugin))
     plugin = PluginConfig(plugin)
     if plugin.valid():
-        return plugin.data['info'][option]
+        try:
+            return plugin.data['info'][option]
+        except KeyError as err:
+            log.warning("Plugin {0} does not have a {1} key.".format(p, option))
+            return []
     else:
         return []
 
@@ -83,7 +87,10 @@ def get_value_list(option):
     for p in plugins:
         _plugin = PluginConfig(p)
         if _plugin.valid():
-            plist.append((p, _plugin.data['info'][option]))
+            try:
+                plist.append((p, _plugin.data['info'][option]))
+            except KeyError as err:
+                log.warning("Plugin {0} does not have a {1} key.".format(p, option))
     return plist
 
 def get_value_dict(option):
@@ -94,7 +101,10 @@ def get_value_dict(option):
     for p in plugins:
         _plugin = PluginConfig(p)
         if _plugin.valid():
-            pdict[p] = _plugin.data['info'][option]
+            try:
+                pdict[p] = _plugin.data['info'][option]
+            except KeyError as err:
+                log.warning("Plugin {0} does not have a {1} key.".format(p, option))
     return pdict
 
 class Config(object):
