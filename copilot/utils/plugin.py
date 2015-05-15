@@ -42,7 +42,9 @@ class Plugin(object):
 def get_plugins():
     plugin_dir = "/home/www/co-pilot/copilot/plugins"
     # Get all folder names in plugins and remove the directory cruft to make them plugin names
-    return [x[0][2:] for x in os.walk(plugin_dir) if x[0] != "."]
+    plugins = [x[0][2:] for x in os.walk(plugin_dir) if x[0] != "."]
+    log.debug("Plugins found: {0}".format(plugins))
+    return plugins
 
 def is_plugin(name):
     plugins = get_plugins()
