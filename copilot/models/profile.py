@@ -5,7 +5,7 @@ import csv
 import os
 import uuid
 import subprocess
-from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions, get_config_writer
+from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions, get_config_writer, ProfileConfig
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs
 from werkzeug import secure_filename
@@ -35,10 +35,10 @@ def get_all_profiles():
     _profile_dirs.append(get_config_dir("profiles"))
     profiles = []
     for _dir in _profile_dirs:
-        if os.path.isdir(_profile_dir):
-            for _prof in listdir(_profile_dir):
-                p_path = join(_profile_dir, _prof)
-                if isfile(p_path):
+        if os.path.isdir(_dir):
+            for _prof in os.listdir(_dir):
+                p_path = os.path.join(_dir, _prof)
+                if os.path.isfile(p_path):
                     _test = ProfileConfig(p_path)
                     if _test.valid():
                         profiles.append(_prof)

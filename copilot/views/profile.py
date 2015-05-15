@@ -6,9 +6,9 @@ from copilot.models import profile as mdl_prof
 from copilot.views import forms
 from flask.ext.wtf import Form
 from copilot.controllers import get_status_items
-from copilot.models.config import get_valid_actions, get_valid_targets
+from copilot.models.config import get_valid_actions, get_valid_targets, get_config_dir
 from copilot.models.trainer import get_trainer
-
+from copilot.utils.file_sys import get_usb_dirs
 #Get flask modules
 from flask import redirect, url_for, render_template, flash, make_response, request
 from flask.ext.login import login_user, login_required
@@ -139,6 +139,11 @@ def profile_load():
         return redirect(url_for('profile', prof_name=tmp_profile.name))
 
     profiles = mdl_prof.get_all_profiles()
+    if profiles = []:
+        flash('You don\'t seem to have any profiles saved on this device.', 'error')
+        flash('You can still create a new profile!', 'success')
+        redirect(url_for('error', face="suprise"))
+
     status_items = get_status_items()
     buttons = [{"name":"Return", "link":url_for('profile')}]
     return render_template('load.html',
@@ -165,9 +170,9 @@ def profile_applied():
     buttons = [{"name":"Return", "link":url_for('profile')}]
     return render_template('profile_applied.html', profile=profile, buttons=buttons, status_items=status_items)
 
-@app.route('/profile/save', methods=["GET", "POST"])
+@app.route('/profile/save', defaults={"prof_name": "null"}, methods=["GET", "POST"])
 @login_required
-def profile_save():
+def profile_save(prof_name):
     """Choose where to save the current profile."""
     #Get what submit button the user pressed
     _usb = False
@@ -178,11 +183,29 @@ def profile_save():
     elif request.form['submit_action'] == 'Save on Co-Pilot':
         _device = True
 
-    #Save profile
-    if _usb:
-
-
-
+    form = forms.SavePeofileForm()
+    if form.validate_on_submit():
+        log.info("save form is valid")
+        log.info("identifying the directory to save to.")
+        if _usb:
+            save_dir = form.usb.data
+            if not save_dir in get_usb_dirs():
+                log.debug("See! This is why we don't accept user input. I gave you just fine USB directories, and you give me this. What do you want me to do with this?")
+                raise ValueError("USB drive {0} does not exist. Cannot save a profile to a non-existant, or non mounted USB drive. Did you unplug the usb between page loads?".format(save_dir))
+        elif _device:
+            save_dir = get_config_dir("profiles")
+        prof_name = form.prof_name.data
+        profile = mdl_prof.Profile(prof_name)
+        profile.profile_dir = "temporary"
+        profile.refresh()
+        profile.profile_dir = "profiles"
+        profile.save()
+    else:
+        if prof_name != "null":
+            form.prof_name.data = prof_name
+        else:
+            flash('An error occured identifying the profile to save.', 'error')
+            redirect(url_for('error'))
 
     status_items = get_status_items()
     buttons = [{"name":"Save to USB", "submit":False},

@@ -27,3 +27,10 @@ def not_found(error):
 @login_required
 def menu():
      return render_template('menu.html')
+
+# HTTP error handling
+@app.route('/error', defaults={"face": "sad"})
+def error(face):
+    # current faces designed
+    # happy, suprise, sad, FIRE
+    return render_template('error.html', face=face)

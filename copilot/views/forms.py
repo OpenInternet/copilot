@@ -7,6 +7,7 @@ from wtforms import PasswordField, TextField, SelectField, FieldList, FormField
 from wtforms.validators import Required, Length, EqualTo, ValidationError, Optional
 from copilot.models.trainer import Trainer
 from copilot.models.config import get_valid_actions, get_valid_targets
+from copilot.utils.file_sys import get_usb_dirs
 
 # Define the login form
 class LoginForm(Form):
@@ -85,3 +86,8 @@ class ProfileForm(Form):
 class NewProfileForm(Form):
     prof_name = TextField('Profile Name', default="new")
     rules = FieldList(FormField(RuleField))
+
+
+class SaveProfileField(Form):
+    usb = RadioField("USB's", choices=(get_usb_dirs() + ["None"]), default="None")
+    prof_name = TextField('Profile Name', default="new")
