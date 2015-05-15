@@ -177,7 +177,6 @@ class ProfileWriter(ProfileParser):
         text_rules = "\n\t".join(rule_list)
         self.set(action, target, text_rules)
 
-
 class ProfileConfig(object):
     def __init__(self, path):
         self.path = os.path.abspath(path)
@@ -231,9 +230,11 @@ class ProfileConfig(object):
         return _dict
 
 
+
+
 class PluginConfig(object):
     def __init__(self, name):
-        self.path = os.path.abspath(os.path.join("./", name, "plugin.conf"))
+        self.path = os.path.abspath(os.path.join("./", "plugins", name, "plugin.conf"))
         self.parser = ProfileParser()
         if self.valid():
             self.data = self.build_map()
