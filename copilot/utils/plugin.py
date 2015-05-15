@@ -7,7 +7,6 @@ import os
 import logging
 log = logging.getLogger(__name__)
 
-
 # For easier usage calculate the path relative to here.
 # See: https://github.com/mitsuhiko/pluginbase/blob/master/example/example.py
 here = os.path.abspath(os.path.dirname(__file__))
@@ -42,7 +41,7 @@ class Plugin(object):
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"
     # Get all folder names in plugins and remove the directory cruft to make them plugin names
-    plugins = [x[0][2:] for x in os.walk(plugin_dir) if x[0] != "."]
+    plugins = [x[0][2:] for x in os.walk(plugin_dir) if x[0] != "." and x[0] != "plugins"]
     log.debug("Plugins found: {0}".format(plugins))
     return plugins
 

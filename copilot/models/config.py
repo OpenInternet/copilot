@@ -200,13 +200,13 @@ class ProfileConfig(object):
         try:
             _data = self.parser.read(self.path)
         except:
-            log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
             return False
         if _data == []:
-            log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
             return False
         if not self.parser.has_option("info", "name"):
-            log.warn("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
             return False
         #TODO Add config file format values for each module
         log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
@@ -253,13 +253,13 @@ class ProfileConfig(object):
         try:
             _data = self.parser.read(self.path)
         except:
-            log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
             return False
         if _data == []:
-            log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
             return False
         if not self.parser.has_option("info", "name"):
-            log.warn("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
             return False
         #TODO Add config file format values for each module
         log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
@@ -303,15 +303,20 @@ class PluginConfig(object):
         try:
             _data = self.parser.read(self.path)
         except:
-            log.warn("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
             return False
         if _data == []:
-            log.warn("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            log.warning("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
             return False
-        required = ["name", "config_file", "target", "actions", "directory"]
+        required = ["name", "config_file", "directory"]
+        desired = ["target", "actions"]
         for r in required:
             if not self.parser.has_option("info", r):
-                log.warn("Config file at {0} has no {1} and therefore cannot be used. Marking as invalid.".format(self.path, r))
+                log.warning("Config file at {0} has no {1} and therefore cannot be used. Marking as invalid.".format(self.path, r))
+                return False
+        for r in desired:
+            if not self.parser.has_option("info", r):
+                log.warning("Config file at {0} has no {1} and will not generate rules.".format(self.path, r))
                 return False
         log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
         return True
