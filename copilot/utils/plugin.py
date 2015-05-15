@@ -2,7 +2,6 @@ from pluginbase import PluginBase
 from functools import partial
 import os
 
-
 # stat logging
 import logging
 log = logging.getLogger(__name__)
@@ -41,7 +40,7 @@ class Plugin(object):
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"
     # Get all folder names in plugins and remove the directory cruft to make them plugin names
-    plugins = [x[0] for x in os.walk(plugin_dir) if x[0] != "." and x[0] != "plugins"]
+    plugins = [os.path.basename(x[0]) for x in os.walk(plugin_dir) if os.path.basename(x[0]) != "plugins"]
     log.debug("Plugins found: {0}".format(plugins))
     return plugins
 
