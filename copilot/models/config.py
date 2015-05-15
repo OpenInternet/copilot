@@ -25,6 +25,7 @@ def get_config_dir(directory):
 
 def get_config_file(config):
     """ return the path to a config file."""
+    log.info("getting {0} config file.".format(config))
     directory = get_option("directory", config)[0]
     config_file = get_option("config_file", config)[0]
     path = os.path.join(directory, config_file)
@@ -37,12 +38,14 @@ def get_valid_actions(package=None):
         return get_option("actions", package)
 
 def get_valid_targets():
+    log.info("getting valid targets.")
     return get_unique_values("target")
 
 def get_config_writer(name):
     """
     Get a plugins config writer object
     """
+    log.info("getting a plugins config writer.")
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
     plugin = Plugin(name)
@@ -51,6 +54,7 @@ def get_config_writer(name):
 
 def get_option(option, plugin):
     """Get an option from a plugin config file as a list."""
+    log.info("getting option {0} from {1}'s config file.".format(option, plugin))
     if not is_plugin(plugin):
         raise ValueError("{0} is not a plugin.".format(plugin))
     plugin = PluginConfig(plugin)
@@ -58,6 +62,7 @@ def get_option(option, plugin):
 
 def get_unique_values(option):
     """Returns a list of a specific key's value across all plugins config files with no repeats."""
+    log.info("getting all unique values for option {0}.".format(option))
     values = []
     val_list = get_value_list(option)
     for i in val_list:
@@ -69,6 +74,7 @@ def get_unique_values(option):
 
 def get_value_list(option):
     """Returns a list of (plugin,[value1, value2, value3]) tuples of a specific key's value across all plugins config files."""
+    log.info("Getting a list of all values")
     plugins = get_plugins()
     plist = []
     for p in plugins:
@@ -78,6 +84,7 @@ def get_value_list(option):
 
 def get_value_dict(option):
     """Returns a dictionary of {plugin: [value1, value2, value3]} of a specific key's value across all plugins config files."""
+    log.info("Getting a dict of all values")
     plugins = get_plugins()
     pdict = {}
     for p in plugins:
@@ -144,46 +151,6 @@ class Config(object):
         else:
             log.debug("No header found.")
 
-class APConfig(Config):
-
-    def __init__(self, ap_name, ap_password, iface_in="eth0", iface_out="wlan0"):
-        super(APConfig, self).__init__()
-        self._config_type = "create_ap"
-        self.iface_in = iface_in
-        self.iface_out = iface_out
-        self.header = "{0} {1} ".format(self.iface_out, self.iface_in)
-        self.ap_name = ap_name
-        self.ap_password = ap_password
-        self.add_rule(self.ap_name)
-        self.add_rule(self.ap_password)
-        self.config_type = "create_ap"
-
-    @property
-    def ap_password(self):
-        return self._ap_password
-
-    @ap_password.setter
-    def ap_password(self, plaintext):
-        if (8 < len(str(plaintext)) <= 63 and
-            all(char in string.printable for char in plaintext)):
-            self._ap_password = plaintext
-        else:
-            raise ValueError("Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.")
-
-    @property
-    def ap_name(self):
-        return self._ap_name
-
-    @ap_name.setter
-    def ap_name(self, name):
-        if 0 < len(str(name)) <= 31:
-            self._ap_name = name
-        else:
-            raise ValueError("Access Point names must be between 1 and 31 characters long.")
-
-    def add_rule(self, rule):
-        log.debug("adding rule {0}".format(rule))
-        self._rules.append("{0} ".format(rule))
 
 
 class ProfileParser(SafeConfigParser):
