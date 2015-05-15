@@ -1,7 +1,7 @@
 from copilot.models.config import Config
 
-import logging
-log = logging.getLogger(__name__)
+#import logging
+#log = logging.getLogger(__name__)
 
 import string
 
@@ -35,7 +35,7 @@ class ConfigWriter(Config):
             raise ValueError("Access Point names must be between 1 and 31 characters long.")
 
     def add_rule(self, ap_name="copilot", ap_password="copilot_pass", iface_in="eth0", iface_out="wlan0"):
-        log.debug("adding create ap rule  {0} {1} {2} {3}".format(iface_out, iface_in, ap_name, ap_password))
+        #log.debug("adding create ap rule  {0} {1} {2} {3}".format(iface_out, iface_in, ap_name, ap_password))
         self._rules.append("{0} ".format(iface_out))
         self._rules.append("{0} ".format(iface_in))
         self._rules.append("{0} ".format(ap_name))
