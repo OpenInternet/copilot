@@ -12,7 +12,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 
 plugin_base = PluginBase(package='copilot.plugins',
-                         searchpath=[get_path("/home/www/co-pilot/copilot/plugins")])
+                         searchpath=[get_path("/home/www/copilot/copilot/plugins")])
 
 class Plugin(object):
     def __init__(self, name):
@@ -22,18 +22,18 @@ class Plugin(object):
         # and a source which loads the plugins from the "plugins/PLUGIN_NAME"
         # folder.
         self.source = plugin_base.make_plugin_source(
-            searchpath=[get_path('./plugins/{0}'.format(self.name))],
+            searchpath=[get_path('/home/www/copilot/copilot/plugins/{0}'.format(self.name))],
             identifier=self.name)
 
         # Here we list all the plugins the source knows about, load them
         # and the use the "setup" function provided by the plugin to
         # initialize the plugin.
         for plugin_name in self.source.list_plugins():
+            log.debug("Loading sub-plugin {0} from plugin: {1}".format(self.name, plugin_name))
             plugin = self.source.load_plugin(plugin_name)
             plugin.setup(self)
 
     def get_config_writer(self):
-        log.debug("sub-plugins available in the {0} plugin: {1}".format(self.name, self.source.list_plugins()))
         config = self.source.load_plugin("config")
         config_writer = config.ConfigWriter()
         return config_writer
