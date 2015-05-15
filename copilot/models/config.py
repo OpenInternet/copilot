@@ -79,7 +79,8 @@ def get_value_list(option):
     plist = []
     for p in plugins:
         _plugin = PluginConfig(p)
-        plist.append((p, _plugin.data['info'][option]))
+        if _plugin.valid():
+            plist.append((p, _plugin.data['info'][option]))
     return plist
 
 def get_value_dict(option):
