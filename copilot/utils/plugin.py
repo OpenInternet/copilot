@@ -35,14 +35,14 @@ class Plugin(object):
             plugin.setup(self)
 
     def get_config_writer(self):
-        config = plugin_source.load_plugin('config')
+        config = self.source.load_plugin('config')
         config_writer = config.ConfigWriter()
         return config_writer
 
 def get_plugins():
     plugin_dir = "/home/www/co-pilot/copilot/plugins"
     # Get all folder names in plugins and remove the directory cruft to make them plugin names
-    return [x[0][2:] for x in os.walk(directory) if x[0] != "."]
+    return [x[0][2:] for x in os.walk(plugin_dir) if x[0] != "."]
 
 def is_plugin(name):
     plugins = get_plugins
