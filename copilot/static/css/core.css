@@ -84,6 +84,12 @@ Base 05: #fafafa
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
 }
 
+.nav_bar {
+    width: 100%;
+    background: #002e62;
+    height: 40px
+}
+
 .nav-trigger {
     position: absolute;
     clip: rect(0, 0, 0, 0);
