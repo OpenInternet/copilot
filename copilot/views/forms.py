@@ -89,4 +89,4 @@ class NewProfileForm(Form):
 
 class SaveProfileField(Form):
     prof_name = HiddenField('Profile Name', default="new")
-    location = RadioField("Save Location", choices=(zip(get_usb_dirs() + ["Co-Pilot"], get_usb_dirs() + ["Co-Pilot"])), default="Co-Pilot")
+    location = RadioField("Save Location", choices=[], default="Co-Pilot")
