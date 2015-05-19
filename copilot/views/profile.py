@@ -69,7 +69,7 @@ def profile(prof_name):
         if _apply:
             profile.apply_config()
         if _save:
-            return redirect(url_for('profile_save', prof_name=prof_name))
+            return redirect(url_for('profile_save', prof_name="new"))
         elif _apply:
             flash('Profile "{0}" has been applied!'.format(prof_name), 'success')
     else:
@@ -174,7 +174,7 @@ def profile_applied():
     buttons = [{"name":"Return", "link":url_for('profile')}]
     return render_template('profile_applied.html', profile=profile, buttons=buttons, status_items=status_items)
 
-@app.route('/profile/save/<string:prof_name>', defaults={"prof_name": "null"}, methods=["GET", "POST"])
+@app.route('/profile/save/<prof_name>', methods=["GET", "POST"])
 @login_required
 def profile_save(prof_name):
     """Choose where to save the current profile."""
@@ -200,7 +200,7 @@ def profile_save(prof_name):
         profile.profile_dir = "profiles"
         profile.save()
     else:
-        if prof_name != "null":
+        if prof_name:
             form.prof_name.data = prof_name
         else:
             flash('An error occured identifying the profile to save.', 'error')
