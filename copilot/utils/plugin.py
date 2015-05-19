@@ -20,6 +20,7 @@ class Plugin(object):
 
         # and a source which loads the plugins from the "plugins/PLUGIN_NAME"
         # folder.
+        log.debug(self.source)
         self.source = plugin_base.make_plugin_source(
             searchpath=[get_path('/home/www/copilot/copilot/plugins/{0}'.format(self.name))],
             identifier=self.name)
