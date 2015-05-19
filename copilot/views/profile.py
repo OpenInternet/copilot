@@ -208,6 +208,8 @@ def profile_save(prof_name):
 
     status_items = get_status_items()
     buttons = [{"name":"Save", "submit":True}]
+    log.debug(form.data.location)
+    log.debug(dir(form.data))
 
     return render_template('profile_save.html',
                            form=form,
