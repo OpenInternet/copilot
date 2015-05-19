@@ -30,7 +30,7 @@ class ConfigWriter(Config):
         try:
             _domain = self.get_dns(sub)
         except ValueError as err:
-            log.warnwing("Could not add rule. Invalid Target.")
+            log.warning("Could not add rule. Invalid Target.")
             raise ValueError(err)
         if action == "block":
             log.debug("Found a blocking role. Setting address to localhost (127.0.0.1).")
