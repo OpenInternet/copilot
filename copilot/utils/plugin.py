@@ -33,7 +33,7 @@ class Plugin(object):
             plugin.setup(self)
 
     def get_config_writer(self, plugin_writer):
-        self.writer = plugin_writer
+        self.writer = plugin_writer()
 
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"
