@@ -30,8 +30,8 @@ class Plugin(object):
         for plugin_name in self.source.list_plugins():
             log.debug("Loading sub-plugin {0} from plugin: {1}".format(plugin_name, self.name))
 
-    def get_config_writer(self, plugin_name):
-        return self.source.load_plugin(plugin_name)
+    def get_config_writer(self):
+        return self.source.load_plugin("config")
 
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"

@@ -51,10 +51,9 @@ def get_config_writer(name):
     log.info("getting a plugins config writer.")
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
-    plugin = Plugin(name)
-    with plugin.source:
-        from copilot.plugins import config
-        writer = config.ConfigWriter()
+    plugins = Plugin(name)
+    config = plugins.get_config_writer()
+    writer = config.ConfigWriter()
     return writer
 
 def get_option(option, plugin):
