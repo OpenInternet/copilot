@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "rule_item.html" import render_rules %}
 {% from "status.html" import render_status_items %}
 {% from "alert.html" import render_alerts %}
 {% from "submit.html" import render_submit_links %}
@@ -12,10 +13,12 @@
 {% endblock %}
 
 {% block body %}
-<h3>Name: {{ form.prof_name.label }}</h3>
-{{ form.location.label }}
-{{ form.location() }}
-
+{% for subfield in form.location %}
+    <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+    </tr>
+{% endfor %}
 {% endblock %}
 
 {% block submit %}
