@@ -63,6 +63,7 @@ Base 05: #fafafa
     min-width: 100%;
     min-height: 100%;
     background-color: #fafafa;
+    font-family: "Helvetica";
     position: relative;
     top: 0;
     bottom: 100%;
@@ -109,11 +110,6 @@ label[for="nav-trigger"] {
 
 body {
     overflow-x: hidden;
-}
-
-body {
-    font-family: "Helvetica";
-    background: #fafafa;
 }
 
 /* === Text Formatting === */
