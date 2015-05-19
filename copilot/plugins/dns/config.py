@@ -10,7 +10,7 @@ class ConfigWriter(Config):
 
     def __init__(self):
         super(ConfigWriter, self).__init__()
-        self.config_type = "dnschef"
+        self.config_type = "dns"
         self.header = "[A]\n"
 
     def add_rule(self, rule):
