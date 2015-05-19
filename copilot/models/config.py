@@ -53,8 +53,8 @@ def get_config_writer(name):
         raise ValueError("{0} is not a plugin.".format(name))
     plugin = Plugin(name)
     with plugin.source:
-        from copilot.plugins.config import ConfigWriter
-        writer = ConfigWriter()
+        from copilot.plugins import config
+        writer = config.ConfigWriter()
     return writer
 
 def get_option(option, plugin):
