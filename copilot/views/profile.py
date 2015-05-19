@@ -9,6 +9,7 @@ from copilot.controllers import get_status_items
 from copilot.models.config import get_valid_actions, get_valid_targets, get_config_dir
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs
+
 #Get flask modules
 from flask import redirect, url_for, render_template, flash, make_response, request
 from flask.ext.login import login_user, login_required
@@ -178,7 +179,7 @@ def profile_applied():
 def profile_save(prof_name):
     """Choose where to save the current profile."""
 
-    form = forms.SaveProfileForm()
+    form = forms.SaveProfileField()
     if form.validate_on_submit():
         log.info("save form is valid")
         log.info("identifying the directory to save to.")
