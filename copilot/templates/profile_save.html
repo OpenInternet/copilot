@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block body %}
-{% for subfield in form %}
+{% for subfield in form.location %}
     <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
