@@ -171,12 +171,12 @@ class Profile(object):
             _sub = r[2]
             if _tar not in configs:
                 log.debug("Creating a {0} config".format(_tar))
-                configs[r.target] = get_config_writer(_tar)
+                configs[_tar] = get_config_writer(_tar)
                 log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[r.target].add_rule(_tar, _action, _sub)
+                configs[_tar].add_rule(_tar, _action, _sub)
             else:
                 log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[r.target].add_rule(_tar, _action, _sub)
+                configs[_tar].add_rule(_tar, _action, _sub)
         for c in configs:
             log.debug("Writing {0} config.".format(c))
             configs[c].write()
