@@ -52,7 +52,7 @@ def get_config_writer(name):
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
     plugins = Plugin(name)
-    config = plugins.get_config_writer()
+    config = plugins.get_config_writer().config
     writer = config.ConfigWriter()
     return writer
 

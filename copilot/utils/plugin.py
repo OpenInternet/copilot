@@ -31,7 +31,7 @@ class Plugin(object):
             log.debug("Loading sub-plugin {0} from plugin: {1}".format(plugin_name, self.name))
 
     def get_config_writer(self):
-        return self.source.load_plugin("config")
+        return self.source.load_plugin(self.name)
 
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"
