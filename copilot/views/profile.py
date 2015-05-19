@@ -207,7 +207,8 @@ def profile_save(prof_name):
             redirect(url_for('error'))
 
     status_items = get_status_items()
-    buttons = [{"name":"Save", "submit":True}]
+    buttons = [{"name":"Save", "submit":True},
+               {"name":"Load", "submit":True}]
     #log.debug(form.data.location)
     log.debug(dir(form.location.choices))
     log.debug(form.location.choices)
