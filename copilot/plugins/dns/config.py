@@ -1,10 +1,10 @@
 from copilot.models.config import Config
-from exceptions import ValueError
 
-import string
-from urlparse import urlparse
 
 class ConfigWriter(Config):
+    from exceptions import ValueError
+    import string
+    from urlparse import urlparse
 
     def __init__(self):
         super(ConfigWriter, self).__init__()
