@@ -69,7 +69,7 @@ def profile(prof_name):
         if _apply:
             profile.apply_config()
         if _save:
-            return redirect(url_for('profile_save', prof_name="new"))
+            return redirect(url_for('profile_save', prof_name=prof_name))
         elif _apply:
             flash('Profile "{0}" has been applied!'.format(prof_name), 'success')
     else:
@@ -174,7 +174,7 @@ def profile_applied():
     buttons = [{"name":"Return", "link":url_for('profile')}]
     return render_template('profile_applied.html', profile=profile, buttons=buttons, status_items=status_items)
 
-@app.route('/profile/save', defaults={"prof_name": "null"}, methods=["GET", "POST"])
+@app.route('/profile/save/<string:prof_name>', defaults={"prof_name": "null"}, methods=["GET", "POST"])
 @login_required
 def profile_save(prof_name):
     """Choose where to save the current profile."""
