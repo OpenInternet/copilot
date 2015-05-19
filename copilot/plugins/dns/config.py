@@ -2,11 +2,11 @@ from copilot.models.config import Config
 
 
 class ConfigWriter(Config):
-    from exceptions import ValueError
-    import string
-    from urlparse import urlparse
 
     def __init__(self):
+        from exceptions import ValueError
+        import string
+        from urlparse import urlparse
         super(ConfigWriter, self).__init__()
         self.log.debug("Initializing dns config writer.")
         self.config_type = "dns"
