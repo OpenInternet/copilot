@@ -37,16 +37,16 @@ def profile(prof_name):
         _apply = False
         _download = False
         log.info("Checking users submission choice.")
-        if form['submit_action'] == 'Save':
+        if request.form['submit_action'] == 'Save':
             _save = True
-        elif form['submit_action'] == 'Save & Apply':
+        elif request.form['submit_action'] == 'Save & Apply':
             _save = True
             _apply = True
-        elif form['submit_action'] == 'Apply':
+        elif request.form['submit_action'] == 'Apply':
             _apply = True
-        elif form['submit_action'] == 'Download':
+        elif request.form['submit_action'] == 'Download':
             _download = True
-        elif form['submit_action'] == 'Load':
+        elif request.form['submit_action'] == 'Load':
             return redirect(url_for('profile_load'))
         else:
             log.debug("No submission selected.")
