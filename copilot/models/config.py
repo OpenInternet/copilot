@@ -131,7 +131,7 @@ class Config(object):
         try:
             return self._config_type
         except AttributeError as err:
-            self.log.debug("Config type is not yet set, returning empty string.")
+            log.debug("Config type is not yet set, returning empty string.")
             return ""
 
     @config_type.setter
