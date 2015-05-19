@@ -72,7 +72,7 @@ class Profile(object):
 
     def add_rule(self, rule):
         log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
-        config_obj = get_config_writer(rule[1])
+        config_obj = get_config_writer(rule['target'])
         try:
             config_obj.add_rule(rule['action'], rule['target'], rule['sub_target'])
         except ValueError as _err:
