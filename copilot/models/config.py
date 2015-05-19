@@ -4,7 +4,7 @@ import importlib
 from urlparse import urlparse
 from copilot.utils.file_sys import get_usb_dirs
 from ConfigParser import SafeConfigParser
-from copilot.utils.plugin import Plugin, is_plugin, get_plugins
+from copilot.utils.plugin import is_plugin, get_plugins
 
 #stat logging
 import logging
@@ -54,8 +54,6 @@ def get_config_writer(name):
         raise ValueError("{0} is not a plugin.".format(name))
     config = importlib.import_module('copilot.plugins.{0}.config'.format(name))
     log.debug("{0} contains {1}".format(config.__name__, dir(config)))
-    #plugins = Plugin(name)
-    #config = plugins.get_config_writer().config
     writer = config.ConfigWriter()
     return writer
 
@@ -121,14 +119,6 @@ class Config(object):
     def __init__(self):
         self._rules = []
         self.config_dir = "main"
-        import logging
-        #set logger
-        self.log = logging.getLogger("plugin.{0}".format(self.config_type))
-        self.log.setLevel("DEBUG")
-        lhr = logging.FileHandler("/var/log/copilot.log")
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        lhr.setFormatter(formatter)
-        self.log.addHandler(lhr)
 
     @property
     def config_type(self):
