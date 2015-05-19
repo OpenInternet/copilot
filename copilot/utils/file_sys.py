@@ -1,6 +1,10 @@
 import os
 import subprocess
 
+#stat logging
+import logging
+log = logging.getLogger(__name__)
+
 
 #Adapted from https://stackoverflow.com/questions/6840711/writing-a-file-to-a-usb-stick-in-linux-with-python
 # Feel like a https://www.eff.org/files/images_insert/defcon20-script-kitty-detail.jpg
@@ -17,6 +21,7 @@ def get_usb_dirs():
                 if os.path.islink(path):
                     if os.path.realpath(path).find("/usb") > 0:
                         devices.append('/dev/'+deviceName)
+    log.debug("usb debvices found: {0}".format(devices))
     #get mount point
     mounts = []
     for line in subprocess.check_output(['mount', '-l']).split('\n'):
@@ -24,4 +29,5 @@ def get_usb_dirs():
         if len(parts) > 2:
             if parts[0][:-1] in devices:
                 mounts.append(parts[2])
+    log.debug("usb mount points found: {0}".format(mounts))
     return mounts
