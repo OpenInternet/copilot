@@ -52,10 +52,10 @@ def get_config_writer(name):
     log.info("getting a plugins config writer.")
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
-    config = importlib.import_module('copilot.plugins.{0}'.format(name))
+    plugin = importlib.import_module('copilot.plugins.{0}'.format(name))
     #plugins = Plugin(name)
     #config = plugins.get_config_writer().config
-    writer = config.ConfigWriter()
+    writer = plugin.config.ConfigWriter()
     return writer
 
 def get_option(option, plugin):
