@@ -2,6 +2,11 @@ from copilot.models.config import Config
 import string
 from urlparse import urlparse
 
+#stat logging
+import logging
+log = logging.getLogger(__name__)
+
+
 class ConfigWriter(Config):
 
     def __init__(self):
