@@ -61,4 +61,5 @@ class ConfigWriter(Config):
 
 
 def setup(app):
-    app.get_config_writer(ConfigWriter)
+    dns = ConfigWriter()
+    app.get_config_writer(dns)
