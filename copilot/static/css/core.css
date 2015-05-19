@@ -1,20 +1,119 @@
 /*
 Color Palette
 
+Primary:
 Dark Blue : #002e62
-Light Blue : #005baa
-Grey Blue : #96a3c3
-Light Grey : #939192
-Dark Grey : #626264
-Green : #6db33
-Light Green : #b3d78d
-Orange : #fbb033
-Yellow : #fbb033
+Mid Blue:   #244c78
+Light Blue: #72afb7
+
+Secondary:
+Dark Orange : #f25d23
+Dark Yellow : #fbb033
+
+Base:
+Base 01: #1a1a1a
+Base 02: #757575
+Base 03: #e0e0e0
+Base 04: #eeeeee
+Base 05: #fafafa
+
 */
+
+
+/* Navagation Bar */
+
+.navigation {
+    list-style: none;
+    background: #002e62;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* Navigation Menu - List items */
+.nav-item {
+  /* non-critical appearance styles */
+  width: 200px;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-item a {
+  /* non-critical appearance styles */
+  display: block;
+  padding: 1em;
+  background: linear-gradient(135deg, #002e62 0%,#002e62 100%);
+  color: #fafafa;
+  font-size: 1.2em;
+  text-decoration: none;
+  transition: color 0.2s, background 0.5s;
+}
+
+.nav-item a:hover {
+  color: #72afb7;
+  background: linear-gradient(135deg,#002e62  0%,#244c78 100%);
+}
+
+.site-wrap {
+    min-width: 100%;
+    min-height: 100%;
+    background-color: #fafafa;
+    position: relative;
+    top: 0;
+    bottom: 100%;
+    left: 0;
+    z-index: 1;
+    padding: 4em;
+    /*background-image: linear-gradient(135deg,
+                      rgb(254,255,255) 0%,
+                      rgb(221,241,249) 35%,
+                      rgb(160,216,239) 100%);
+    */
+    background-size: 200%;
+}
+
+.nav-trigger {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+label[for="nav-trigger"] {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
+    background-size: contain;
+}
+
+.nav-trigger:checked + label {
+    left: 215px;
+}
+
+.nav-trigger:checked ~ .site-wrap {
+    left: 200px;
+    box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+}
+
+.nav-trigger + label, .site-wrap {
+    transition: left 0.2s;
+}
+
+body {
+    overflow-x: hidden;
+}
 
 body {
     font-family: "Helvetica";
-    background: #ffffff;
+    background: #fafafa;
 }
 
 /* === Text Formatting === */

@@ -16,12 +16,19 @@
 {% include 'sprites/status_symbol.svg' %}
 
 <head>
-    <div class="status">
-        {% block status %}{% endblock %}
-    </div>
-    <div>
-        {% block alert %}{% endblock %}
-    </div>
+    <nav class="navagation">
+        <button>Menu</button>
+        <ul>
+            <li class="nav-item"><a class="popover-link" href="#new">New</a></li>
+            <li class="nav-item"><a class="popover-link" href="#load">Load</a></li>
+            <li class="nav-item"><a class="popover-link" href="#edit">Edit</a></li>
+            <li class="nav-item"><a class="popover-link" href="#settings">Settings</a></li>
+            <li class="nav-item"><a class="popover-link" href="#info">Info</a></li>
+            <li class="nav-item"><a class="popover-link" href="#plugins">Plugins</a></li>
+        </ul>
+    </nav>
+    <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+    <label for="nav-trigger"></label>
 </head>
 
 <body>
