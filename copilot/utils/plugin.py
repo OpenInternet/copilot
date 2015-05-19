@@ -31,6 +31,10 @@ class Plugin(object):
             log.debug("Loading sub-plugin {0} from plugin: {1}".format(plugin_name, self.name))
             plugin = self.source.load_plugin(plugin_name)
 
+
+    def get_config_writer(self, plugin_writer):
+        self.writer = plugin_writer
+
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"
     # Get all folder names in plugins and remove the directory cruft to make them plugin names
