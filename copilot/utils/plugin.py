@@ -20,20 +20,18 @@ class Plugin(object):
 
         # and a source which loads the plugins from the "plugins/PLUGIN_NAME"
         # folder.
-        log.debug(self.source)
         self.source = plugin_base.make_plugin_source(
             searchpath=[get_path('/home/www/copilot/copilot/plugins/{0}'.format(self.name))],
             identifier=self.name)
-
+        log.debug(self.source)
         # Here we list all the plugins the source knows about, load them
         # and the use the "setup" function provided by the plugin to
         # initialize the plugin.
         for plugin_name in self.source.list_plugins():
             log.debug("Loading sub-plugin {0} from plugin: {1}".format(plugin_name, self.name))
-            #plugin = self.source.load_plugin(plugin_name)
 
-    def get_config_writer(self, plugin_writer):
-        self.writer = plugin_writer
+    def get_config_writer(self, plugin_name):
+        return self.source.load_plugin(plugin_name)
 
 def get_plugins():
     plugin_dir = "/home/www/copilot/copilot/plugins"
