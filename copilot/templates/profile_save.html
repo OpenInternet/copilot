@@ -12,8 +12,9 @@
 {% endblock %}
 
 {% block body %}
-<h3>Name: {{ form.prof_name }}</h3>
-{{ form.location }}
+<h3>Name: {{ form.prof_name.label }}</h3>
+{{ form.location.label }}
+{{ form.location() }}
 
 {% endblock %}
 
