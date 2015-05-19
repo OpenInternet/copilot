@@ -3,13 +3,12 @@ from exceptions import ValueError
 
 import logging
 #set logger
-logger = logging.getLogger(__name__)
-logger.setLevel("DEBUG")
+log = logging.getLogger(__name__)
+log.setLevel("DEBUG")
 lhr = logging.FileHandler("/var/log/copilot.log")
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 lhr.setFormatter(formatter)
-logger.addHandler(lhr)
-log = logging.getLogger(__name__)
+log.addHandler(lhr)
 
 import string
 from urlparse import urlparse
