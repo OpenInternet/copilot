@@ -69,7 +69,7 @@ def profile(prof_name):
         if _apply:
             profile.apply_config()
         if _save:
-            return redirect(url_for('profile_save', prof_name="new"))
+            return redirect(url_for('profile_save', prof_name=prof_name))
         elif _apply:
             flash('Profile "{0}" has been applied!'.format(prof_name), 'success')
     else:
