@@ -53,7 +53,7 @@ def get_config_writer(name):
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
     plugin = importlib.import_module('copilot.plugins.{0}'.format(name))
-    log.debug(dir(plugin))
+    log.debug("{0} contains {1}".format(plugin.__name__, dir(plugin)))
     #plugins = Plugin(name)
     #config = plugins.get_config_writer().config
     writer = plugin.config.ConfigWriter()
