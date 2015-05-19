@@ -12,20 +12,9 @@
 {% endblock %}
 
 {% block body %}
-<h3>Name: {{ profile.name }}</h3>
-{% for rule in profile.rules %}
-<div class="row">
-    <div class="four columns">
-        {{ rule.action  }}
-    </div>
-    <div class="four columns">
-        {{ rule.target  }}
-    </div>
-    <div class="four columns">
-        {{ rule.sub_target  }}
-    </div>
-</div>
-{% endfor %}
+<h3>Name: {{ form.prof_name }}</h3>
+{{ form.location }}
+
 {% endblock %}
 
 {% block submit %}
