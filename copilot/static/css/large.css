@@ -1,5 +1,5 @@
-.body {
-	padding: 3rem 0 2rem;
+.site-wrap {
+    padding: 4rem 0rem 15rem 4rem;
 }
 
 .submit {
@@ -7,24 +7,24 @@
 }
 
 .rule {
-	padding: 1rem 0 1rem;
+        padding: 1rem 0 1rem;
 }
 
 .rule.error {
-	padding-left: 1rem;
+        padding-left: 1rem;
 }
 
 .status .items {
-	padding-top: 2.5rem;
+        padding-top: 2.5rem;
 }
 
 
 svg.icon {
-	height: 5rem;
-	width: 5rem;
+        height: 5rem;
+        width: 5rem;
 }
 
 
 .logo {
-    	padding: 3rem 0 3rem;
+        padding: 3rem 0 3rem;
 }

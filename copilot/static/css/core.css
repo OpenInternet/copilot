@@ -62,6 +62,8 @@ Base 05: #fafafa
 .site-wrap {
     min-width: 100%;
     min-height: 100%;
+    width: 100%;
+    height: 100%;
     background-color: #fafafa;
     font-family: "Helvetica";
     position: relative;
@@ -79,7 +81,8 @@ Base 05: #fafafa
 }
 
 .content-frame {
-
+    padding: 2em 2em 2em 2em;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
 }
 
 .nav-trigger {
