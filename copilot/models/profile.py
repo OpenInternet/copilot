@@ -173,10 +173,10 @@ class Profile(object):
                 log.debug("Creating a {0} config".format(_tar))
                 configs[_tar] = get_config_writer(_tar)
                 log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[_tar].add_rule(_tar, _action, _sub)
+                configs[_tar].add_rule([_action, _tar, _sub])
             else:
                 log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[_tar].add_rule(_tar, _action, _sub)
+                configs[_tar].add_rule([_action, _tar, _sub])
         for c in configs:
             log.debug("Writing {0} config.".format(c))
             configs[c].write()
