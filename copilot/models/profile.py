@@ -67,6 +67,7 @@ class Profile(object):
         try:
             _dir = get_config_dir(plaintext)
             self._profile_dir = _dir
+            self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
         except ValueError:
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
