@@ -13,7 +13,8 @@ class ConfigWriter(Config):
         self.config_type = "dnschef"
         self.header = "[A]\n"
 
-    def add_rule(self, target, action, sub):
+    def add_rule(self, rule):
+        action, target, sub = rule[0], rule[1], rule[2]
         _rule = ""
         _domain = ""
         _address = ""
