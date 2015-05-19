@@ -178,7 +178,7 @@ def profile_applied():
 def profile_save(prof_name):
     """Choose where to save the current profile."""
 
-    form = forms.SavePeofileForm()
+    form = forms.SaveProfileForm()
     if form.validate_on_submit():
         log.info("save form is valid")
         log.info("identifying the directory to save to.")
