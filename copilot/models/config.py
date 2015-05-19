@@ -128,9 +128,10 @@ class Config(object):
 
     @property
     def config_type(self):
-        if self._config_type:
+        try:
             return self._config_type
-        else:
+        except AttributeError as err:
+            self.log.debug("Config type is not yet set, returning empty string.")
             return ""
 
     @config_type.setter
