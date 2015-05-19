@@ -117,10 +117,9 @@ class Config(object):
     def __init__(self):
         self._rules = []
         self.config_dir = "main"
-        self.config_type = ""
         import logging
         #set logger
-        self.log = logging.getLogger("plugin.{0}".format(self.config_type))
+        self.log = logging.getLogger("plugin.{0}".format(self.config_type if self.config_type else ""))
         self.log.setLevel("DEBUG")
         lhr = logging.FileHandler("/var/log/copilot.log")
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
