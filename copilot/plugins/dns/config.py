@@ -3,7 +3,7 @@ from exceptions import ValueError
 
 import logging
 #set logger
-log = logging.getLogger(__name__)
+log = logging.getLogger("copilot.plugin.dns")
 log.setLevel("DEBUG")
 lhr = logging.FileHandler("/var/log/copilot.log")
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -17,6 +17,7 @@ class ConfigWriter(Config):
 
     def __init__(self):
         super(ConfigWriter, self).__init__()
+        log.debug("Initializing dns config writer.")
         self.config_type = "dns"
         self.header = "[A]\n"
 
