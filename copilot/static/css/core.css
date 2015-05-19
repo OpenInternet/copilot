@@ -61,7 +61,7 @@ Base 05: #fafafa
 
 .site-wrap {
     min-width: 100%;
-    min-height: 100%;
+    height: 100vh;
     overflow: hidden;
     background-color: #fafafa;
     font-family: "Helvetica";
@@ -70,7 +70,6 @@ Base 05: #fafafa
     bottom: 100%;
     left: 0;
     z-index: 1;
-    padding: 30px 4em 15em 4em;
     /*background-image: linear-gradient(135deg,
                       rgb(254,255,255) 0%,
                       rgb(221,241,249) 35%,
@@ -81,6 +80,7 @@ Base 05: #fafafa
 
 .content-frame {
     padding: 2em 2em 2em 2em;
+    background: #ffffff;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
 }
 
