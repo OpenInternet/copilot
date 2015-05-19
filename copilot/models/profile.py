@@ -71,15 +71,15 @@ class Profile(object):
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
     def add_rule(self, rule):
-        log.debug("adding rule {0} {1} {2}".format(rule.action, rule.target, rule.sub_target))
+        log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
         config_obj = get_config_writer(rule[1])
         try:
-            config_obj.add_rule(rule.target, rule.action, rule.sub_target)
+            config_obj.add_rule(rule['action'], rule['target'], rule['sub_target'])
         except ValueError as _err:
             log.error("Error Encountered in add_rule()")
             log.info("Rule is NOT valid")
             raise ValueError(_err) #TODO add real error correction here
-        self.rules.append([rule.action, rule.target, rule.sub_target])
+        self.rules.append([rule['action'], rule['target'], rule['sub_target']])
 
     def save(self):
         log.info("Saving profile {0} to {1}".format(self.name, self.profile_file))

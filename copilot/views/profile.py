@@ -56,7 +56,7 @@ def profile(prof_name):
         prof_name = form.prof_name.data
         profile = mdl_prof.Profile(prof_name)
         for rule in form.data['rules']:
-            profile.add_rule([rule['action'], rule['target'], rule['sub_target']])
+            profile.add_rule(rule)
         log.debug("Saving profile in temporary directory {0}".format(prof_name))
         profile.profile_dir = "temporary"
         profile.save()
