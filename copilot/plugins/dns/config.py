@@ -11,7 +11,7 @@ class ConfigWriter(Config):
         import logging
         #set logger
         self.log = logging.getLogger("plugin.dns")
-        log.setLevel("DEBUG")
+        self.log.setLevel("DEBUG")
         lhr = logging.FileHandler("/var/log/copilot.log")
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         lhr.setFormatter(formatter)
