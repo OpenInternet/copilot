@@ -205,11 +205,13 @@ def profile_save(prof_name):
         else:
             flash('An error occured identifying the profile to save.', 'error')
             redirect(url_for('error'))
-    form.locations.choices = zip(get_usb_dirs() + ["Co-Pilot"], get_usb_dirs() + ["Co-Pilot"])
+    form.location.choices = zip(get_usb_dirs() + ["Co-Pilot"], get_usb_dirs() + ["Co-Pilot"])
+    log.debug("form locations: {0}".format(form.locations.choices)
     status_items = get_status_items()
     buttons = [{"name":"Save", "submit":True}]
     #log.debug(form.data.location)
-
+    #log.debug(dir(form.location.choices))
+    #log.debug(form.location.choices)
     return render_template('profile_save.html',
                            form=form,
                            status_items=status_items,
