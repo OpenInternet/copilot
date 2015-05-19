@@ -1,5 +1,6 @@
 import os
 import string
+import importlib
 from urlparse import urlparse
 from copilot.utils.file_sys import get_usb_dirs
 from ConfigParser import SafeConfigParser
@@ -51,8 +52,9 @@ def get_config_writer(name):
     log.info("getting a plugins config writer.")
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
-    plugins = Plugin(name)
-    config = plugins.get_config_writer().config
+    config = importlib.import_module('copilot.plugins.{0}'.format(name))
+    #plugins = Plugin(name)
+    #config = plugins.get_config_writer().config
     writer = config.ConfigWriter()
     return writer
 
