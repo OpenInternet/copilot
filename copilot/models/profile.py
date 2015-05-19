@@ -165,7 +165,6 @@ class Profile(object):
 
         configs = {}
         log.info("looking for config files that need to be written.")
-        targets = get_package_configs("target")
         for r in self.rules:
             _action = r[0]
             _tar = r[1]
