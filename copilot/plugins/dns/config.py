@@ -8,14 +8,6 @@ class ConfigWriter(Config):
 
     def __init__(self):
         super(ConfigWriter, self).__init__()
-        import logging
-        #set logger
-        self.log = logging.getLogger("plugin.dns")
-        self.log.setLevel("DEBUG")
-        lhr = logging.FileHandler("/var/log/copilot.log")
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        lhr.setFormatter(formatter)
-        self.log.addHandler(lhr)
         self.log.debug("Initializing dns config writer.")
         self.config_type = "dns"
         self.header = "[A]\n"
