@@ -78,6 +78,10 @@ Base 05: #fafafa
     background-size: 200%;
 }
 
+.content-frame {
+
+}
+
 .nav-trigger {
     position: absolute;
     clip: rect(0, 0, 0, 0);
