@@ -56,8 +56,7 @@ def profile(prof_name):
         prof_name = form.prof_name.data
         profile = mdl_prof.Profile(prof_name)
         for rule in form.data['rules']:
-            _rule = mdl_prof.Rule(rule['target'], rule['action'], rule['sub_target'])
-            profile.add_rule(_rule)
+            profile.add_rule([rule['action'], rule['target'], rule['sub_target']])
         log.debug("Saving profile in temporary directory {0}".format(prof_name))
         profile.profile_dir = "temporary"
         profile.save()
@@ -124,7 +123,7 @@ def profile_load():
 
     log.info("Checking users submission choice.")
     if form.validate_on_submit():
-        if form['submit_action'] == 'Upload Profile':
+        if request.form['submit_action'] == 'Upload Profile':
             tmp_profile = mdl_prof.Profile("tmp")
             tmp_profile.profile_dir = "temporary"
             user_file = request.files['Profile']
