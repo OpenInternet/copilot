@@ -31,7 +31,7 @@ Base 05: #fafafa
     top: 0;
     right: 0;
     bottom: 0;
-    right: 0;
+    left: 0;
     z-index: 0;
 }
 
@@ -62,14 +62,14 @@ Base 05: #fafafa
 .site-wrap {
     min-width: 100%;
     height: 100vh;
-    overflow: hidden;
-    background-color: #fafafa;
+    padding-top: 60px;
+    overflow-x: hidden;
+    background-color: #eeeeee;
     font-family: "Helvetica";
     position: relative;
-    padding-top: 60px;
     top: 0;
     bottom: 100%;
-    right: 0;
+    left: 0;
     z-index: 1;
     /*background-image: linear-gradient(135deg,
                       rgb(254,255,255) 0%,
@@ -78,12 +78,16 @@ Base 05: #fafafa
     */
     background-size: 200%;
 }
+html, body {height:100%;}
 
 .content-frame {
+    border-radius: 1em;
     padding: 2em 2em 2em 2em;
     background: #ffffff;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    margin: 5%;
 }
+
 
 .nav_bar {
     width: 100%;
@@ -100,26 +104,52 @@ Base 05: #fafafa
 label[for="nav-trigger"] {
     position: fixed;
     top: 15px;
-    right: 15px;
+    left: 15px;
     z-index: 2;
     width: 30px;
     height: 30px;
+    fill: #ffffff;
     cursor: pointer;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='white' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
     background-size: contain;
 }
 
 .nav-trigger:checked + label {
-    right: 215px;
+    left: 215px;
 }
 
 .nav-trigger:checked ~ .site-wrap {
-    right: 200px;
+    left: 200px;
     box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
 
-.nav-trigger + label, .site-wrap {
-    transition: right 0.2s;
+.nav-trigger + label,
+.site-wrap,
+.menu_bar {
+    transition: left 0.2s;
+}
+
+.site-wrap[left=200px] > .menu_bar {
+    left: 200px;
+}
+
+.page_title {
+    line-height: 60px;
+    color: #ffffff;
+    font-size: 3em;
+    margin-right: 1em;
+}
+
+.menu_bar {
+    position: fixed;
+    left: inherit;
+    top: 0;
+    right: 0;
+    text-align: right;
+    text-color: #FFFFFF;
+    background: #002e62;
+    height: 60px;
+    z-index: 1;
 }
 
 body {
@@ -143,63 +173,87 @@ h1 {
 
 /* Alert Message Lists */
 
+.alerts {
+    padding: 1em;
+    border: 1px solid #e0e0e0;
+    border-radius: 1em;
+}
+
+.notice {
+    font-weight:bold;
+    text-align:center;
+}
+
 ul.flashes {
     list-style: none;
     padding:0;
     margin:0;
 }
 
-li.flashes {
+.flashes li {
     padding-left: 1em;
     text-indent: -.7em;
 }
 
-li.flashes.error {
+.flashes li.error {
     border-bottom: 1px solid #f25d23;
 }
 
-li.flashes.success {
-    border-bottom: 1px solid #6db33;
+.flashes li.success {
+    border-bottom: 1px solid #72afb7;
 }
 
-li.flashes:before {
+.flashes li:before {
     content: "• ";
 }
 
-li.flashes.error:before {
+.flashes li.error:before {
     color: #f25d23;
 }
 
-li.flashes.success:before {
-    color: #6db33;
+.flashes li.success:before {
+    color: #72afb7;
 }
 
 /* Form Submission Buttons */
 
-.form_button {
-  position: relative;
-  vertical-align: top;
-  width: 100%;
-  height: 80%;
-  padding: 0;
-  font-size: 2rem;
-  color: white;
-  text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  background: #005baa;
-  border: 0;
-  border-bottom: 2px solid #002e62;
-  cursor: pointer;
-  -webkit-box-shadow: inset 0 -2px #002e62;
-  box-shadow: inset 0 -2px #002e62;
+.blues {
+    background-color:#72afb7 !important;
+    border-color:#72afb7 !important;
 }
 
-.form_button:active {
-  top: 1px;
-  outline: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+.blues:hover {
+    background-color:#244c78 !important;
+    border-color:#244c78 !important;
 }
+
+.submit {
+    margin-top: 1em;
+}
+
+.input_field  {
+    margin-bottom: .5em;
+}
+
+
+#overlay {
+     visibility: hidden;
+     position: absolute;
+     left: 0px;
+     top: 0px;
+     width:100%;
+     height:100%;
+     text-align:center;
+     z-index: 1000;
+}
+
+.paper {
+    border-radius: 1em;
+    background: #ffffff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    padding: 1em;
+}
+
 
 /* Rules and Profiles */
 
@@ -221,22 +275,156 @@ li.flashes.success:before {
         display: block;
 }
 
+.rule {
+    border-bottom: 1px solid #eeeeee;
+    padding: 3rem 0;
+}
+
+.mock_rule {
+    border-bottom: 1px solid #eeeeee;
+    padding: 3rem 0;
+}
+
+/* Errors */
+.error_bar {
+    background: #fbb033;
+    height: 300px;
+    align-items:center;
+    display:flex;
+}
+
+.error_container {
+    margin-right:auto;
+    margin-left:auto;
+}
+
+.face {
+    margin: 15px;
+    height: 200px;
+    width: 167.046px;
+    vertical-align: middle;
+}
+
+.big_errors .alerts {
+    padding-top: 1em;
+    font-size: 2em;
+    text-align: center;
+}
+
+.error_msg {
+    color: #ffffff;
+    font-size: 5em;
+}
+
+/*Start with emotes invisible*/
+.smile {opacity: 0.0;}
+.frown {opacity: 0.0;}
+.flame {opacity: 0.0;}
+.oface {opacity: 0.0;}
+
+/* But not everything */
+.glasses_wifi  {opacity: 1.0;}
+.glasses {opacity: 1.0;}
+.face_head  {opacity: 1.0;}
+
+/* Make the emotions become opaque when they are in the right emote class parent */
+.emote_smile /deep/ .smile {opacity: 1.0;}
+.emote_frown /deep/ .frown {opacity: 1.0;}
+.emote_flame /deep/ .flame {opacity: 1.0;}
+.emote_oface /deep/ .oface {opacity: 1.0;}
+
+
+/* Login */
+.welcome_bar {
+    height: 300px;
+    position:relative;
+}
+
+.welcome_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+/* Load Profiles page */
+
+.load_profiles li {
+  background: url('/static/images/globe_16.png') no-repeat left top;
+  padding: 0px 0px 30px 63px;
+  /* reset styles (optional): */
+  list-style: none;
+  margin: 0;
+  margin-top: 15px;
+  border-bottom: 1px solid #eeeeee;
+}
+.load_profiles a {
+    font-size: 2em;
+}
+
+.load_profiles li.upload_prof {
+  background: url('/static/images/upload_16.png') no-repeat left top;
+  padding: 0px 0px 30px 63px;
+  /* reset styles (optional): */
+  list-style: none;
+  margin: 0;
+  margin-top: 15px;
+  border-bottom: 1px solid #eeeeee;
+  font-size: 2em;
+}
+
+.services li.working {
+  background: url('/static/images/reload_lblue_16.png') no-repeat left top;
+  padding: 0px 0px 30px 63px;
+  /* reset styles (optional): */
+  list-style: none;
+  margin-top: 15px;
+  margin: 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.services li.broken {
+  background: url('/static/images/reload_orange_16.png') no-repeat left top;
+  padding: 0px 0px 30px 63px;
+  /* reset styles (optional): */
+  list-style: none;
+  margin-top: 15px;
+  margin: 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.services a {
+    font-size: 2em;
+}
+
+
+.status li {
+  padding: 0px 0px 30px 63px;
+  /* reset styles (optional): */
+  list-style: none;
+  margin-top: 15px;
+  margin: 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.status li.on.wifi {
+  background: url('/static/images/wifi_on_16.png') no-repeat left top;
+}
+
+.status li.off.wifi {
+  background: url('/static/images/wifi_off_16.png') no-repeat left top;
+}
+
+.status li.on.profile {
+  background: url('/static/images/globe_16.png') no-repeat left top;
+}
+
+.status li.off.profile {
+  background: url('/static/images/globe_off_16.png') no-repeat left top;
+}
+
 .status {
-        text-align: center;
-        border-bottom:1px solid #939192;
-        border-top:1px solid #939192;
-        display: block;
-        z-index: 99;
-}
-
-svg.icon.on {
-        fill: #b3d78d;
-}
-
-svg.icon.off {
-        fill: #939192;
-}
-
-svg.icon.error {
-        fill: #f25d23;
+    font-size: 2em;
 }

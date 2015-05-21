@@ -1,44 +1,60 @@
 {% extends "base.html" %}
 {% from "_formhelpers.html" import render_field %}
-{% from "status.html" import render_status_items %}
 {% from "alert.html" import render_alerts %}
 {% from "submit.html" import render_submit_buttons %}
 
+{% block alert %}
+{{ render_alerts(get_flashed_messages(with_categories=true))}}
+{% endblock %}
+
 {% block body %}
-  <h2>Configure Co-Pilot</h2>
+<script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
+
   {% if form.error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
       <form action="{{ url_for('config') }}" method=post>
-          {{ form.errors }}
-          {{ form.error }}
           {{ form.csrf_token }}
-          <div class="row">
-              <div class="six columns">
+          <div class="row input_field">
+              <div class="ten columns">
                   {{ render_field(form.ap_name) }}
               </div>
           </div>
-          <div class="row">
-              <div class="six columns">
+          <div class="row input_field">
+              <div class="ten columns">
                   {{ render_field(form.ap_password) }}
               </div>
           </div>
-          <div class="row">
-              <div class="six columns">
+          <div class="row input_field">
+              <div class="ten columns">
                   {{ render_field(form.confirm_ap_pass) }}
               </div>
           </div>
-          <div class="row">
-              <div class="six columns">
+          <div class="row input_field">
+              <div class="ten columns">
                   {{ render_field(form.password) }}
               </div>
           </div>
-          <div class="row">
-              <div class="six columns">
+          <div class="row input_field">
+              <div class="ten columns">
                   {{ render_field(form.confirm) }}
               </div>
           </div>
 {% endblock %}
 
 {% block submit %}
-{{ render_submit_buttons(buttons) }}
+          {% if form.old_password %}
+          <a href='#' onclick='overlay()' class="button button-primary blues">Submit</a>
+          <div id="overlay">
+              <div class="paper">
+                  {{ render_field(form.old_password) }}
+                  <div class="submit">
+                      <div class="row input_field">
+                          <input type="submit" name="submit_action" value="Submit" class="button-primary blues">
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {% else %}
+          {{ render_submit_buttons(buttons) }}
+          {% endif %}
 </form>
 {% endblock %}

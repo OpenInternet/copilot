@@ -61,9 +61,9 @@ class Trainer(Base, UserMixin):
     # Ensure Solo account
     _solo  = db.Column(db.Boolean,  default=True, nullable=False)
     # AP Name
-#    _ap_name   = db.Column(db.String(128),  nullable=False)
+    _ap_name   = db.Column(db.String(128),  nullable=False)
     # AP password
-#    _ap_password = db.Column(db.String(192),  nullable=False)
+    _ap_password = db.Column(db.String(192),  nullable=False)
     # Trainer password
     _password = db.Column(db.String(192),  nullable=False)
     _current = db.Column(db.String(192),  nullable=True)
@@ -74,9 +74,11 @@ class Trainer(Base, UserMixin):
         self.password = trainer_pass
         self.solo = True
         self.current = False
+        self.ap_name = ap_name
+        self.ap_password = ap_password
         self.ap_config = get_config_writer("create_ap")
         log.debug(dir(self.ap_config))
-        self.ap_config.add_rule(ap_name, ap_password)
+        self.ap_config.add_rule(self.ap_name, self.ap_password)
 
     @property
     def solo(self):
@@ -87,12 +89,30 @@ class Trainer(Base, UserMixin):
         self._solo = True
 
     @property
+    def ap_name(self):
+        return self._ap_name
+
+    @ap_name.setter
+    def ap_name(self, plaintext):
+        self._ap_name = plaintext
+
+    @property
     def password(self):
         return self._password
 
     @password.setter
     def password(self, plaintext):
         self._password = bcrypt.generate_password_hash(plaintext)
+
+    @property
+    def ap_password(self):
+        return self._ap_password
+
+    @ap_password.setter
+    def ap_password(self, plaintext):
+        # This get's written in plain-text in the create_ap anyway
+        self._ap_password = plaintext
+
 
     @property
     def current(self):

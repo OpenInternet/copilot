@@ -31,3 +31,15 @@ def get_usb_dirs():
                 mounts.append(parts[2])
     log.debug("usb mount points found: {0}".format(mounts))
     return mounts
+
+def get_likely_usb():
+    all_usb = get_usb_dirs()
+    if len(all_usb) > 0:
+        return all_usb[-1]
+
+def is_usb():
+    all_usb = get_usb_dirs()
+    if len(all_usb) > 0:
+        return True
+    else:
+        return False

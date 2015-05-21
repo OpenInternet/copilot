@@ -1,6 +1,7 @@
 {% macro render_alerts(messages) %}
 {% if messages %}
 <div class="container alerts">
+    <div class="notice"> Co-Pilot reporting back... </div>
     <ul class=flashes>
         {% for category, message in messages %}
         <li class="{{ category }}">{{ message }}</li>

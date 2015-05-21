@@ -1,3 +1,14 @@
-.site-wrap {
-    padding: 60px 1em 15em 1em;
+.face {
+    height: 100px;
+    width: 83.523px;
+}
+
+.rule {
+    border-bottom: 1px solid #eeeeee;
+    padding: 3rem 0;
+}
+
+.mock_rule {
+    border-bottom: 1px solid #eeeeee;
+    padding: 3rem 0;
 }

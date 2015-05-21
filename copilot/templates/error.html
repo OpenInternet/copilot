@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "alert.html" import render_alerts %}
+
+{% block body %}
+    {# https://lincolnloop.com/blog/svg-sprites-and-icon-systems-are-super/ #}
+    {# http://svgpocketguide.com/book/ #}
+    {# http://24ways.org/2014/an-overview-of-svg-sprite-creation-techniques/ #}
+
+<!-- SVG face sprite sheet -->
+{% include 'sprites/face.svg' %}
+<div class="error_bar">
+    <div class="error_container">
+        <svg class="face {% for e in emotions %} {{ e }} {% endfor %}">
+            <use xlink:href="#copilot_emote_face"></use>
+        </svg>
+        <span class="error_msg">Error</span>
+    </div>
+</div>
+<div class="big_errors">
+    {{ render_alerts(get_flashed_messages(with_categories=true))}}
+</div>
+
+<a href='{{ url_for("profile") }}' class="button button-primary blues">Home</a>
+{% endblock %}

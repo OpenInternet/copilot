@@ -2,7 +2,7 @@ import os
 import string
 import importlib
 from urlparse import urlparse
-from copilot.utils.file_sys import get_usb_dirs
+from copilot.utils.file_sys import get_usb_dirs, get_likely_usb
 from ConfigParser import SafeConfigParser
 from copilot.utils.plugin import is_plugin, get_plugins
 
@@ -13,11 +13,14 @@ log = logging.getLogger(__name__)
 
 def get_config_dir(directory):
     directories = {"main" : "/tmp/copilot/",
-                   "profiles" : "/tmp/copilot/profiles",
+                   "profiles" : "/tmp/copilot/profiles/",
                    "temporary" : "/tmp/copilot/tmp/"}
+    # Adding plugin directories
     plugins = get_value_dict("directory")
     for p in plugins:
         directories[p] = plugins[p][0]
+    # Adding USB directory
+    directories["usb"] = get_likely_usb()
     if directory in directories:
         log.debug("Directory {0} found and being returned.".format(directory))
         return directories[directory]
@@ -78,12 +81,13 @@ def get_unique_values(option):
     """Returns a list of a specific key's value across all plugins config files with no repeats."""
     log.info("getting all unique values for option {0}.".format(option))
     values = []
-    val_list = get_value_list(option)
-    for i in val_list:
+    val_list = get_value_dict(option)
+    for plugin in val_list:
         # All values are returned as a list
-        for j in i:
+        for j in val_list[plugin]:
             if j not in values:
                 values.append(j)
+    log.debug("unique values found: {0}".format(values))
     return values
 
 def get_value_list(option):
@@ -98,6 +102,7 @@ def get_value_list(option):
                 plist.append((p, _plugin.data['info'][option]))
             except KeyError as err:
                 log.warning("Plugin {0} does not have a {1} key.".format(p, option))
+    log.debug("values found: {0}".format(plist))
     return plist
 
 def get_value_dict(option):
@@ -112,7 +117,25 @@ def get_value_dict(option):
                 pdict[p] = _plugin.data['info'][option]
             except KeyError as err:
                 log.warning("Plugin {0} does not have a {1} key.".format(p, option))
+    log.debug("values found: {0}".format(pdict))
     return pdict
+
+def get_target_by_actions():
+    log.info("getting targets (e.g. plugins) sorted by actions")
+    tar_act_dict = {}
+    tdict = get_value_dict("actions")
+    for target in tdict:
+        for action in tdict[target]:
+            if action not in tar_act_dict:
+                tar_act_dict[action] = []
+                tar_act_dict[action].append(target)
+            elif target not in tar_act_dict[action]:
+                tar_act_dict[action].append(target)
+            else:
+                log.debug("Found action {0} in target {1}. This should not occur. A plugin is being examed twice or is somehow duplicated.".format(action, target))
+    log.debug("target/action pairs found: {0}".format(tar_act_dict))
+    return tar_act_dict
+
 
 class Config(object):
 
@@ -193,13 +216,13 @@ class ProfileWriter(ProfileParser):
         target = rule[1]
         sub = rule[2]
         rule_list = []
-        if not self.has_section(action):
-            self.add_section(action)
-        if self.has_option(action, target):
-            rule_list = self.get_list(action, target)
+        if not self.has_section(target):
+            self.add_section(target)
+        if self.has_option(target, action):
+            rule_list = self.get_list(target, action)
         rule_list.append(sub)
         text_rules = "\n\t".join(rule_list)
-        self.set(action, target, text_rules)
+        self.set(target, action, text_rules)
 
 class ProfileConfig(object):
     def __init__(self, path):
@@ -222,6 +245,7 @@ class ProfileConfig(object):
                     if action in get_valid_actions(target):
                         for sub in self.data[target][action]:
                             rules.append([action, target, sub])
+        log.debug("Found rules: {0}".format(rules))
         return rules
 
     def valid(self):
@@ -250,7 +274,7 @@ class ProfileConfig(object):
             _options = self.parser.options(sect)
             log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
             for opt in _options:
-                _dict[sect][opt] = self.parser.getlist("sect", "opt")
+                _dict[sect][opt] = self.parser.get_list(sect, opt)
         return _dict
 
 

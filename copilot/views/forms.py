@@ -38,39 +38,19 @@ class AdminConfig(Config):
     old_password = PasswordField('Enter your current password to change these values.', validators=[
         Required(message='You must enter your current password to change any values.'),
         check_old_password])
-
-# #Define the admin configuration form
-# class InitialConfig(Form):
-#     ap_name = TextField('Trainee Access Point Name', validators=[
-#         Required(message='You must change the access point name.'),
-#         Length(min=1, max=31)])
-#     ap_password = PasswordField('Access Point Password', validators=[
-#         Required(message='You must change the access point password.'),
-#         Length(min=8, max=63),
-#         EqualTo('confirm_ap_pass', message='Passwords must match')])
-#     confirm_ap_pass = PasswordField('Repeat Access Point Password')
-#     password = PasswordField('Trainer Administration Password', validators=[
-#         Required(message='You must create a trainer password.'),
-#         EqualTo('confirm', message='Passwords must match')])
-#     confirm = PasswordField('Repeat Trainer Administration Password')
-
-# #Define the admin configuration form
-# class AdminConfig(Form):
-#     old_password = PasswordField('Enter your current password to change these values.', validators=[
-#         Required(message='You must enter your current password to change any values.'),
-#         check_old_password])
-#     ap_name = TextField('Trainee Access Point Name', validators=[
-#         Optional(),
-#         Length(min=1, max=31)])
-#     ap_password = PasswordField('Access Point Password', validators=[
-#         Optional(),
-#         Length(min=8, max=63),
-#         EqualTo('confirm_ap_pass', message='Passwords must match')])
-#     confirm_ap_pass = PasswordField('Repeat Access Point Password')
-#     password = PasswordField('Trainer Administration Password', validators=[
-#         Optional(),
-#         EqualTo('confirm', message='Passwords must match')])
-#     confirm = PasswordField('Repeat Trainer Administration Password')
+    ap_name = TextField('Trainee Access Point Name', validators=[
+        Optional(),
+        Length(min=1, max=31)])
+    ap_password = PasswordField('Access Point Password', validators=[
+        Optional(),
+        Length(min=8, max=63),
+        EqualTo('confirm_ap_pass', message='Passwords must match')])
+    confirm_ap_pass = PasswordField('Repeat Access Point Password')
+    password = PasswordField('Trainer Administration Password', validators=[
+        Optional(),
+        Length(min=3, max=31),
+        EqualTo('confirm', message='Passwords must match')])
+    confirm = PasswordField('Repeat Trainer Administration Password')
 
 class RuleField(Form):
     action = SelectField("Action", choices=zip(get_valid_actions(), get_valid_actions()), default="block")
@@ -81,12 +61,9 @@ class RuleField(Form):
         super(RuleField, self).__init__(*args, **kwargs)
 
 class ProfileForm(Form):
+    prof_name = TextField('Profile Name', default="new")
     rules = FieldList(FormField(RuleField))
 
 class NewProfileForm(Form):
     prof_name = TextField('Profile Name', default="new")
     rules = FieldList(FormField(RuleField))
-
-class SaveProfileField(Form):
-    prof_name = HiddenField('Profile Name', default="new")
-    location = RadioField("Save Location", choices=[], default="Co-Pilot")

@@ -1,7 +1,8 @@
 
 //Rule Defaults
-var actionOptions = ["block"];
-var targetOptions = ["dns"];
+// Ignore the ugly one liners.
+var targetOptions = document.getElementById("all_targets").content.split(" ").filter(function(el) {return el.length != 0});
+var actionOptions = document.getElementById("all_actions").content.split(" ").filter(function(el) {return el.length != 0});
 var subTargetDefault = "internews.org";
 var helpText = {}
 helpText.action = ""
@@ -116,6 +117,7 @@ function createRuleData(type, ruleID, options) {
     }
     //Set Generic Properties
     data.id = ruleID
+    data.onclick = "update_from_".concat(type, "(this)")
     data.className = "u-full-width {{ type }}"
     data.name = ruleID
     return data
@@ -140,3 +142,24 @@ function getIdNum() {
     // return that number
     return curNum
 }
+
+
+//update the target based upon an action
+function update_from_action(selector) {
+    var idNum = selector.id.split("-")[1]
+    // get metadata object data of action target pairs
+    var raw_targets = document.getElementById('pairs-'.concat(selector.value)).content;
+    var targets = raw_targets.split(" ").filter(function(el) {return el.length != 0})
+
+    // get the target selector we will be modifying
+    var targetObj = document.getElementById('rules-'.concat(idNum, "-", "target"));
+    // clear all options from it
+    targetObj.options.length=0
+    // repopulate the options
+    for (i=0; i < targets.length; i++){
+        targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
+    }
+}
+
+function update_from_target(selector) {}
+function update_from_sub_target(selector) {}

@@ -20,9 +20,13 @@ def get_profile_status():
     current_profile = False
     try:
         current_profile = trainer.current
+        log.debug("current profile found: {0}".format(current_profile))
     except:
-        log.warn("FIX THIS SOON (function get_profile_status)")
+        log.debug("No current trainer found. Returning broken profile.")
+        log.warn("FIX THIS SOON: wildcard exception (function get_profile_status)")
     if current_profile:
+        if current_profile == "0":
+            current_profile = "No Active Profile"
         profile['status'] = "on"
         profile['value'] = current_profile
     else:
@@ -74,7 +78,12 @@ class Profile(object):
         except ValueError:
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
-    def add_rule(self, rule):
+    def add_rule(self, ruleset):
+        # Rapid prototyping means that I just want the rule, I don't care how it is formatted.
+        if isinstance(ruleset, dict):
+            rule = ruleset
+        elif isinstance(ruleset ,list):
+            rule = {"action":ruleset[0], "target":ruleset[1], "sub_target":ruleset[2]}
         log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
         config_obj = get_config_writer(rule['target'])
         try:
@@ -118,14 +127,14 @@ class Profile(object):
         if not config.valid():
             raise ValueError("Config file is not valid. Cannot reload config")
         log.debug("Current name: {0}".format(self.name))
-        self.name = config["info"]["name"][0]
+        self.name = config.data["info"]["name"][0]
         log.debug("Set profile name to {0}".format(self.name))
         log.debug("Current profile file: {0}".format(self.profile_file))
         self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
         log.debug("Set profile file to {0}".format(self.profile_file))
         log.debug("Current description: {0}".format(self.description))
-        if "description" in config["info"]:
-            self.description = config["info"]["description"][0]
+        if "description" in config.data["info"]:
+            self.description = config.data["info"]["description"][0]
         log.debug("Set description to {0}".format(self.description))
         log.debug("Current rules: {0}".format(self.rules))
         log.debug("clearing all existing rules")
@@ -142,15 +151,16 @@ class Profile(object):
         NOTE: Does not change the profile directory.
         """
         log.info("Loading profile.")
+        log.debug("Using profile at {0}".format(self.profile_file))
         config = ProfileConfig(self.profile_file)
         if not config.valid():
             raise ValueError("Config file is not valid. Cannot load config")
-        self.name = config["info"]["name"][0]
+        self.name = config.data["info"]["name"][0]
         log.debug("Set profile name to {0}".format(self.name))
         self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
         log.debug("Set profile file to {0}".format(self.profile_file))
-        if "description" in config["info"]:
-            self.description = config["info"]["description"][0]
+        if "description" in config.data["info"]:
+            self.description = config.data["info"]["description"][0]
         log.debug("Set description to {0}".format(self.description))
         _rules = config.get_rules()
         for r in _rules:

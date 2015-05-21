@@ -1,3 +1,20 @@
-.site-wrap {
-    padding-top: 60px;
+.content-frame {
+    padding: 1em 1em 1em 1em;
+    margin-top: 5%;
+}
+
+.face {
+    height: 150px;
+    width: 125.285px;
+    font-size: 2em;
+}
+
+.rule {
+    border-bottom: 1px solid #eeeeee;
+    padding: 3rem 0;
+}
+
+.mock_rule {
+    border-bottom: 1px solid #eeeeee;
+    padding: 3rem 0;
 }

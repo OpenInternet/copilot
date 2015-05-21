@@ -1,5 +1,7 @@
 from functools import partial
 import os
+import subprocess
+import re
 
 # stat logging
 import logging
@@ -20,6 +22,19 @@ def get_plugins():
 def is_plugin(name):
     plugins = get_plugins()
     if name in plugins:
+        return True
+    else:
+        return False
+
+
+def is_service(service):
+    services = []
+    for line in subprocess.check_output(['supervisorctl', 'status']).split('\n'):
+        log.debug("Service line received: {0}".format(line))
+        match_name = re.search("^([^\s]*)\s*([A-Z]*)", line)
+        if match_name and match_name.group(1) != "":
+            services.append(match_name.group(1))
+    if service in services:
         return True
     else:
         return False
