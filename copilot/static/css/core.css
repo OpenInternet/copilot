@@ -31,7 +31,7 @@ Base 05: #fafafa
     top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
+    right: 0;
     z-index: 0;
 }
 
@@ -69,7 +69,7 @@ Base 05: #fafafa
     padding-top: 60px;
     top: 0;
     bottom: 100%;
-    left: 0;
+    right: 0;
     z-index: 1;
     /*background-image: linear-gradient(135deg,
                       rgb(254,255,255) 0%,
@@ -110,16 +110,16 @@ label[for="nav-trigger"] {
 }
 
 .nav-trigger:checked + label {
-    left: 215px;
+    right: 215px;
 }
 
 .nav-trigger:checked ~ .site-wrap {
-    left: 200px;
+    right: 200px;
     box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
 
 .nav-trigger + label, .site-wrap {
-    transition: left 0.2s;
+    transition: right 0.2s;
 }
 
 body {
