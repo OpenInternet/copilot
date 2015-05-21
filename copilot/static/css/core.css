@@ -66,6 +66,7 @@ Base 05: #fafafa
     background-color: #fafafa;
     font-family: "Helvetica";
     position: relative;
+    padding-top: 60px;
     top: 0;
     bottom: 100%;
     left: 0;
@@ -99,7 +100,7 @@ Base 05: #fafafa
 label[for="nav-trigger"] {
     position: fixed;
     top: 15px;
-    left: 15px;
+    right: 15px;
     z-index: 2;
     width: 30px;
     height: 30px;
