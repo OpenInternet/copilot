@@ -1,32 +1,26 @@
 import os
 import string
+import importlib
 from urlparse import urlparse
+from copilot.utils.file_sys import get_usb_dirs, get_likely_usb
+from ConfigParser import SafeConfigParser
+from copilot.utils.plugin import is_plugin, get_plugins
 
 #stat logging
 import logging
 log = logging.getLogger(__name__)
 
-"""
-CP_PACKAGES = { "SERVICE NAME" : {
-                   "name" : "SERVICE NAME",
-                   "config_file": "CONFIG FILE NAME",
-                   "target" : "TARGET NAME",
-                   "actions": ["ACTION 001", "ACTION 002", "ACTION ETC"],
-                   "directory":"DIRECTORY HEADING FROM CP_DIRS VAR"}
-"""
-#TODO Remove this variable and pull package configs from some sort of config file
-CP_PACKAGES = {"dnschef":{"name": "dnschef",
-                          "config_file": "dnschef.conf",
-                          "target" : "dns",
-                          "actions": ["block", "redirect"],
-                          "directory":"main"},
-               "create_ap":{"name": "create_ap",
-                     "config_file": "ap.conf",
-                     "directory":"main"}}
 
 def get_config_dir(directory):
     directories = {"main" : "/tmp/copilot/",
-           "profiles" : "/tmp/copilot/profiles"}
+                   "profiles" : "/tmp/copilot/profiles/",
+                   "temporary" : "/tmp/copilot/tmp/"}
+    # Adding plugin directories
+    plugins = get_value_dict("directory")
+    for p in plugins:
+        directories[p] = plugins[p][0]
+    # Adding USB directory
+    directories["usb"] = get_likely_usb()
     if directory in directories:
         log.debug("Directory {0} found and being returned.".format(directory))
         return directories[directory]
@@ -35,30 +29,112 @@ def get_config_dir(directory):
 
 def get_config_file(config):
     """ return the path to a config file."""
-    _copilot_dir = get_config_dir("main")
-    if config in CP_PACKAGES:
-        if "config_file" in CP_PACKAGES[config]:
-            try:
-                _directory = get_config_dir(CP_PACKAGES[config]["directory"])
-                _path = os.path.join(_directory, CP_PACKAGES[config]["config_file"])
-                log.debug("Returning config path {0}".format(_path))
-                return _path
-            except ValueError as err:
-                log.error("Directory found in CP_PACKAGES under the {0} package was invalid.".format(config))
-                raise ValueError(err)
-    else:
-        raise ValueError("That config file is not valid.")
+    log.info("getting {0} config file.".format(config))
+    directory = get_option("directory", config)[0]
+    log.debug("found directory {0}".format(directory))
+    config_file = get_option("config_file", config)[0]
+    log.debug("found config file {0}".format(config_file))
+    path = os.path.join(directory, config_file)
+    return path
 
-def get_valid_actions():
-    _valid_actions = ["block", "redirect"]
-    return _valid_actions
+def get_valid_actions(package=None):
+    """ Returns the valid actions for a package, or all packages as a list"""
+    if not package:
+        return get_unique_values("actions")
+    else:
+        return get_option("actions", package)
 
 def get_valid_targets():
-    _targets = []
-    for item in CP_PACKAGES:
-        if "target" in CP_PACKAGES[item]:
-            _targets.append(CP_PACKAGES[item]["target"])
-    return _targets
+    log.info("getting valid targets.")
+    return get_unique_values("target")
+
+def get_config_writer(name):
+    """
+    Get a plugins config writer object
+    """
+    log.info("getting a plugins config writer.")
+    if not is_plugin(name):
+        raise ValueError("{0} is not a plugin.".format(name))
+    config = importlib.import_module('copilot.plugins.{0}.config'.format(name))
+    log.debug("{0} contains {1}".format(config.__name__, dir(config)))
+    writer = config.ConfigWriter()
+    return writer
+
+def get_option(option, plugin):
+    """Get an option from a plugin config file as a list."""
+    log.info("getting option {0} from {1}'s config file.".format(option, plugin))
+    if not is_plugin(plugin):
+        raise ValueError("{0} is not a plugin.".format(plugin))
+    plugin = PluginConfig(plugin)
+    if plugin.valid():
+        try:
+            option_found = plugin.data['info'][option]
+            log.debug("returning {0} option.".format(option_found))
+            return option_found
+        except KeyError as err:
+            log.warning("Plugin {0} does not have a {1} key.".format(p, option))
+            return []
+    else:
+        return []
+
+def get_unique_values(option):
+    """Returns a list of a specific key's value across all plugins config files with no repeats."""
+    log.info("getting all unique values for option {0}.".format(option))
+    values = []
+    val_list = get_value_dict(option)
+    for plugin in val_list:
+        # All values are returned as a list
+        for j in val_list[plugin]:
+            if j not in values:
+                values.append(j)
+    log.debug("unique values found: {0}".format(values))
+    return values
+
+def get_value_list(option):
+    """Returns a list of (plugin,[value1, value2, value3]) tuples of a specific key's value across all plugins config files."""
+    log.info("Getting a list of all values")
+    plugins = get_plugins()
+    plist = []
+    for p in plugins:
+        _plugin = PluginConfig(p)
+        if _plugin.valid():
+            try:
+                plist.append((p, _plugin.data['info'][option]))
+            except KeyError as err:
+                log.warning("Plugin {0} does not have a {1} key.".format(p, option))
+    log.debug("values found: {0}".format(plist))
+    return plist
+
+def get_value_dict(option):
+    """Returns a dictionary of {plugin: [value1, value2, value3]} of a specific key's value across all plugins config files."""
+    log.info("Getting a dict of all values")
+    plugins = get_plugins()
+    pdict = {}
+    for p in plugins:
+        _plugin = PluginConfig(p)
+        if _plugin.valid():
+            try:
+                pdict[p] = _plugin.data['info'][option]
+            except KeyError as err:
+                log.warning("Plugin {0} does not have a {1} key.".format(p, option))
+    log.debug("values found: {0}".format(pdict))
+    return pdict
+
+def get_target_by_actions():
+    log.info("getting targets (e.g. plugins) sorted by actions")
+    tar_act_dict = {}
+    tdict = get_value_dict("actions")
+    for target in tdict:
+        for action in tdict[target]:
+            if action not in tar_act_dict:
+                tar_act_dict[action] = []
+                tar_act_dict[action].append(target)
+            elif target not in tar_act_dict[action]:
+                tar_act_dict[action].append(target)
+            else:
+                log.debug("Found action {0} in target {1}. This should not occur. A plugin is being examed twice or is somehow duplicated.".format(action, target))
+    log.debug("target/action pairs found: {0}".format(tar_act_dict))
+    return tar_act_dict
 
 
 class Config(object):
@@ -69,16 +145,23 @@ class Config(object):
 
     @property
     def config_type(self):
-        return self._config_type
+        try:
+            return self._config_type
+        except AttributeError as err:
+            log.debug("Config type is not yet set, returning empty string.")
+            return ""
 
     @config_type.setter
     def config_type(self, config_type):
         try:
             config_file = get_config_file(config_type)
+            log.debug("config file {0} found".format(config_file))
         except ValueError as err:
             log.error("An invalid config type was passed. Please check \"get_config_file\" in the models/config.py scripts for the valid types of config files.")
             raise ValueError(err)
+        log.debug("setting config type.")
         self._config_type = config_type
+        log.debug("setting config file {0}.".format(config_file))
         self.config_file = config_file
 
     def check_file(self):
@@ -120,95 +203,122 @@ class Config(object):
         else:
             log.debug("No header found.")
 
-class DNSConfig(Config):
 
-    def __init__(self):
-        super(DNSConfig, self).__init__()
-        self.config_type = "dnschef"
-        self.header = "[A]\n"
 
-    def add_rule(self, target, action, sub):
-        _rule = ""
-        _domain = ""
-        _address = ""
+class ProfileParser(SafeConfigParser):
+    def get_list(self,section,option):
+        value = self.get(section,option)
+        return list(filter(None, (x.strip() for x in value.splitlines())))
+
+class ProfileWriter(ProfileParser):
+    def set_rule(self, rule):
+        action = rule[0]
+        target = rule[1]
+        sub = rule[2]
+        rule_list = []
+        if not self.has_section(target):
+            self.add_section(target)
+        if self.has_option(target, action):
+            rule_list = self.get_list(target, action)
+        rule_list.append(sub)
+        text_rules = "\n\t".join(rule_list)
+        self.set(target, action, text_rules)
+
+class ProfileConfig(object):
+    def __init__(self, path):
+        self.path = os.path.abspath(path)
+        self.parser = ProfileParser()
+        if self.valid():
+            self.data = self.build_map()
+        self.rules = self.get_rules()
+
+    def get_rules(self):
+        """
+        Returns a list of rules.
+        [["block", "dns", "www.internews.org"],["redirect", "dns", "info.internews"]]
+        """
+        rules = []
+        _val_targets = get_valid_targets()
+        for target in self.data:
+            if target in _val_targets:
+                for action in self.data[target]:
+                    if action in get_valid_actions(target):
+                        for sub in self.data[target][action]:
+                            rules.append([action, target, sub])
+        log.debug("Found rules: {0}".format(rules))
+        return rules
+
+    def valid(self):
         try:
-            _domain = self.get_dns(sub)
-        except ValueError as err:
-            log.warn("Could not add rule. Invalid Target.")
-        if action == "block":
-            log.debug("Found a blocking role. Setting address to localhost (127.0.0.1).")
-            _address = "127.0.0.1"
-        elif action == "redirect":
-            log.debug("Found a redirection role. Setting address to default AP address (192.168.12.1).")
-            _address = "192.168.12.1"
-        _rule = "{0} = {1}\n".format(_domain, _address)
-        self._rules.append(_rule)
+            _data = self.parser.read(self.path)
+        except:
+            log.debug("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            return False
+        if _data == []:
+            log.debug("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            return False
+        if not self.parser.has_option("info", "name"):
+            log.debug("Config file at {0} has no name and therefore cannot be used. Marking as invalid.".format(self.path))
+            return False
+        #TODO Add config file format values for each module
+        log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
+        return True
 
-    def get_dns(self, sub):
-        tld = ["ac", "ad", "ae", "aero", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "arpa", "as", "asia", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "biz", "bj", "bl", "bm", "bn", "bo", "bq", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cat", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "com", "coop", "cr", "cs", "cu", "cv", "cw", "cx", "cy", "cz", "dd", "de", "dj", "dk", "dm", "do", "dz", "ec", "edu", "ee", "eg", "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gov", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "info", "int", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jobs", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "local", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "me", "mf", "mg", "mh", "mil", "mk", "ml", "mm", "mn", "mo", "mobi", "mp", "mq", "mr", "ms", "mt", "mu", "museum", "mv", "mw", "mx", "my", "mz", "na", "name", "nato", "nc", "ne", "net", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "onion", "org", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "pro", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "su", "sv", "sx", "sy", "sz", "tc", "td", "tel", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tp", "tr", "travel", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "xxx", "ye", "yt", "yu", "za", "zm", "zr", "zw"]
-        _sub = sub
-        log.debug("sub target is {0}".format(_sub))
-        if _sub == "":
-            return None
-        parsed = urlparse(_sub).path
-        log.debug("parsed url is {0}".format(parsed))
-        split_sub = string.split(parsed, ".")
-        log.debug("split up sub target is {0}".format(split_sub))
-        #TODO the below is a monstrosity it needs to be made to actually work
-        if len(split_sub) > 3:
-            log.error("The domain {0} has too many parts and cannot be processed. Use a simpler domain with MAX 3 parts.".format(_sub))
-            raise ValueError("invalid url")
-        elif len(split_sub) == 3:
-            log.debug("The domain {0} has exactly three parts.".format(_sub))
-            return parsed
-        elif len(split_sub) == 1:
-            log.debug("The domain {0} has exactly one part. Interpreting as a domain name only.".format(_sub))
-            return "*.{0}.*".format(split_sub[0])
-        elif (len(split_sub) == 2 and split_sub[1] not in tld):
-            log.debug("The domain {0} has exactly two parts, and the second part is NOT a top level domain I recognize. Interpreting as a host + a domain name.".format(_sub))
-            return "{0}.{1}.*".format(split_sub[0], split_sub[1])
-        elif split_sub[1] in tld:
-            log.debug("The domain {0} has exactly two parts, and the second part IS a top level domain I recognize. Interpreting as a domain name with a top level domain.".format(_sub))
-            return "*.{0}.{1}".format(split_sub[0], split_sub[1])
-        #todo add just TLD.
+    def build_map(self):
+        _dict = {}
+        _data = self.parser.read(self.path)
+        _sections = self.parser.sections()
+        log.debug("Config file has the following sections {0}.".format(_sections))
+        for sect in _sections:
+            _dict[sect] = {}
+            _options = self.parser.options(sect)
+            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
+            for opt in _options:
+                _dict[sect][opt] = self.parser.get_list(sect, opt)
+        return _dict
 
-class APConfig(Config):
 
-    def __init__(self, ap_name, ap_password, iface_in="eth0", iface_out="wlan0"):
-        super(APConfig, self).__init__()
-        self._config_type = "create_ap"
-        self.iface_in = iface_in
-        self.iface_out = iface_out
-        self.header = "{0} {1} ".format(self.iface_out, self.iface_in)
-        self.ap_name = ap_name
-        self.ap_password = ap_password
-        self.add_rule(self.ap_name)
-        self.add_rule(self.ap_password)
-        self.config_type = "create_ap"
 
-    @property
-    def ap_password(self):
-        return self._ap_password
 
-    @ap_password.setter
-    def ap_password(self, plaintext):
-        if (8 < len(str(plaintext)) <= 63 and
-            all(char in string.printable for char in plaintext)):
-            self._ap_password = plaintext
-        else:
-            raise ValueError("Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.")
+class PluginConfig(object):
+    def __init__(self, name):
+        self.path = os.path.abspath(os.path.join("/home/www/copilot/copilot/plugins/", name, "plugin.conf"))
+        self.parser = ProfileParser()
+        if self.valid():
+            self.data = self.build_map()
 
-    @property
-    def ap_name(self):
-        return self._ap_name
+    def build_map(self):
+        _dict = {}
+        _data = self.parser.readfp(open(self.path))
+        _sections = self.parser.sections()
+        log.debug("Config file has the following sections {0}.".format(_sections))
+        for sect in _sections:
+            _dict[sect] = {}
+            log.debug("getting options for section {0}".format(sect))
+            _options = self.parser.options(sect)
+            log.debug("It has the following options {0}.".format(_options))
+            for opt in _options:
+                _dict[sect][opt] = self.parser.get_list(sect, opt)
+        log.debug("Created below plugin data map. \n {0}".format(_dict))
+        return _dict
 
-    @ap_name.setter
-    def ap_name(self, name):
-        if 0 < len(str(name)) <= 31:
-            self._ap_name = name
-        else:
-            raise ValueError("Access Point names must be between 1 and 31 characters long.")
-
-    def add_rule(self, rule):
-        log.debug("adding rule {0}".format(rule))
-        self._rules.append("{0} ".format(rule))
+    def valid(self):
+        try:
+            _data = self.parser.read(self.path)
+        except:
+            log.info("Config file at {0} is not properly configured. Marking as invalid.".format(self.path))
+            return False
+        if _data == []:
+            log.info("Config file at {0} is not properly configured or does not exist. Marking as invalid.".format(self.path))
+            return False
+        required = ["name", "config_file", "directory"]
+        desired = ["target", "actions"]
+        for r in required:
+            if not self.parser.has_option("info", r):
+                log.info("Config file at {0} has no {1} and therefore cannot be used. Marking as invalid.".format(self.path, r))
+                return False
+        for r in desired:
+            if not self.parser.has_option("info", r):
+                log.info("Config file at {0} has no {1} and will not generate rules.".format(self.path, r))
+        log.info("Config file at {0} is properly formatted. Marking as valid.".format(self.path))
+        return True

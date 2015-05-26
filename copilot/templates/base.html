@@ -12,21 +12,25 @@
 <link rel="stylesheet" type=text/css media="(orientation: portrait)" href="{{ url_for('static', filename='css/portrait.css') }}">
 <link rel="stylesheet" type=text/css media="(orientation: landscape)" href="{{ url_for('static', filename='css/landscape.css') }}">
 
-<!-- SVG sprite sheet -->
-{% include 'sprites/status_symbol.svg' %}
-
-<head>
-    <div class="status">
-        {% block status %}{% endblock %}
-    </div>
-    <div>
-        {% block alert %}{% endblock %}
-    </div>
-</head>
-
 <body>
-    <div class="container body">
-        <div>
+    <ul class="navigation">
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('profile') }}">New</a></li>
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('profile_load') }}">Load</a></li>
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('profile_current') }}">Edit</a></li>
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('config') }}">Settings</a></li>
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('info') }}">Info</a></li>
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('plugins') }}">Plugins</a></li>
+        <li class="nav-item"><a class="popover-link" href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+    <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+    <label for="nav-trigger"></label>
+    <div class="site-wrap">
+        <div class="menu_bar">
+            <div class="page_title">
+                {{ title }}
+            </div>
+        </div>
+        <div class="container content-frame">
             {% block body %}{% endblock %}
             {% block submit %}{% endblock %}
         </div>

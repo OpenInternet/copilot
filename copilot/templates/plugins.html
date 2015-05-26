@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "alert.html" import render_alerts %}
+
+{% block body %}
+{{ render_alerts(get_flashed_messages(with_categories=true))}}
+
+<div>Click on a service to restart it.</div>
+<ul class="services">
+  {% for name in services %}
+    {% if services[name] == "RUNNING" %}
+    <li class="working"><a href="/plugins/restart/{{ name }}">{{ name }}</a></li>
+    {% else %}
+    <li class="broken"><a href="/plugins/restart/{{ name }}">{{ name }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+{% endblock %}

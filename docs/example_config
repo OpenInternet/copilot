@@ -1,0 +1,16 @@
+[info]
+name =  config name
+description = This is an example config file. It does some things with various plugins and uses as many options as could be thought of.
+
+#section headers refer to the targets of a profile
+[dns]
+#multi line values, each starting with whitespace, are used to store the targets
+redirect =
+    www.internews.org
+    women.internews.org
+    innovation.internews.org
+    speaksafe.internews.org
+    saferjourno.internews.org
+# you have values start on the key line or not. Up to you.
+block = www.internews
+    .com

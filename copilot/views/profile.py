@@ -4,14 +4,14 @@
 from copilot import app, db
 from copilot.models import profile as mdl_prof
 from copilot.views import forms
-from flask.ext.wtf import Form
-from copilot.controllers import get_status_items
-from copilot.models.config import get_valid_actions, get_valid_targets
-from copilot.models.trainer import get_trainer
 
+from flask.ext.wtf import Form
+from copilot.models.config import get_valid_actions, get_valid_targets, get_config_dir, get_target_by_actions
+from copilot.models.trainer import get_trainer
+from copilot.utils.file_sys import get_usb_dirs, get_likely_usb, is_usb
 
 #Get flask modules
-from flask import redirect, url_for, render_template, flash
+from flask import redirect, url_for, render_template, flash, make_response, request, send_file
 from flask.ext.login import login_user, login_required
 from wtforms import FormField
 
@@ -29,56 +29,44 @@ log = logging.getLogger(__name__)
 def profile(prof_name):
     """Display an existing profle in the profile editor."""
     log.debug("profile received {0}".format(prof_name))
-    form = forms.NewProfileForm()
-    if form.validate_on_submit():
-        log.info("profile form was validated")
-        log.debug("Form {0} submitted".format(form.prof_name.data))
-        prof_name = form.prof_name.data
-        profile = mdl_prof.Profile(prof_name)
-        for rule in form.data['rules']:
-            _rule = mdl_prof.Rule(rule['target'], rule['action'], rule['sub_target'])
-            profile.add_rule(_rule)
-        log.debug("Saving profile {0}".format(prof_name))
-        profile.save()
-        #Save as current profile for trainer.
-        #TODO make this change depending upon the submit button used
-        #First should look for a Save and Apply flag.
-        trainer = get_trainer()
-        log.debug("Applying form data to trainer {0}".format(form.data))
-        trainer.current = form.data['prof_name']
-        db.session.commit()
-        #This should be used for any wioth an apply flag
-        log.debug("Applying profile {0}".format(prof_name))
-        profile.apply_config()
-        flash('Your profile has been saved and Applied!')
-        return redirect(url_for('profile_applied'))
-    else:
-        log.info("Form was not validated.")
-        log.debug(form.errors)
-        profile = mdl_prof.Profile(prof_name)
-        if profile.exist():
-            log.debug("Loading rule {0}".format(prof_name))
-            profile.load()
-            form.prof_name.data = profile.name
-            for rule in profile.rules:
-                log.debug("adding rule: action: {0}, target:{1}, subtarget{2}".format(rule.action, rule.target, rule.sub_target))
-                form.rules.append_entry(data={"target":rule.target, "sub_target":rule.sub_target, "action":rule.action})
-        else:
-            log.debug("New profile being created")
-            form = forms.NewProfileForm()
-            form.rules.append_entry(data={"target":get_valid_targets(), "sub_target":"internews.org", "action":get_valid_actions()})
-            form.prof_name.data = "new"
-            log.debug(dir(form.rules))
-    status_items = get_status_items()
-    buttons = [{"name":"Submit", "submit":False},
-               {"name":"Test", "submit":False},
-               {"name":"Save", "submit":False},
-               {"name":"Save & Apply", "submit":True}]
-    return render_template('profile.html',
-                           form=form,
-                           status_items=status_items,
-                           buttons=buttons)
 
+    form = forms.NewProfileForm()
+    profile = mdl_prof.Profile(prof_name)
+    if profile.exist():
+        title = "Profile > Edit"
+        log.info("Existing profile found. Loading profile")
+        log.debug("Loading rule {0}".format(prof_name))
+        profile.load()
+        form.prof_name.data = profile.name
+        log.info("Adding profile rules.")
+        for rule in profile.rules:
+            _action = rule[0]
+            _tar = rule[1]
+            _sub = rule[2]
+            log.debug("adding rule: action: {0}, target:{1}, subtarget{2}".format(_action, _tar, _sub))
+            form.rules.append_entry(data={"target":_tar, "sub_target":_sub, "action":_action})
+    else:
+        log.info("New profile being created")
+        title = "Profile > New"
+        form = forms.NewProfileForm()
+        _targets = get_valid_targets()
+        _actions = get_valid_actions()
+        log.debug("Setting default rule target and action. Targets = {0}, Actions = {1}".format(_targets, _actions))
+        form.rules.append_entry(data={"target":_targets[0], "sub_target":"internews.org", "action":_actions[0]})
+        form.prof_name.data = "new"
+
+    #Add the locations a user can save to.
+    locations =["Co-Pilot", "Download"]
+    if is_usb():
+        locations.append("USB")
+    action_pairs = get_target_by_actions()
+    all_targets = get_valid_targets()
+    return render_template('profile.html',
+                           title=title,
+                           form=form,
+                           locations=locations,
+                           action_pairs=action_pairs,
+                           all_targets=all_targets)
 
 @app.route('/profile/current', methods=["GET", "POST"])
 @login_required
@@ -93,18 +81,44 @@ def profile_current():
     else:
         return redirect(url_for('profile'))
 
+@app.route('/profile/upload', methods=["POST"])
+@login_required
+def profile_upload():
+
+    log.info("Checking users submission choice.")
+    tmp_profile = mdl_prof.Profile("tmp")
+    tmp_profile.profile_dir = "temporary"
+    tmp_profile.save()
+    user_file = request.files['file']
+    _profile_loc = join(tmp_profile.profile_dir, tmp_profile.name)
+    log.debug("Saving user supplied configuration in {0}".format(_profile_loc))
+    user_file.save(_profile_loc)
+    try:
+        #get correct info (and name) from file.
+        tmp_profile.refresh()
+    except ValueError as err:
+        flash("That is not a valid co-pilot config file.", "error")
+        return redirect(url_for('profile_load'))
+    tmp_profile.profile_dir = "profiles"
+    tmp_profile.save()
+    tmp_profile.apply_config()
+    flash("Profile {0} uploaded.".format(tmp_profile.name))
+    return redirect(url_for('profile', prof_name=tmp_profile.name))
+
 @app.route('/profile/load', methods=["GET", "POST"])
 @login_required
 def profile_load():
     """Display the profile that is currently being run on the Co-Pilot box. """
-    PROFILE_DIR="/tmp/copilot/profiles/"
-    profiles = [ f for f in listdir(PROFILE_DIR) if isfile(join(PROFILE_DIR,f)) ]
-    status_items = get_status_items()
-    buttons = [{"name":"Return", "link":url_for('profile')}]
+
+    profiles = mdl_prof.get_all_profiles()
+    if profiles == []:
+        flash('You don\'t seem to have any profiles saved on this device.', 'error')
+        flash('To create a new profile choose "New" in the menu on the top left.', 'success')
+        return redirect(url_for('error', face="suprise"))
+
     return render_template('load.html',
-                           profiles=profiles,
-                           status_items=status_items,
-                           buttons=buttons)
+                           title="Profile > Load",
+                           profiles=profiles)
 
 
 @app.route('/profile/applied', methods=["GET", "POST"])
@@ -121,13 +135,54 @@ def profile_applied():
         return redirect(url_for('profile'))
     profile = mdl_prof.Profile(prof_applied)
     profile.load()
-    status_items = get_status_items()
     buttons = [{"name":"Return", "link":url_for('profile')}]
-    return render_template('profile_applied.html', profile=profile, buttons=buttons, status_items=status_items)
+    return render_template('profile_applied.html', profile=profile, buttons=buttons, title="Profile > Applied")
 
 @app.route('/profile/save', methods=["GET", "POST"])
 @login_required
 def profile_save():
-    """Display the profile that is currently being run on the Co-Pilot box. """
+    """Choose where to save the current profile."""
 
-    return render_template('profile_save.html', form=form)
+    form = forms.NewProfileForm()
+    if form.validate_on_submit():
+        log.info("Profile form is valid")
+
+        log.info("identifying the directory to save to.")
+        save_dir = None
+        _download = False
+        log.info("Checking users submission choice.")
+        if request.form['submit_action'] == 'USB':
+            save_dir = "usb"
+        elif request.form['submit_action'] == 'Co-Pilot':
+            save_dir = "profiles"
+        elif request.form['submit_action'] == 'Download':
+            save_dir = "profiles"
+            _download = True
+        else:
+            log.debug("See! This is why we don't accept user input. I gave you just fine USB directories, and you give me this. What do you want me to do with this?")
+            flash("Location {0} does not exist. Cannot save a profile to a non-existant folder, non mounted USB drive, or un-allowed folder. Did you unplug the usb between page loads?".format(save_dir), "error")
+            return redirect(url_for('error'))
+
+        prof_name = form.prof_name.data
+        profile = mdl_prof.Profile(form.prof_name.data)
+        profile.profile_dir = save_dir
+        for rule in form.data['rules']:
+            profile.add_rule(rule)
+        profile.save()
+        profile.apply_config()
+
+        log.debug("Applying form data to trainer {0}".format(form.data))
+        trainer = get_trainer()
+        trainer.current = form.data['prof_name']
+        db.session.commit()
+
+        if _download == True:
+            return send_file(profile.profile_file, as_attachment=True)
+
+        flash('Profile "{0}" has been applied!'.format(form.prof_name.data), 'success')
+        return redirect(url_for('profile_current'))
+
+    else:
+        log.debug(form.errors)
+        flash('We could not save your profile at this time. It seems to be invalid, but we don\'t know how.', 'error')
+        return redirect(url_for('error'))
