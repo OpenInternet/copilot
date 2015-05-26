@@ -9,7 +9,7 @@ This project is a prototype Training "Co-Pilot:" an easy to use censorship simul
 
 ### Co-Pilot Project Organization
 
-This repository is **ONLY** used for overarching project tracking. [Installing Co-Pilot](https://github.com/OpenInternet/co-pilot/wiki/Installing-Co-Pilot) is done using the [Co-Pilot Ansible](https://github.com/OpenInternet/co-pilot-ansible) code repository. 
+[Installing Co-Pilot](https://github.com/OpenInternet/co-pilot/wiki/Installing-Co-Pilot) is done using the [Co-Pilot Installation](https://github.com/OpenInternet/co-pilot_installation) code repository. 
 
 
 ### [CURRENT STATE OF CO-PILOT:](https://github.com/OpenInternet/co-pilot/milestones)
