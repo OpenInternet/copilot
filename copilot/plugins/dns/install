@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+set -x
+
+install_DNS_tools() {
+    #Install DNSChef tool
+    apt-get -y install dnschef
+}
+
+setup_DNS_tools() {
+    #Make our localhost the only nameserver used
+    echo "supersede domain-name-servers 127.0.0.1;" >> /etc/dhcp/dhclient.conf
+}
+
+main() {
+       install_DNS_tools
+       setup_DNS_tools
+}
+
+main

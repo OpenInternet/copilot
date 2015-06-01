@@ -1,0 +1,168 @@
+#!/bin/bash
+
+set -e
+set -x
+
+readonly PROG_DIR=$(readlink -m $(dirname $0))
+readonly COPILOT_DIR=/home/www/copilot
+readonly WEB_DIR=/home/www
+readonly SETUP_DIR=/tmp/setup
+readonly TESTING=true
+
+
+# ==== HARDWARE ====
+
+
+prepare_devices() {
+    #TODO remove the temporary fix that address' a bug introduced in https://github.com/OpenInternet/co-pilot/issues/59
+    # watch https://github.com/OpenInternet/co-pilot/issues/60 for when this can be removed.
+    #To remove this temporary fix delete the call to temporary_fixes below, remove the temporary_fixes function, and uncoment apt-get -y install dnsmasq
+    temporary_fixes
+    #Currently only BBB has specific preparation needs
+    local kernel=$(uname -mrs)
+    if [[ $kernel == *"bone"* ]]; then
+        #Prepare the beagle bone black
+        prep_bbb
+    fi
+}
+
+prep_bbb() {
+    rm -rf /var/lib/apt/lists
+    apt-get -y update
+    apt-get -y --force-yes install kali-archive-keyring
+}
+
+temporary_fixes () {
+    echo dnsmasq-base hold |dpkg --set-selections
+}
+
+# ==== OS ====
+
+
+update_os() {
+    apt-get -y update
+    apt-get -y upgrade
+}
+
+# ==== CO-PILOT BASE ====
+
+
+install_copilot() {
+    cp -fr $PROG_DIR $COPILOT_DIR
+}
+
+install_co-pilot_deps() {
+    #usbmount auto-mounts usb sticks
+    apt-get -y install usbmount
+}
+
+
+# ==== FLASK ====
+
+install_flask_deps() {
+    #Install Flask dependencies
+    apt-get -y install python-dev
+    apt-get -y install curl
+    apt-get -y install python2.7-dev
+    apt-get -y install python-pysqlite2
+    # Instal pip
+    curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python -
+    curl https://bootstrap.pypa.io/get-pip.py | python -
+    export PATH="/usr/local/bin:$PATH"
+}
+
+install_flask() {
+    #install flask & WTForms
+    pip install flask
+    pip install flask-wtf
+    pip install SQLAlchemy
+    pip install Flask-SQLAlchemy
+    pip install flask-bcrypt
+    pip install Flask-Login
+}
+
+setup_flask_env() {
+    cd $WEB_DIR
+    mkdir $COPILOT_DIR/instance
+    #TODO REMOVE TESTING CONFIG HERE
+    if [[ $TESTING = true ]]; then
+        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/config.py
+    fi
+    cd $PROG_DIR
+}
+
+
+# ==== WSGI ====
+install_wsgi() {
+    apt-get -y install  nginx supervisor
+    pip install gunicorn
+    apt-get -y install python-pip
+    pip install watchdog
+}
+
+setup_wsgi() {
+    setup_nginx
+    setup_supervisor
+}
+
+setup_nginx() {
+    service nginx start
+    rm /etc/nginx/sites-enabled/default
+    cp  $COPILOT_DIR/templates/nginx_sites /etc/nginx/sites-available/copilot
+    ln -s /etc/nginx/sites-available/copilot /etc/nginx/sites-enabled/copilot
+    #enable
+    update-rc.d nginx enable
+    service nginx restart
+}
+
+setup_supervisor() {
+    cp $COPILOT_DIR/templates/supervisor /etc/supervisor/conf.d/supervisord.conf
+    #enable
+    update-rc.d supervisor enable
+}
+
+
+# ==== PLUGINS ====
+
+install_plugins() {
+    echo "Installing plugins."
+    for path in "$COPILOT_DIR"/copilot/plugins/*; do
+        [ -d "${path}" ] || continue # if not a directory, skip
+        dirname="$(basename "${path}")"
+        echo "Beginning install of plugin $dirname"
+        "$path"/install
+        echo "Plugin $dirname installed"
+    done
+    echo "All plugins installed"
+}
+
+dependencies() {
+    install_co-pilot_deps
+    install_flask_deps
+}
+
+install() {
+    #create setup directory
+    mkdir -p $SETUP_DIR
+    #Create website Directory
+    mkdir -p $WEB_DIR
+    install_copilot
+    setup_flask_env
+    install_flask
+    install_wsgi
+}
+
+setup() {
+    setup_wsgi
+}
+
+main() {
+    prepare_devices
+    update_os
+    dependencies
+    install
+    setup
+    cd $COPILOT_DIR
+    install_plugins
+    cd $PROG_DIR
+}
