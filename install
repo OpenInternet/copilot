@@ -166,3 +166,5 @@ main() {
     install_plugins
     cd $PROG_DIR
 }
+
+main

@@ -30,3 +30,4 @@ main() {
     install_create_ap_deps
     install_create_ap
 }
+main
