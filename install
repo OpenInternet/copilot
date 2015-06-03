@@ -121,6 +121,14 @@ setup_supervisor() {
     update-rc.d supervisor enable
 }
 
+# ==== AVAHI ====
+
+install_avahi() {
+    apt-get install avahi-daemon
+    update-rc.d avahi-daemon enable
+    service avahi-daemon restart
+}
+
 
 # ==== PLUGINS ====
 
@@ -150,6 +158,7 @@ install() {
     setup_flask_env
     install_flask
     install_wsgi
+    install_avahi
 }
 
 setup() {
