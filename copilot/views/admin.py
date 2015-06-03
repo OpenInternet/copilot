@@ -16,9 +16,7 @@ def login():
         #We only have one admin user, so we only query for the first ID in the trainer table
         trainer = get_trainer()
         if trainer.is_correct_password(form.password.data):
-            flash("TRAINER PASS CORRECT")
             login_user(trainer)
-            flash(login_user(trainer))
             return redirect(url_for('index'))
         else:
             return redirect(url_for('login'))

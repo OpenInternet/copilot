@@ -300,8 +300,6 @@ ul.flashes {
 
 .face {
     margin: 15px;
-    height: 200px;
-    width: 167.046px;
     vertical-align: middle;
 }
 
@@ -315,24 +313,6 @@ ul.flashes {
     color: #ffffff;
     font-size: 5em;
 }
-
-/*Start with emotes invisible*/
-.smile {opacity: 0.0;}
-.frown {opacity: 0.0;}
-.flame {opacity: 0.0;}
-.oface {opacity: 0.0;}
-
-/* But not everything */
-.glasses_wifi  {opacity: 1.0;}
-.glasses {opacity: 1.0;}
-.face_head  {opacity: 1.0;}
-
-/* Make the emotions become opaque when they are in the right emote class parent */
-.emote_smile /deep/ .smile {opacity: 1.0;}
-.emote_frown /deep/ .frown {opacity: 1.0;}
-.emote_flame /deep/ .flame {opacity: 1.0;}
-.emote_oface /deep/ .oface {opacity: 1.0;}
-
 
 /* Login */
 .welcome_bar {

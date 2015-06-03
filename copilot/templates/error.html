@@ -2,17 +2,9 @@
 {% from "alert.html" import render_alerts %}
 
 {% block body %}
-    {# https://lincolnloop.com/blog/svg-sprites-and-icon-systems-are-super/ #}
-    {# http://svgpocketguide.com/book/ #}
-    {# http://24ways.org/2014/an-overview-of-svg-sprite-creation-techniques/ #}
-
-<!-- SVG face sprite sheet -->
-{% include 'sprites/face.svg' %}
 <div class="error_bar">
     <div class="error_container">
-        <svg class="face {% for e in emotions %} {{ e }} {% endfor %}">
-            <use xlink:href="#copilot_emote_face"></use>
-        </svg>
+        <img src="{{ url_for('static', filename='images/face_{0}_48.png'.format(emotion)) }}" alt="Co-Pilot Logo" />
         <span class="error_msg">Error</span>
     </div>
 </div>
