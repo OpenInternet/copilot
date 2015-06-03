@@ -31,7 +31,8 @@ def index():
 # HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html'), 404
+    flash("We're sorry. The page you are looking for cannot be found.", "error")
+    return redirect(url_for("error", face="sad"))
 
 @app.route('/menu')
 @login_required
@@ -76,6 +77,7 @@ def restart_service(service):
     flash("Service {0} restarted.".format(service), "success")
     return redirect(url_for("plugins"))
 
+
 # HTTP error handling
 @app.route('/error', defaults={"face": "sad"})
 @app.route('/error/<face>')
@@ -83,11 +85,12 @@ def error(face):
     face = face.decode("UTF-8")
     # current faces designed
     # happy, suprise, sad, fire
-    emotes = {"sad":"emote_frown",
-              "suprise":"emote_oface",
-              "happy":"emote_smile"}
-    if face == "fire":
-        emotions = ["emote_flame", "emote_smile"]
+    emotes = {"sad":"frown",
+              "suprise":"oface",
+              "happy":"smile",
+              "fire":"fire"}
+    if face in emotes:
+        emotion = emotes[face]
     else:
-        emotions = [emotes[face]]
-    return render_template('error.html', emotions=emotions)
+        emotion = "smile"
+    return render_template('error.html', emotion=emotion)
