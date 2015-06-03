@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+set -x
+
+readonly SETUP_DIR=/tmp/setup
+readonly COPILOT_DIR=/home/www/copilot
+
+
+install_create_ap_deps() {
+    # Dependencies for create_ap
+    apt-get -y install hostapd
+    apt-get -y install build-essential
+#    apt-get -y install dnsmasq #see todo in prep_devices for when to uncomment this. https://github.com/OpenInternet/co-pilot/issues/60
+    apt-get -y install haveged
+}
+
+install_create_ap() {
+    mkdir -p $SETUP_DIR
+    #Clone create_ap into setup directory
+    git clone https://github.com/openinternet/create_ap.git "$SETUP_DIR"/create_ap
+    #Enter create_ap install directory
+    cd  "$SETUP_DIR"/create_ap
+    #install create ap
+    make install
+    cd "$COPILOT_DIR"
+}
+
+main() {
+    install_create_ap_deps
+    install_create_ap
+}
+main
