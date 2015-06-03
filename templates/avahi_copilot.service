@@ -5,6 +5,6 @@
   <service>
     <type>_http._tcp</type>
     <port>8080</port>
-    <host>copilot.local</host>
+    <host-name>copilot.local</host-name>
   </service>
 </service-group>
