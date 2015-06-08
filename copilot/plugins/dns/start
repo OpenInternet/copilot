@@ -1,0 +1,35 @@
+#!/bin/bash
+
+readonly custom_profile="/tmp/copilot/dnschef.conf"
+readonly command="/usr/bin/dnschef"
+readonly pid_file="/tmp/dnschef.pid"
+
+start_dnschef() {
+    if [[ -e "$custom_profile" ]]; then
+        echo "Starting with a custom DNSChef profile."
+        #Write PID to custom file in 5 seconds for later killing
+        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
+        "$command" --file="$custom_profile"
+    else
+        echo "Starting with an empty DNSChef profile."
+        #Write PID to custom file in 5 seconds for later killing
+        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
+        "$command"
+
+    fi
+}
+
+kill_old() {
+    echo ${1}
+    set -x
+    kill $(cat "$pid_file")
+    kill
+    set +x
+    exit 0
+}
+
+main() {
+    start_dnschef
+}
+trap 'kill_old' EXIT
+main

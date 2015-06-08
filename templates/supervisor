@@ -12,20 +12,6 @@ user = root
 autostart=true
 autorestart=true
 
-[program:create_ap]
-command =   /home/www/copilot/bin/create_ap
-directory = /home/www/copilot/bin
-user = root
-autostart=true
-autorestart=true
-
-[program:dnschef]
-command =   /home/www/copilot/bin/dnschef
-directory = /home/www/copilot/bin
-user = root
-autostart=true
-autorestart=true
-
 [program:config_watcher]
 command =  python  watch_config
 directory = /home/www/copilot/bin

@@ -152,7 +152,14 @@ install_plugins() {
         [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
         echo "Beginning install of plugin $dirname"
-        "$path"/install
+        # Run installation script
+        if [ -a "$path"/install]; then
+            "$path"/install
+        fi
+        # Add supervisor configs to supervisor
+        if [ -a "$path"/supervisor.conf]; then
+            cat "$path"/supervisor.conf >> /etc/supervisor/conf.d/supervisord.conf
+        fi
         echo "Plugin $dirname installed"
     done
     echo "All plugins installed"
