@@ -7,7 +7,7 @@ readonly PROG_DIR=$(readlink -m $(dirname $0))
 readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
-readonly TESTING=true
+readonly TESTING=false
 
 
 # ==== HARDWARE ====
@@ -89,11 +89,17 @@ install_flask() {
 setup_flask_env() {
     cd $WEB_DIR
     mkdir $COPILOT_DIR/instance
-    #TODO REMOVE TESTING CONFIG HERE
     local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
     if [[ $TESTING = true ]]; then
+        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/config.py
+        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
+    else
         cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/config.py
+        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
     fi
+
+    # Get rid of the application root in the bp_config
+    sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
 
     # Add a random CSRF session key.
     local CSRF=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
@@ -189,6 +195,7 @@ install() {
 
 setup() {
     setup_wsgi
+    setup_avahi
 }
 
 main() {
