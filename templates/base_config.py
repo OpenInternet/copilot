@@ -17,9 +17,6 @@ THREADS_PER_PAGE = 2
 # Enable protection agains *Cross-site Request Forgery (CSRF)*
 CSRF_ENABLED  = True
 
-#Set the application root to /config for copilot. (blockpage deleted this in the install script.)
-APPLICATION_ROOT = '/config'
-
 # Number of rounds for password hashing
 BCRYPT_LOG_ROUNDS = 12
 

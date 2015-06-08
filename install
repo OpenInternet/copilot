@@ -104,10 +104,12 @@ setup_flask_env() {
     # Add a random CSRF session key.
     local CSRF=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
     sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/config.py
+    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/bp_config.py
 
     # Add a random secret key for signing cookies
     local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
     sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
+    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/bp_config.py
 
     cd $PROG_DIR
 }
