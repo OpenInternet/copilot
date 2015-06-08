@@ -146,7 +146,7 @@ setup_supervisor() {
 # ==== AVAHI ====
 
 install_avahi() {
-    apt-get install avahi-daemon
+    apt-get -y install avahi-daemon
     update-rc.d avahi-daemon enable
     service avahi-daemon restart
 }
@@ -190,6 +190,7 @@ install() {
     install_copilot
     setup_copilot_db
     setup_flask_env
+    install_avahi
     install_flask
     install_wsgi
     install_avahi
