@@ -143,6 +143,10 @@ install_avahi() {
     service avahi-daemon restart
 }
 
+setup_avahi() {
+    echo "copilot" > /etc/hostname
+    /etc/init.d/hostname.sh start
+}
 
 # ==== PLUGINS ====
 
