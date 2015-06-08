@@ -95,7 +95,7 @@ setup_flask_env() {
         cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
     else
         cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/config.py
-        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
+        cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/bp_config.py
     fi
 
     # Get rid of the application root in the bp_config
