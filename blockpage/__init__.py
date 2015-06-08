@@ -16,7 +16,7 @@ logger.addHandler(lhr)
 blockpage = Flask('blockpage', instance_relative_config=True)
 blockpage.config.from_object('config')
 # Load configuration variables from an instance folder.
-blockpage.config.from_pyfile('config.py')
+blockpage.config.from_pyfile('bp_config.py')
 
 #Putting the import at the end avoids the circular import error.
 from blockpage import models

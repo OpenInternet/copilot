@@ -1,13 +1,13 @@
 #!/bin/bash
 
-set -e
-set -x
+#set -e
+#set -x
 
 readonly PROG_DIR=$(readlink -m $(dirname $0))
 readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
-readonly TESTING=true
+readonly TESTING=false
 
 
 # ==== HARDWARE ====
@@ -57,6 +57,11 @@ install_co-pilot_deps() {
 }
 
 
+setup_copilot_db() {
+    mkdir -p /var/lib/copilot
+}
+
+
 # ==== FLASK ====
 
 install_flask_deps() {
@@ -84,13 +89,30 @@ install_flask() {
 setup_flask_env() {
     cd $WEB_DIR
     mkdir $COPILOT_DIR/instance
-    #TODO REMOVE TESTING CONFIG HERE
+    local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
     if [[ $TESTING = true ]]; then
         cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/config.py
+        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
+    else
+        cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/config.py
+        cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/bp_config.py
     fi
+
+    # Get rid of the application root in the bp_config
+    sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
+
+    # Add a random CSRF session key.
+    local CSRF=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/config.py
+    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/bp_config.py
+
+    # Add a random secret key for signing cookies
+    local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
+    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/bp_config.py
+
     cd $PROG_DIR
 }
-
 
 # ==== WSGI ====
 install_wsgi() {
@@ -121,6 +143,18 @@ setup_supervisor() {
     update-rc.d supervisor enable
 }
 
+# ==== AVAHI ====
+
+install_avahi() {
+    apt-get -y install avahi-daemon
+    update-rc.d avahi-daemon enable
+    service avahi-daemon restart
+}
+
+setup_avahi() {
+    echo "copilot" > /etc/hostname
+    /etc/init.d/hostname.sh start
+}
 
 # ==== PLUGINS ====
 
@@ -130,7 +164,14 @@ install_plugins() {
         [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
         echo "Beginning install of plugin $dirname"
-        "$path"/install
+        # Run installation script
+        if [ -a "$path"/install ]; then
+            "$path"/install
+        fi
+        # Add supervisor configs to supervisor
+        if [ -a "$path"/supervisor.conf ]; then
+            cat "$path"/supervisor.conf >> /etc/supervisor/conf.d/supervisord.conf
+        fi
         echo "Plugin $dirname installed"
     done
     echo "All plugins installed"
@@ -147,13 +188,17 @@ install() {
     #Create website Directory
     mkdir -p $WEB_DIR
     install_copilot
+    setup_copilot_db
     setup_flask_env
+    install_avahi
     install_flask
     install_wsgi
+    install_avahi
 }
 
 setup() {
     setup_wsgi
+    setup_avahi
 }
 
 main() {

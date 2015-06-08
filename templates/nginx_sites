@@ -1,7 +1,7 @@
 server {
        listen 8080;
        location / {
-       		proxy_pass http://127.0.0.1:8000;
+                proxy_pass http://127.0.0.1:8000;
        }
        location /static {
         alias  /home/www/copilot/copilot/static/;
