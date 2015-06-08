@@ -107,7 +107,7 @@ setup_flask_env() {
 
     # Add a random secret key for signing cookies
     local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    sed -i "s/^\(SECRET_KEY\s=\s\).*i$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
+    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
 
     cd $PROG_DIR
 }

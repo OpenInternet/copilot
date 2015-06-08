@@ -13,7 +13,4 @@ server {
     location / {
         proxy_pass http://127.0.0.1:8090;
     }
-    location /config {
-        proxy_pass http://127.0.0.1:8000;
-    }
 }
