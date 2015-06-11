@@ -20,7 +20,7 @@ logger.addHandler(lhr)
 
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 app = Flask('copilot', instance_relative_config=True)
-app.config.from_object('config')
+#app.config.from_object('config')
 # Load configuration variables from an instance folder.
 app.config.from_pyfile('config.py')
 

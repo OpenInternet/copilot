@@ -14,7 +14,7 @@ logger.addHandler(lhr)
 
 # If we set instance_relative_config=True when we create our app with the Flask() call, app.config.from_pyfile() will load the specified file from the instance/ directory.
 blockpage = Flask('blockpage', instance_relative_config=True)
-blockpage.config.from_object('config')
+#blockpage.config.from_object('config')
 # Load configuration variables from an instance folder.
 blockpage.config.from_pyfile('bp_config.py')
 
