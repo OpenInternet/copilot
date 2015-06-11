@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 def get_config_dir(directory):
     directories = {"main" : "/tmp/copilot/",
-                   "profiles" : "/tmp/copilot/profiles/",
+                   "profiles" : "/var/lib/copilot/profiles/",
                    "temporary" : "/tmp/copilot/tmp/"}
     # Adding plugin directories
     plugins = get_value_dict("directory")

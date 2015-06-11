@@ -17,9 +17,28 @@
     {{ form.csrf_token }}
     <div id="rule_list">
         {% if form.prof_name %}
+        <div class="row rule_name">
         <label for="Name">Name</label>
         {{form.prof_name }}
         {% endif %}
+        </div>
+        <div class="row mock_rule">
+            <div class="one columns">
+                <p></p>
+            </div>
+            <div class="three columns">
+                <div class="rule_desc_label">Action</div>
+                <p>The action to be taken against the "targeted" traffic. e.g. block, throttle, redirect, or monitor.</p>
+            </div>
+            <div class="three columns">
+                <div class="rule_desc_label">Target</div>
+                <p>The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL.</p>
+            </div>
+            <div class="three columns">
+                <div class="rule_desc_label">Sub-Target</div>
+                <p>A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic.</p>
+            </div>
+        </div>
         {% for item in form.rules %}
         {{ render_rules(item) }}
         {% endfor %}

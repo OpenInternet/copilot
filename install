@@ -59,6 +59,7 @@ install_co-pilot_deps() {
 
 setup_copilot_db() {
     mkdir -p /var/lib/copilot
+    mkdir -p /var/lib/copilot/profiles
 }
 
 

@@ -41,6 +41,8 @@ class ConfigWriter(Config):
         log.debug("sub target is {0}".format(_sub))
         if _sub == "":
             return None
+        if _sub == "*":
+            return "*"
         parsed = urlparse(_sub).path
         log.debug("parsed url is {0}".format(parsed))
         split_sub = string.split(parsed, ".")
@@ -53,15 +55,19 @@ class ConfigWriter(Config):
             log.debug("The domain {0} has exactly three parts.".format(_sub))
             return parsed
         elif len(split_sub) == 1:
-            log.debug("The domain {0} has exactly one part. Interpreting as a domain name only.".format(_sub))
-            return "*.{0}.*".format(split_sub[0])
+            if split_sub[0] in tld:
+                log.debug("The domain {0} has exactly one part that is a top level domain. Interpreting as a TLD target.".format(_sub))
+                return "*.*.{0}".format(split_sub[0])
+            else:
+                log.debug("The domain {0} has exactly one part. Interpreting as a domain name only.".format(_sub))
+                return "*.{0}.*".format(split_sub[0])
         elif (len(split_sub) == 2 and split_sub[1] not in tld):
             log.debug("The domain {0} has exactly two parts, and the second part is NOT a top level domain I recognize. Interpreting as a host + a domain name.".format(_sub))
             return "{0}.{1}.*".format(split_sub[0], split_sub[1])
         elif split_sub[1] in tld:
             log.debug("The domain {0} has exactly two parts, and the second part IS a top level domain I recognize. Interpreting as a domain name with a top level domain.".format(_sub))
             return "*.{0}.{1}".format(split_sub[0], split_sub[1])
-        #todo add just TLD.
+
 
 
 def setup(app):
