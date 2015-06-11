@@ -41,6 +41,9 @@ class ConfigWriter(Config):
         log.debug("sub target is {0}".format(_sub))
         if _sub == "":
             return None
+
+        if _sub == "*":
+            return "*"
         parsed = urlparse(_sub).path
         log.debug("parsed url is {0}".format(parsed))
         split_sub = string.split(parsed, ".")
