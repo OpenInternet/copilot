@@ -171,10 +171,20 @@ class Config(object):
             return False
 
     def add_rule(self, rule):
+        """
+        This function takes a single rule, checks if that rule is valid, transforms and formats the rule, and adds that rule to the self._rules list in a way that can be processed by the writer.
+        Args:
+        rule: A list containing the action, target, and sub-target of a rule as three strings.
+
+            action, target, sub_target = rule[0], rule[1], rule[2]
+        """
         log.debug("adding rule {0}".format(rule))
         self._rules.append(rule)
 
     def write(self):
+        """
+        Opens, and clears, the specified config file and writes the header and then all of the rules for this config.
+        """
         self.prepare()
         log.debug("Opening config file {0} for writing.".format(self.config_file))
         with open(self.config_file, 'w+') as config_file:
@@ -192,10 +202,19 @@ class Config(object):
             log.info("The config directory {0} exists and will not be created.".format(_dir))
 
     def write_rule(self, config_file, rule):
+        """
+        Args:
+            config_file: A file handler for a config file to write to.
+            rule: A string that should be written to the file.
+        """
         log.debug("writing rule {0}".format(rule))
         config_file.write(rule)
 
     def write_header(self, config_file):
+        """
+        Args:
+            config_file: A file handler for a config file to write to.
+        """
         log.debug("writing header info {0}".format(self.header))
         if self.header:
             log.debug("Found header. Writing to config file {0}".format(config_file))
