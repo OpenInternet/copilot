@@ -18,7 +18,7 @@ install_create_ap_deps() {
 install_create_ap() {
     mkdir -p $SETUP_DIR
     #Clone create_ap into setup directory
-    git clone https://github.com/oblique/create_ap.git "$SETUP_DIR"/create_ap
+    git clone https://github.com/openinternet/create_ap.git "$SETUP_DIR"/create_ap
     #Enter create_ap install directory
     cd  "$SETUP_DIR"/create_ap
     #install create ap
