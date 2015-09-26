@@ -56,6 +56,7 @@ class Trainer(Base, UserMixin):
     """ The trainer (SINGLE user) model"""
 
     __tablename__ = 'trainer'
+    __table_args__ = {'extend_existing': True}
 
     #DataBase Values
     # Ensure Solo account
