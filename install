@@ -79,6 +79,7 @@ install_flask_deps() {
 
 install_flask() {
     #install flask & WTForms
+    apt-get -y install libffi-dev
     pip install flask
     pip install flask-wtf
     pip install SQLAlchemy
