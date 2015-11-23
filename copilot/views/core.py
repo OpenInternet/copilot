@@ -17,15 +17,16 @@ log = logging.getLogger(__name__)
 
 @app.route('/')
 def index():
-    log.info(current_user.is_authenticated())
-    if current_user.is_authenticated():
-        log.info("user is authenticated.")
+    log.info("root route requested")
+    log.debug(current_user.is_authenticated)
+    if current_user.is_authenticated:
+        log.debug("user is authenticated.")
         return redirect(url_for('profile'))
     elif get_trainer():
-        log.info("there is a trainer currently")
+        log.debug("there is a trainer currently")
         return redirect(url_for('login'))
     else:
-        log.info("No trainer exists. Setting up congfig.")
+        log.debug("No trainer exists. Setting up congfig.")
         return redirect(url_for('config'))
 
 # HTTP error handling
