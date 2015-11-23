@@ -155,6 +155,8 @@ install_avahi() {
 setup_avahi() {
     echo "copilot" > /etc/hostname
     /etc/init.d/hostname.sh start
+    sed -i 's/127.0.0.1\s*kali/127.0.0.1\tcopilot/' /etc/hosts
+    service networking restart
 }
 
 # ==== PLUGINS ====
