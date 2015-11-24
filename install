@@ -75,6 +75,10 @@ install_flask_deps() {
     curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python -
     curl https://bootstrap.pypa.io/get-pip.py | python -
     export PATH="/usr/local/bin:$PATH"
+
+    # Bcrypt Dependencies
+    apt-get -y install build-essential
+    apt-get -y install libffi-dev
 }
 
 install_flask() {
@@ -83,12 +87,6 @@ install_flask() {
     pip install flask-wtf
     pip install SQLAlchemy
     pip install Flask-SQLAlchemy
-
-    # Bcrypt Dependencies
-    apt-get -y install build-essential
-    apt-get -y install libffi-dev
-    #pip install py-bcrypt
-
     pip install flask-bcrypt
     pip install Flask-Login
 }
