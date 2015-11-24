@@ -85,8 +85,9 @@ install_flask() {
     pip install Flask-SQLAlchemy
 
     # Bcrypt Dependencies
+    apt-get -y install build-essential
     apt-get -y install libffi-dev
-    pip install py-bcrypt
+    #pip install py-bcrypt
 
     pip install flask-bcrypt
     pip install Flask-Login
