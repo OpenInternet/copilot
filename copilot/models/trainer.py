@@ -15,19 +15,36 @@ login_manager.login_view =  "login"
 
 @login_manager.user_loader
 def load_user(userid):
+    """ Load the user object using the login manager"""
     _user = get_trainer()
     if not _user:
         log.info("No trainer object found. Assuming a new user.")
     return _user
 
 def get_trainer():
-    """Only allow one trainer account. """
+    """ Get the trainer user object.
+
+    CoPilot only allows for a single user. This function will return
+    the first Trainer object in the database.
+    """
     _trainer = Trainer.query.first()
     if not _trainer:
         log.info("No trainer found.")
     return _trainer
 
 def get_ap_status():
+    """ Get the state and name of CoPilot's access point.
+
+    Checks for the current access point name and if it is
+    set returns the name and an indicator that the access
+    point is currently working.
+
+    The try/except stanza that sets the status of the current_ap
+    should actually evaluate if CoPilot is providing an access
+    point instead of simply looking for if the AP name is set
+    in the trainer and showing a "on" state if it does not raise
+    an exception.
+    """
     trainer = get_trainer()
     ap = {}
     current_ap = False
@@ -44,6 +61,7 @@ def get_ap_status():
     return ap
 
 class Base(db.Model):
+    """ The base database model for CoPilot"""
 
     __abstract__  = True
 
@@ -53,7 +71,12 @@ class Base(db.Model):
                                            onupdate=db.func.current_timestamp())
 
 class Trainer(Base, UserMixin):
-    """ The trainer (SINGLE user) model"""
+    """ The trainer database model
+
+    This is a single user database model because CoPilot is not intended to
+    be used with multiple trainers sharing the same device with varying levels
+    of access.
+    """
 
     __tablename__ = 'trainer'
 
@@ -102,6 +125,10 @@ class Trainer(Base, UserMixin):
 
     @password.setter
     def password(self, plaintext):
+        """Admin password setter
+
+        Passwords are hashed using bcrypt and then saved.
+        """
         self._password = bcrypt.generate_password_hash(plaintext)
 
     @property
@@ -110,7 +137,11 @@ class Trainer(Base, UserMixin):
 
     @ap_password.setter
     def ap_password(self, plaintext):
-        # This get's written in plain-text in the create_ap anyway
+        """Access Point Password Setter (plaintext)
+
+        This needs to be written in plain-text so that it can be passed
+        to create_ap when starting the access point.
+        """
         self._ap_password = plaintext
 
 
@@ -123,6 +154,14 @@ class Trainer(Base, UserMixin):
         self._current = plaintext
 
     def is_correct_password(self, plaintext):
+        """Compare the password provided with the saved password.
+
+        Compares a hash of the string provided with the hash of the
+        current saved password.
+
+        Args:
+            plaintext (str): a password to check.
+        """
         return bcrypt.check_password_hash(self._password, plaintext)
 
     def __repr__(self):

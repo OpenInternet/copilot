@@ -15,6 +15,15 @@ import logging
 log = logging.getLogger(__name__)
 
 def get_profile_status():
+    """ Gives the status and name of the currenty running profile.
+
+    This function provides a status dict containing the name of the
+    current profile (if any), and if that profile is enabled. There
+    is currently no way to disable the currently running profile
+    without creating and running a blank profile. As such, this
+    funtion retuns disabled profiles only when there is no current
+    trainer.
+    """
     trainer = get_trainer()
     profile = {}
     current_profile = False
@@ -23,7 +32,7 @@ def get_profile_status():
         log.debug("current profile found: {0}".format(current_profile))
     except:
         log.debug("No current trainer found. Returning broken profile.")
-        log.warn("FIX THIS SOON: wildcard exception (function get_profile_status)")
+        log.warn("FIX THIS SOON: bare exception (function get_profile_status)")
     if current_profile:
         if current_profile == "0":
             current_profile = "No Active Profile"
@@ -35,6 +44,7 @@ def get_profile_status():
     return profile
 
 def get_all_profiles():
+    """ Get a list of all profiles on CoPilot"""
     _profile_dirs = get_usb_dirs()
     _profile_dirs.append(get_config_dir("profiles"))
     profiles = []
@@ -50,6 +60,15 @@ def get_all_profiles():
 
 
 class Profile(object):
+    """ A CoPilot profile.
+
+    A profile is a set of rules (The combination of a target and
+    an action) that are to be used together. For example a training profile
+    may contain one rule to "Block HTTPS" traffic and another to "Block the
+    URL www.google.com" so that trainee's can not use any HTTPS websites
+    and cannot use google.com even if it is not using HTTPS.
+    """
+
     def __init__(self, name, description="A co-pilot profile", rules={}):
         self.rules = []
         self.profile_dir = "profiles"
@@ -68,6 +87,14 @@ class Profile(object):
 
     @profile_dir.setter
     def profile_dir(self, plaintext):
+        """ Set the profile's save directory
+
+        Set the profiles save directory based upon the config type
+
+        Args:
+           plaintext (str): The configuration file type of this profile.
+                See models/config.py get_config_dir() for available types.
+        """
         try:
             _dir = get_config_dir(plaintext)
             self._profile_dir = _dir
@@ -79,6 +106,12 @@ class Profile(object):
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
     def add_rule(self, ruleset):
+        """ Add a rule to the Profile object
+
+
+        Args:
+        ruleset (list|dict): a single set containing an  action, target, and sub_target.
+        """
         # Rapid prototyping means that I just want the rule, I don't care how it is formatted.
         if isinstance(ruleset, dict):
             rule = ruleset
@@ -95,6 +128,7 @@ class Profile(object):
         self.rules.append([rule['action'], rule['target'], rule['sub_target']])
 
     def save(self):
+        """ Save the profile as a flat file in its profile directory."""
         log.info("Saving profile {0} to {1}".format(self.name, self.profile_file))
         if not os.path.exists(self.profile_dir):
             os.makedirs(self.profile_dir)
@@ -109,6 +143,7 @@ class Profile(object):
         log.info("Profile {0} saved".format(self.name))
 
     def exist(self):
+        """Checks if the profile file already exists."""
         if os.path.isfile(self.profile_file):
             log.info(" profile {0} exists".format(self.name))
             return True
@@ -117,10 +152,12 @@ class Profile(object):
             return False
 
     def refresh(self):
-        """
-        Reload all profile values from its file.
+        """Reload all profile values from its file.
 
-        NOTE: Does not change the profile directory.
+        NOTE: This method does not check the currently set profile directory
+        to re-create the path to the profile file. If you change a profiles
+        directory you must also refresh the profile_file property for this
+        function to refresh from the new location.
         """
         log.info("Refreshing profile from file.")
         config = ProfileConfig(self.profile_file)
@@ -145,10 +182,12 @@ class Profile(object):
         log.debug("Set rules to {0}".format(self.rules))
 
     def load(self):
-        """
-        Load a profile from a file.
+        """Load a profile from a file.
 
-        NOTE: Does not change the profile directory.
+        NOTE: This method does not check the currently set profile directory
+        to re-create the path to the profile file. If you change a profiles
+        directory you must also refresh the profile_file property for this
+        function to load from the new location.
         """
         log.info("Loading profile.")
         log.debug("Using profile at {0}".format(self.profile_file))
@@ -168,6 +207,12 @@ class Profile(object):
         log.debug("Set rules to {0}".format(self.rules))
 
     def apply_config(self):
+        """Apply and start running the current profile.
+
+        This method both sets the current profile as the "current"
+        profile and writes the approptiate configuration files for
+        the rules contained within the profile.
+        """
         log.info("Applying profile {0}".format(self.name))
         trainer = get_trainer() #Save as current profile for trainer.
         trainer.current = self.name

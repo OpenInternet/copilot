@@ -12,7 +12,15 @@ log = logging.getLogger(__name__)
 
 
 def get_config_dir(directory):
-    """Search and return the config directory for a plugin."""
+    """Return the appropriate directory for a type of config file.
+
+    Each type of config file is kept in a different location. This
+    function identified the correct location for a specific config
+    file.
+
+    Args:
+        directory (str): The type of config file directory to return.
+    """
 
     directories = {"main" : "/tmp/copilot/",
                    "profiles" : "/var/lib/copilot/profiles/",
@@ -30,8 +38,16 @@ def get_config_dir(directory):
         raise ValueError("That config directory is not valid.")
 
 def get_config_file(config):
-    """ return the path to a config file."""
+    """ Return the path to a plugins config file.
 
+    Given a plugins name this function will query the
+    plugins options to retreive the path where its
+    config file should be stored.
+
+    Args:
+        config (str): The name of the plugin that you wish to retrive a
+    config path for.
+    """
     log.info("getting {0} config file.".format(config))
     directory = get_option("directory", config)[0]
     log.debug("found directory {0}".format(directory))
@@ -41,7 +57,7 @@ def get_config_file(config):
     return path
 
 def get_valid_actions(package=None):
-    """ Returns the valid actions for a package, or all packages as a list"""
+    """ Returns the valid actions for a plugin, or all plugin as a list"""
 
     if not package:
         return get_unique_values("actions")
@@ -49,11 +65,16 @@ def get_valid_actions(package=None):
         return get_option("actions", package)
 
 def get_valid_targets():
+    """Return all valid targets for CoPilot Rules."""
     log.info("getting valid targets.")
     return get_unique_values("target")
 
 def get_config_writer(name):
-    """Get a plugins config writer object."""
+    """Get a plugins config file writer object.
+
+    Args:
+        name (str): The name of the plugin that you want a writer for.
+    """
 
     log.info("getting a plugins config writer.")
     if not is_plugin(name):
@@ -64,7 +85,12 @@ def get_config_writer(name):
     return writer
 
 def get_option(option, plugin):
-    """Get an option from a plugin config file as a list."""
+    """Get an option from a plugin config file as a list.
+
+    Args:
+        option (str): The option you want to get.
+        plugin (str): The name of the plugin you want the value from.
+    """
 
     log.info("getting option {0} from {1}'s config file.".format(option, plugin))
     if not is_plugin(plugin):
@@ -82,9 +108,13 @@ def get_option(option, plugin):
         return []
 
 def get_unique_values(option):
-    """
+    """ Get all possible values for a specific option across all plugins.
+
     Returns a list of a specific key's value across all plugins config files
     with no repeats.
+
+    Args:
+        option (str): The option you want to get unique values for.
     """
 
     log.info("getting all unique values for option {0}.".format(option))
@@ -99,9 +129,13 @@ def get_unique_values(option):
     return values
 
 def get_value_list(option):
-    """
+    """ Get a list containing the value of an option for each plugin.
+
     Returns a list of (plugin,[value1, value2, value3]) tuples of a
     specific key's value across all plugins config files.
+
+    Args:
+        option (str): The option you want to get values for.
     """
 
     log.info("Getting a list of all values")
@@ -118,9 +152,14 @@ def get_value_list(option):
     return plist
 
 def get_value_dict(option):
-    """
+    """Get a dict containing the value of an option for each plugin.
+
     Returns a dictionary of {plugin: [value1, value2, value3]} of a
     specific key's value across all plugins config files.
+
+    Args:
+        option (str): The option you want to get values for.
+
     """
 
     log.info("Getting a dict of all values")
@@ -137,7 +176,14 @@ def get_value_dict(option):
     return pdict
 
 def get_target_by_actions():
-    """Get targets (plugins) sorted by their available actions. """
+    """Get a dict of targets sorted by their available actions.
+
+    Get a dictionary keyed with available actions (The censorship/surveillance
+    action to be taken against the "targeted" traffic. Examples would
+    be to block, throttle, redirect, or monitor.) with values containing
+    lists of all the possile targets (The type of network traffic to be targeted
+    by the co-pilot.) that the action can be used against.
+    """
 
     log.info("getting targets (e.g. plugins) sorted by actions")
     tar_act_dict = {}
@@ -156,7 +202,17 @@ def get_target_by_actions():
 
 
 class Config(object):
-    """Base config writer for plugins."""
+    """Base config writer for plugins.
+
+    Your plugin will have different configuration file needs than any other
+    program. To handle this we have created a Python based "configuration
+    writer" class that can be customized to write all manner of configuration
+    files.
+
+    Guidance for extending and modifying this config object for plugins can be
+    found in the CoPilot wiki.
+    https://github.com/OpenInternet/co-pilot/wiki/Plugin-Guide#minimal-configuration-example
+    """
 
     def __init__(self):
         self._rules = []
@@ -164,6 +220,7 @@ class Config(object):
 
     @property
     def config_type(self):
+        """Returns the config file type."""
         try:
             return self._config_type
         except AttributeError as err:
@@ -175,7 +232,7 @@ class Config(object):
         """Sets the type of the config and the location of the config file.
 
         Args:
-            type: (str) The 'type' of a configuration is an abstraction
+            type (str): The 'type' of a configuration is an abstraction
                         of the directory that the config file is within.
         """
 
@@ -204,16 +261,19 @@ class Config(object):
         This function takes a single rule, checks if that rule is valid, transforms and formats the rule, and adds that rule to the self._rules list in a way that can be processed by the writer.
 
         Args:
-        rule: A list containing the action, target, and sub-target of a rule as three strings.
-              action, target, sub_target = rule[0], rule[1], rule[2]
+            rule (list): A list containing the action, target, and sub-target
+                of a rule as three strings.
+                - action, target, sub_target = rule[0], rule[1], rule[2]
         """
 
         log.debug("adding rule {0}".format(rule))
         self._rules.append(rule)
 
     def write(self):
-        """ Opens, and clears, the specified config file
-            and writes the header and then all of the rules for this config.
+        """ Writes the specified config file.
+
+        Opens, and clears the specified config file and then writes the header
+        and then all of the rules for this config.
         """
 
         self.prepare()
@@ -267,7 +327,7 @@ class ProfileParser(SafeConfigParser):
         return list(filter(None, (x.strip() for x in value.splitlines())))
 
 class ProfileWriter(ProfileParser):
-    """ Object that writes basic profiles"""
+    """ Object that writes basic CoPilot profiles"""
 
     def set_rule(self, rule):
         action = rule[0]
@@ -311,7 +371,7 @@ class ProfileConfig(object):
         return rules
 
     def valid(self):
-        """Tests if a configuration file is properly configured.
+        """Tests if a configuration file is properly formatted.
 
         Returns: (bool) True is proper, False if not
         """
@@ -364,7 +424,7 @@ class PluginConfig(object):
             self.data = self.build_map()
 
     def build_map(self):
-        """ Builds a dictionary out of a plugin config"""
+        """ Builds a dictionary out of a plugin config."""
 
         _dict = {}
         _data = self.parser.readfp(open(self.path))
