@@ -24,15 +24,16 @@ def index():
     is a trainer user created and if the user is authenticated
     as that trainer.
     """
-    print(current_user.is_authenticated())
-    if current_user.is_authenticated():
-        print("user is authenticated.")
+    log.info("root route requested")
+    log.debug(current_user.is_authenticated)
+    if current_user.is_authenticated:
+        log.debug("user is authenticated.")
         return redirect(url_for('profile'))
     elif get_trainer():
-        print("there is a trainer currently")
+        log.debug("there is a trainer currently")
         return redirect(url_for('login'))
     else:
-        print("No trainer exists. Setting up congfig.")
+        log.debug("No trainer exists. Setting up congfig.")
         return redirect(url_for('config'))
 
 # HTTP error handling
