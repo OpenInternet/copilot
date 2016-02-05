@@ -7,16 +7,14 @@ readonly pid_file="/tmp/dnschef.pid"
 start_dnschef() {
     if [[ -e "$custom_profile" ]]; then
         echo "Starting with a custom DNSChef profile."
-        #Write PID to custom file in 5 seconds for later killing
-        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
-        "$command" --file="$custom_profile"
     else
         echo "Starting with an empty DNSChef profile."
-        #Write PID to custom file in 5 seconds for later killing
-        $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
-        "$command"
-
+        printf '[A]\n*.copilot.local = 192.168.12.1' > "$custom_profile"
     fi
+
+    #Write PID to custom file in 5 seconds for later killing
+    $(sleep 5 && echo $(pgrep -f python.*dnschef) > "$pid_file") &
+    "$command" --file="$custom_profile"
 }
 
 kill_old() {

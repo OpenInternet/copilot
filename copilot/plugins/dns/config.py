@@ -20,7 +20,11 @@ class ConfigWriter(Config):
         super(ConfigWriter, self).__init__()
         log.debug("Initializing dns config writer.")
         self.config_type = "dns"
-        self.header = "[A]\n"
+        # This copilot.local redirection is needed by default to combat ISP redirection
+        # ISP's like verizon, much like this plugin, do DNS-redirection
+        # They often do it for advertising, in fact, they do it at my apartment
+        # This has finaly been useful, it helped my ID the bug that forced this change.
+        self.header = "[A]\n*.copilot.local = 192.168.12.1\n"
 
     def add_rule(self, rule):
         action, target, sub = rule[0], rule[1], rule[2]
