@@ -51,7 +51,7 @@ def menu():
     TODO This route needs to be deleted in the future.
     https://github.com/OpenInternet/co-pilot/issues/110
     """
-     return render_template('menu.html')
+    return render_template('menu.html')
 
 @app.route('/info')
 @login_required
