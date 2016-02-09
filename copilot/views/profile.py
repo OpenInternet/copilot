@@ -27,7 +27,23 @@ log = logging.getLogger(__name__)
 @app.route('/profile/edit/<string:prof_name>', methods=["GET", "POST"])
 @login_required
 def profile(prof_name):
-    """Display an existing profle in the profile editor."""
+    """Display a profle in the profile editor.
+
+    The interface where the trainer creates and edits profiles
+    (sets of rules). This interface is used for both the creation
+    of new profiles and the editing of existing profiles.
+
+    Once the trainer is satisfied with the profile they have created
+    they are then able to save locally or to a USB.
+
+    https://github.com/OpenInternet/co-pilot/wiki/User-Interface-Elements#new-profile
+    https://github.com/OpenInternet/co-pilot/wiki/User-Interface-Elements#edit-profile
+
+    Args:
+        prof_name (str): The name of a profile to load. If supplied
+            with a profile name that does not exist this will create
+            a new profile.
+    """
     log.debug("profile received {0}".format(prof_name))
 
     form = forms.NewProfileForm()
@@ -71,7 +87,11 @@ def profile(prof_name):
 @app.route('/profile/current', methods=["GET", "POST"])
 @login_required
 def profile_current():
-    """Display the profile that is currently being run on the Co-Pilot box. """
+    """Display the profile that is currently being run on CoPilot.
+
+    Redirects to the profile configuration interface for the current
+    selected profile.
+    """
     #Check for profile_edit
     trainer = get_trainer()
     #populate from trainer if possible
@@ -84,7 +104,12 @@ def profile_current():
 @app.route('/profile/upload', methods=["POST"])
 @login_required
 def profile_upload():
+    """ Interface for uploading a profile from a users device.
 
+    This interface allows a user to upload a saved profile file
+    from their device up to CoPilot. Once the profile is uploaded
+    it is automatically applied (activated) on CoPilot.
+    """
     log.info("Checking users submission choice.")
     tmp_profile = mdl_prof.Profile("tmp")
     tmp_profile.profile_dir = "temporary"
@@ -108,7 +133,7 @@ def profile_upload():
 @app.route('/profile/load', methods=["GET", "POST"])
 @login_required
 def profile_load():
-    """Display the profile that is currently being run on the Co-Pilot box. """
+    """Display the profile that is currently being run on CoPilot."""
 
     profiles = mdl_prof.get_all_profiles()
     if profiles == []:
@@ -124,7 +149,11 @@ def profile_load():
 @app.route('/profile/applied', methods=["GET", "POST"])
 @login_required
 def profile_applied():
-    """Display an empty profile editor."""
+    """UNUSED interface for confirming that a profile has been applied.
+
+    TODO remove this function and its corresponding template
+    ./copilot/templates/profile_applied.html
+    """
     #Check for profile_edit
     trainer = get_trainer()
     #populate from trainer if possible
@@ -141,7 +170,12 @@ def profile_applied():
 @app.route('/profile/save', methods=["GET", "POST"])
 @login_required
 def profile_save():
-    """Choose where to save the current profile."""
+    """A route which saves the profile contained in the current form.
+
+    This route is where profiles send their form data when they are
+    submitted. If the profile is valid this will save the profile on
+    CoPilot.
+    """
 
     form = forms.NewProfileForm()
     if form.validate_on_submit():

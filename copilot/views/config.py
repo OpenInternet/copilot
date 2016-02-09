@@ -18,19 +18,28 @@ log = logging.getLogger(__name__)
 
 @app.route('/config', methods=["GET", "POST"])
 def config():
-    print("Starting")
+    """ The configuration interface.
+
+    This route includes both the initial configuration interface
+    as well as the administrative configuration interface. The interface
+    is chosen based upon the existance of a trainer. If there is already a
+    trainer setup on CoPilot then the administrative interface is provided.
+    If there is not an existing trainer than the initial configuration
+    interface is provided.
+    """
+    log.debug("Starting configuration interface")
     trainer_exists = get_trainer()
     #If there is already a trainer setup on the box then provide the admin configuration.
     if trainer_exists:
         log.info("Trainer exists")
         form = AdminConfig()
     else:
-        log.info("Trainer DOES NOT exists")
+        log.info("Trainer does not exist")
         form = Config()
     if form.validate_on_submit():
         #Add any new values to the existing trainer
         if trainer_exists:
-            log.debug("found a trainer. Modifying existing configuration.")
+            log.debug("Found a trainer. Modifying existing configuration.")
             trainer = trainer_exists
             if form.password.data != "":
                 flash("set password")
@@ -57,14 +66,14 @@ def config():
             db.session.add(trainer)
 
             #Write values and send the user back to main index.
-            print("Committing Session File")
+            log.info("Committing Session File")
             db.session.commit()
-            print("Writing Config File")
+            log.info("Writing Config File")
             trainer.ap_config.write()
-            print("Restarting create_ap")
+            log.info("Restarting create_ap")
             subprocess.call(["/usr/sbin/service", "create_ap", "restart"], shell=True)
             login_user(trainer)
-            print("Redirecting to index.")
+            log.info("Redirecting to index.")
             return redirect(url_for('index'))
     else:
         log.debug("configuration file was not valid.")

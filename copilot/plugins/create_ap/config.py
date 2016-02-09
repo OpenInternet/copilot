@@ -24,11 +24,17 @@ class ConfigWriter(Config):
 
     @ap_password.setter
     def ap_password(self, plaintext):
+        """ Sets the access point password for create_ap
+
+        Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.
+        """
         if (8 < len(str(plaintext)) <= 63 and
             all(char in string.printable for char in plaintext)):
             self._ap_password = plaintext
         else:
-            raise ValueError("Access Point passwords must be between 8 and 63 characters long and use only printable ASCII characters.")
+            raise ValueError("Access Point passwords must be between" +
+                             " 8 and 63 characters long and use only" +
+                             " printable ASCII characters.")
 
     @property
     def ap_name(self):
@@ -36,6 +42,10 @@ class ConfigWriter(Config):
 
     @ap_name.setter
     def ap_name(self, name):
+        """Sets the access point name for CoPilot
+
+        Access Point names must be between 1 and 31 characters long.
+        """
         if 0 < len(str(name)) <= 31:
             self._ap_name = name
         else:

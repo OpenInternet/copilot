@@ -8,30 +8,66 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class ConfigHandler(FileSystemEventHandler):
+    """Create a file system event handler for watchdog
+
+    This event handler uses relationships between a path and
+    a process name to restart a service every time a file at
+    that path is created, modified, or deleted.
+    """
 
     def __init__(self):
         super(FileSystemEventHandler, self).__init__()
         self.configs = {}
 
     def add_config(self, config, process):
+        """Add a config path/process pair to be watched
+
+        Args:
+            config (str): The path to the config file to be watched
+            process (str): The name used by supervisor to identify the
+                process to be restarted.
+        """
         self.configs[config] = process
 
     def on_modified(self, event):
+        """The actions to be taken when a watched path is modified.
+
+        Args:
+            event (watchdog event): A watchdog FileModifiedEvent
+                https://pythonhosted.org/watchdog/api.html#module-watchdog.events
+        """
         base = path.basename(event.src_path)
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
     def on_created(self, event):
+        """The actions to be taken when a watched path is created
+
+        Args:
+            event (watchdog event): A watchdog FileCreatedEvent
+                https://pythonhosted.org/watchdog/api.html#module-watchdog.events
+        """
         base = path.basename(event.src_path)
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
     def on_deleted(self, event):
+        """The actions to be taken when a watched path is deleted.
+
+        Args:
+            event (watchdog event): A watchdog FileDeletedEvent
+                https://pythonhosted.org/watchdog/api.html#module-watchdog.events
+        """
         base = path.basename(event.src_path)
         if base in self.configs:
             subprocess.call(["supervisorctl", "restart", self.configs[base]])
 
 def prep_directory(config_dir):
+    """Creates a config directory if that config directory does not exist
+
+    Args:
+        config_dir (str): The path where config files will be written.
+    """
     if not path.exists(config_dir):
         makedirs(config_dir)
 
@@ -39,6 +75,7 @@ def prep_directory(config_dir):
 if __name__ == "__main__":
     observer = Observer()
     config_handle = ConfigHandler()
+    # Add config files to monitor
     config_handle.add_config("dnschef.conf", "dnschef")
     config_handle.add_config("ap.conf", "create_ap")
     prep_directory("/tmp/copilot/")
