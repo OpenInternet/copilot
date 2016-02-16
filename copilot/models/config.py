@@ -188,7 +188,7 @@ def get_target_by_actions():
     log.info("getting targets sorted by actions")
     action_target_pairings = {}
     actions_per_plugin = get_value_dict("actions")
-    targets_per_plugin = get_value_dict("targets")
+    targets_per_plugin = get_value_dict("target")
     for plugin, actions in actions_per_plugin.items():
         for action in actions:
             for target in targets_per_plugin.get(plugin, []):
