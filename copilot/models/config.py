@@ -185,20 +185,16 @@ def get_target_by_actions():
     by the co-pilot.) that the action can be used against.
     """
 
-    log.info("getting targets (e.g. plugins) sorted by actions")
-    tar_act_dict = {}
-    tdict = get_value_dict("actions")
-    for target in tdict:
-        for action in tdict[target]:
-            if action not in tar_act_dict:
-                tar_act_dict[action] = []
-                tar_act_dict[action].append(target)
-            elif target not in tar_act_dict[action]:
-                tar_act_dict[action].append(target)
-            else:
-                log.debug("Found action {0} in target {1}. This should not occur. A plugin is being examed twice or is somehow duplicated.".format(action, target))
-    log.debug("target/action pairs found: {0}".format(tar_act_dict))
-    return tar_act_dict
+    log.info("getting targets sorted by actions")
+    action_target_pairings = {}
+    actions_per_plugin = get_value_dict("actions")
+    targets_per_plugin = get_value_dict("targets")
+    for plugin, actions in actions_per_plugin.items():
+        for action in actions:
+            for target in targets_per_plugin[plugin]:
+                action_target_pairings.setdefault(action, []).append(target)
+    log.debug("action to target sets found: {0}".format(action_target_pairings))
+    return action_target_pairings
 
 
 class Config(object):
