@@ -191,7 +191,7 @@ def get_target_by_actions():
     targets_per_plugin = get_value_dict("targets")
     for plugin, actions in actions_per_plugin.items():
         for action in actions:
-            for target in targets_per_plugin[plugin]:
+            for target in targets_per_plugin.get(plugin, []):
                 action_target_pairings.setdefault(action, []).append(target)
     log.debug("action to target sets found: {0}".format(action_target_pairings))
     return action_target_pairings
