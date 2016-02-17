@@ -8,7 +8,9 @@ readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
 readonly TESTING=false
-
+readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
+readonly PLUGINS_BRANCH="master"
+readonly PLUGINS_DIRECTORY="/bin/copilot/"
 
 # ==== HARDWARE ====
 
@@ -167,7 +169,19 @@ setup_avahi() {
 
 install_plugins() {
     echo "Installing plugins."
-    for path in "$COPILOT_DIR"/copilot/plugins/*; do
+
+    # Create Plugin Directory
+    mkdir "${PLUGINS_DIRECTORY}"
+    # Create global environment variable for copilot to use
+    echo "COPIOT_PLUGINS_DIRECTORY=${PLUGINS_DIRECTORY}" >> /etc/environment
+
+    cd "${PLUGINS_DIRECTORY}"
+    echo "Retreiving Plugins from ${PLUGINS_REPO}"
+    git clone "${PLUGINS_REPO}" "plugins"
+    cd plugins
+    git checkout "${PLUGINS_BRANCH}"
+
+    for path in "${PLUGINS_DIRECTORY}"/plugins/*; do
         [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
         echo "Beginning install of plugin $dirname"
