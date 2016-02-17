@@ -173,7 +173,7 @@ install_plugins() {
     # Create Plugin Directory
     mkdir "${PLUGINS_DIRECTORY}"
     # Create global environment variable for copilot to use
-    echo "COPIOT_PLUGINS_DIRECTORY=${PLUGINS_DIRECTORY}" >> /etc/environment
+    echo "COPILOT_PLUGINS_DIRECTORY=${PLUGINS_DIRECTORY}" >> /etc/environment
 
     cd "${PLUGINS_DIRECTORY}"
     echo "Retreiving Plugins from ${PLUGINS_REPO}"
@@ -181,7 +181,7 @@ install_plugins() {
     cd plugins
     git checkout "${PLUGINS_BRANCH}"
 
-    for path in "${PLUGINS_DIRECTORY}"/plugins/*; do
+    for path in "${PLUGINS_DIRECTORY}"plugins/*; do
         [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
         echo "Beginning install of plugin $dirname"

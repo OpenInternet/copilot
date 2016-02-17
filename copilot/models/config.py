@@ -1,4 +1,4 @@
-import os
+import os, sys
 import string
 import importlib
 from urlparse import urlparse
@@ -77,9 +77,13 @@ def get_config_writer(name):
     """
 
     log.info("getting a plugins config writer.")
+    # Get plugin directory from system COPIOT_PLUGINS_DIRECTORY
+    plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
+    sys.path.append(plugin_dir)
+
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
-    config = importlib.import_module('copilot.plugins.{0}.config'.format(name))
+    config = importlib.import_module('plugins.{0}.config'.format(name))
     log.debug("{0} contains {1}".format(config.__name__, dir(config)))
     writer = config.ConfigWriter()
     return writer
@@ -417,8 +421,8 @@ class PluginConfig(object):
         Args:
             name: The plugins folder name.
         """
-
-        self.path = os.path.abspath(os.path.join("/home/www/copilot/copilot/plugins/", name, "plugin.conf"))
+        plugin_base_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
+        self.path = os.path.abspath(os.path.join(plugin_base_dir, "plugins", name, "plugin.conf"))
         self.parser = ProfileParser()
         if self.valid():
             self.data = self.build_map()
