@@ -18,6 +18,8 @@ html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 .copilot-avatar {
+  width: 107px;
+  height: 128px;
   border-radius: 24px;
 }
 .copilot-layout .copilot-header .mdl-textfield {
@@ -57,6 +59,9 @@ html, body {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
@@ -100,6 +105,14 @@ html, body {
   max-width: 1080px;
 }
 
+.copilot-interface .mdl-layout__content {
+    position: relative;
+    margin-bottom: 48px;
+}
+
+.main-content section.section-center {
+    max-width: 860px;
+}
 .section-center > div {
   display: flex;
   align-items: center;
