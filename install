@@ -145,7 +145,11 @@ setup_nginx() {
 }
 
 setup_supervisor() {
-    cp $COPILOT_DIR/templates/supervisor /etc/supervisor/conf.d/supervisord.conf
+    # replace PLUGIN_DIR_REPLACE_STRING with the actual value of the var
+    # Using @ as the sed seperator so that we don't get errors when using double quotes
+    cat $COPILOT_DIR/templates/supervisor \
+        | sed "s@PLUGIN_DIR_REPLACE_STRING@${COPILOT_PLUGINS_DIRECTORY}@" \
+              > /etc/supervisor/conf.d/supervisord.conf
     #enable
     update-rc.d supervisor enable
 }

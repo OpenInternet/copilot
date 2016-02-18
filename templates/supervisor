@@ -1,6 +1,7 @@
 [program:copilot]
 command = gunicorn --log-level debug run:app -b localhost:8000
 directory = /home/www/copilot
+environment=COPILOT_PLUGINS_DIRECTORY=PLUGIN_DIR_REPLACE_STRING
 user = root
 autostart=true
 autorestart=true
@@ -8,6 +9,7 @@ autorestart=true
 [program:blockpage]
 command =   gunicorn --log-level debug run:blockpage -b localhost:8090
 directory = /home/www/copilot
+environment=COPILOT_PLUGINS_DIRECTORY=PLUGIN_DIR_REPLACE_STRING
 user = root
 autostart=true
 autorestart=true
@@ -15,6 +17,7 @@ autorestart=true
 [program:config_watcher]
 command =  python  watch_config
 directory = /home/www/copilot/bin
+environment=COPILOT_PLUGINS_DIRECTORY=PLUGIN_DIR_REPLACE_STRING
 user = root
 autostart=true
 autorestart=true
