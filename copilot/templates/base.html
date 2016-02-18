@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.blue_grey-blue.min.css" />
     <script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
     <title>{{ title }}</title>
     <link rel="stylesheet" href={{ url_for('static', filename='css/styles.css') }}>
@@ -67,10 +69,12 @@
             </nav>
         </div>
         <main class="mdl-layout__content mdl-color--grey-100">
-            <div class="mdl-grid demo-content">
+            <div>
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <!-- INSERT MAIN CONTENT HERE -->
                 {% block body %}{% endblock %}
-                {% block submit %}{% endblock %}
+                    {% block submit %}{% endblock %}
+                </section>
             </div>
         </main>
     </div>
