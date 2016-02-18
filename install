@@ -195,7 +195,7 @@ install_plugins() {
             # Using @ as the sed seperator so that we don't get errors when using double quotes
             cat "$path"/supervisor.conf \
                 | sed "s@COPILOT_PLUGINS_DIRECTORY@${COPILOT_PLUGINS_DIRECTORY}@" \
-                | >> /etc/supervisor/conf.d/supervisord.conf
+                >> /etc/supervisor/conf.d/supervisord.conf
         fi
         echo "Plugin $dirname installed"
     done
