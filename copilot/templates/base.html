@@ -42,6 +42,7 @@
             <header class="copilot-drawer-header">
                 <!-- TODO Replace google head with a copilot head -->
                 <!-- 150x150px ish... -->
+                {% set emotion = 'fire' %}
                 {% set emotion = emotion|default('smile') %}
                 <img src="{{ url_for('static', filename='images/face_'+emotion+'_128.png') }}" class="copilot-avatar">
             </header>
