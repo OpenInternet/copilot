@@ -3,6 +3,8 @@
 
 {% block body %}
 {{ render_alerts(get_flashed_messages(with_categories=true))}}
+
+<section class="section--center mdl-grid">
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
 </div>
 <div class="mdl-card plugin-list mdl-cell mdl-cell--8-col mdl-shadow--4dp">
@@ -36,4 +38,6 @@
         </div>
     </div>
 </div>
+</section>
+
 {% endblock %}

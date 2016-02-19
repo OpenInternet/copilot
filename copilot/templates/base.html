@@ -42,7 +42,7 @@
             <header class="copilot-drawer-header">
                 <!-- TODO Replace google head with a copilot head -->
                 <!-- 150x150px ish... -->
-                <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">
+                <img src="{{ url_for('static', filename='images/face_{{emotion}}_128.png') }}" class="copilot-avatar">
             </header>
             <nav class="copilot-navigation mdl-navigation mdl-color--blue-grey-800">
                 <a class="mdl-navigation__link" href="{{ url_for('profile') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">add_circle</i>New</a>
@@ -59,13 +59,9 @@
         </div>
         <main class="mdl-layout__content mdl-color--grey-100">
             <div class="main-content">
-                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-                    <div class="card-padding"></div>
                     <!-- INSERT MAIN CONTENT HERE -->
                     {% block body %}{% endblock %}
                     {% block submit %}{% endblock %}
-                    <div class="card-padding"></div>
-                </section>
             </div>
         </main>
     </div>
