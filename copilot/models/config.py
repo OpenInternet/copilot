@@ -162,16 +162,15 @@ def get_plugin_from_rules(action, target):
              "{0} : {1}".format(action, target))
     all_actions = get_value_dict("actions")
     all_targets = get_value_dict("target")
-    plugins = []
+    plugins = set()
 
     for plugin_name, actions in all_actions.items():
         if action in actions:
             log.debug("Plugin {0} has the action".format(plugin_name))
-            for plugin_name, targets in all_targets.items():
-                if target in targets:
-                    log.debug("Plugin {0} has the target".format(plugin_name))
-                    plugins.append(plugin_name)
-                    log.info("Plugin {0} contained the rule pair.".format(plugin_name))
+            if target in all_targets.get(plugin_name, []):
+                log.debug("Plugin {0} has the target".format(plugin_name))
+                plugins.add(plugin_name)
+                log.info("Plugin {0} contained the rule pair.".format(plugin_name))
 
     log.debug("Plugins found = {0}".format(plugins))
     if len(plugins) == 1:
