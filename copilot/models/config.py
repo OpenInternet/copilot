@@ -240,7 +240,9 @@ def get_target_by_actions():
         for action in actions:
             targets = get_option("target", plugin)
             targets_by_action.setdefault(action, [])
+            print(action)
             for target in targets:
+                print(target)
                 targets_by_action[action].append(target)
     log.debug("target/action pairs found: {0}".format(targets_by_action))
     return targets_by_action
