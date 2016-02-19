@@ -117,8 +117,9 @@ function createRuleData(type, ruleID, options) {
     }
     //Set Generic Properties
     data.id = ruleID;
-    var onclickstring = "update_from_";
-    data.onclick = onclickstring.concat(type, "(this)");
+    data.addEventListener('click', update_from_action)
+/*    var onclickstring = "update_from_";
+    data.onclick = onclickstring.concat(type, "(this)");*/
     data.className = "u-full-width " + type;
     data.name = ruleID;
     return data
