@@ -173,7 +173,7 @@ def get_plugin_from_rules(action, target):
                     plugins.append(plugin_name)
                     log.info("Plugin {0} contained the rule pair.".format(plugin_name))
 
-    log.debug("Plugins found = {0}".format("plugins")
+    log.debug("Plugins found = {0}".format("plugins"))
     if len(plugins) == 1:
         log.info("Plugin {0} identified as target plugin.".format(plugins[0]))
         return plugins[0]
