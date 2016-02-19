@@ -86,7 +86,9 @@ def get_config_writer(name):
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
     try:
-        config = importlib.import_module('plugins.{0}.config'.format(name))
+        plugin_config_path = "plugins.{0}.config".format(name)
+        log.debug("importing library from {0}".format(plugin_config_path))
+        config = importlib.import_module(plugin_config_path)
     except ImportError as _e:
         log.error("Could not import plugin {0}".format(name))
         log.error(_e)
