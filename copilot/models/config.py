@@ -167,13 +167,15 @@ def get_plugin_from_rules(action, target):
     for plugin_name, actions in all_actions.items():
         if action in actions:
             log.debug("Plugin {0} has the action".format(plugin_name))
-            if target in all_targets.get("target", []):
-                log.debug("Plugin {0} has the target".format(plugin_name))
-                plugins.append(plugin_name)
-                log.info("Plugin {0} contained the rule pair.".format(plugin_name))
+            for plugin_name, targets in all_targets.items():
+                if target in targets:
+                    log.debug("Plugin {0} has the target".format(plugin_name))
+                    plugins.append(plugin_name)
+                    log.info("Plugin {0} contained the rule pair.".format(plugin_name))
 
-    if len(plugins == 1):
-        log.info("Plugin {0} identified as target plugin.".format(plugins))
+    log.debug("Plugins found = {0}".format("plugins")
+    if len(plugins) == 1:
+        log.info("Plugin {0} identified as target plugin.".format(plugins[0]))
         return plugins[0]
     elif len(plugins) > 1:
         log.warn("Multiple plugins found that support the rule pair" +
