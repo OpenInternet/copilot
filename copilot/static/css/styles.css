@@ -101,26 +101,23 @@ html, body {
   margin-right: 32px;
 }
 
-.main-content {
-  max-width: 1080px;
-}
-
 .copilot-interface .mdl-layout__content {
     position: relative;
     margin-bottom: 48px;
 }
 
-.main-content section.section-center {
-    max-width: 860px;
-}
 .section-center > div {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.mdl-card .plugin-list {
+    min-width:260px;
+}
+
 .plugin-list-action div.mdl-list__item {
-    max-width: 400px%;
+    max-width: 400px;
 }
 
 .plugin-list > .mdl-card__title {
