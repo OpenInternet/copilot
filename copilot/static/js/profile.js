@@ -116,10 +116,11 @@ function createRuleData(type, ruleID, options) {
         data.value = subTargetDefault
     }
     //Set Generic Properties
-    data.id = ruleID
-    data.onclick = "update_from_".concat(type, "(this)")
-    data.className = "u-full-width {{ type }}"
-    data.name = ruleID
+    data.id = ruleID;
+    var onclickstring = "update_from_";
+    data.onclick = onclickstring.concat(type, "(this)");
+    data.className = "u-full-width " + type;
+    data.name = ruleID;
     return data
 }
 
