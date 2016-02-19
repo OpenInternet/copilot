@@ -174,13 +174,15 @@ def get_plugin_from_rules(action, target):
 
     log.debug("Plugins found = {0}".format(plugins))
     if len(plugins) == 1:
-        log.info("Plugin {0} identified as target plugin.".format(plugins[0]))
-        return plugins[0]
+        identified_plugin = plugins.pop()
+        log.info("Plugin {0} identified as target plugin.".format(identified_plugin))
+        return identified_plugin
     elif len(plugins) > 1:
+        identified_plugin = plugins.pop()
         log.warn("Multiple plugins found that support the rule pair" +
                  "{0} : {1}. This is not allowed.".format(action, target) +
-                 " Using first plugin: {2}".format(plugins[0]))
-        return plugins[0]
+                 " Using first plugin: {2}".format(identified_plugin))
+        return identified_plugin
     else:
         log.warn("No plugins found that matched the " +
                  "{0}:{1} rule pair.".format(action, target))
