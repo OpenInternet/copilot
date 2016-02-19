@@ -217,18 +217,14 @@ class Profile(object):
 
         configs = {}
         log.info("looking for config files that need to be written.")
-        for r in self.rules:
-            _action = r[0]
-            _tar = r[1]
-            _sub = r[2]
-            if _tar not in configs:
-                log.debug("Creating a {0} config".format(_tar))
-                configs[_tar] = get_config_writer(_tar)
-                log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[_tar].add_rule([_action, _tar, _sub])
-            else:
-                log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[_tar].add_rule([_action, _tar, _sub])
-        for c in configs:
-            log.debug("Writing {0} config.".format(c))
-            configs[c].write()
+        for rule in self.rules:
+            _action = rule[0]
+            _target = rule[1]
+            _sub_target = rule[2]
+            plugin_name = get_plugin_from_rules(_action, _target)
+            configs.setdefault(plugin_name, get_config_writer(plugin_name))
+            log.debug("Adding a rule ({0} {1}) to {2} config.".format(_action, _target, _sub_target))
+            configs[plugin_name].add_rule([_action, _target, _sub_target])
+        for config, conf_writer in configs.items():
+            log.debug("Writing {0} config.".format(config))
+            conf_writer.write()
