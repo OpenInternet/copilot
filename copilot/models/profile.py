@@ -5,6 +5,7 @@ import csv
 import os
 import uuid
 import subprocess
+from copilot.utils.plugin import get_plugin_from_rules
 from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions, get_config_writer, ProfileConfig, ProfileWriter
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs
@@ -118,7 +119,8 @@ class Profile(object):
         elif isinstance(ruleset ,list):
             rule = {"action":ruleset[0], "target":ruleset[1], "sub_target":ruleset[2]}
         log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
-        config_obj = get_config_writer(rule['target'])
+        plugin_name = get_plugin_from_rules(rule.get('action',""), rule.get('target',""))
+        config_obj = get_config_writer(plugin_name)
         try:
             config_obj.add_rule([rule['action'], rule['target'], rule['sub_target']])
         except ValueError as _err:
