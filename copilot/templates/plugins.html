@@ -4,7 +4,7 @@
 {% block body %}
 {{ render_alerts(get_flashed_messages(with_categories=true))}}
 
-<div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--4dp">
+<div class="mdl-card plugin-list mdl-cell mdl-cell--12-col mdl-shadow--4dp">
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">Plugins & Services</h2>
     </div>
@@ -14,10 +14,10 @@
         Click on a service to restart it.
     </div>
     <div class="mdl-card__actions">
-        <div class="demo-list-action mdl-list">
+        <div class="plugin-list-action mdl-list">
             {% for name in services %}
             {% if services[name] == "RUNNING" %}
-            <div class="mdl-list__item ">
+            <div class="mdl-list__item">
                 <span class="mdl-list__item-primary-content">
                     <i class="material-icons mdl-list__item-avatar">check</i>
                     <span>{{ name }}</span>

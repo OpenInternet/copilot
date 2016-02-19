@@ -118,3 +118,12 @@ html, body {
   align-items: center;
   justify-content: center;
 }
+
+.plugin-list-action div.mdl-list__item {
+    max-width: 400px%;
+}
+
+.plugin-list > .mdl-card__title {
+  color: #fff;
+  background: #46B6AC;
+}
