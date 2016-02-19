@@ -215,7 +215,6 @@ def profile_save():
 
         flash('Profile "{0}" has been applied!'.format(form.prof_name.data), 'success')
         return redirect(url_for('profile_current'))
-
     else:
         log.debug(form.errors)
         flash('We could not save your profile at this time. It seems to be invalid, but we don\'t know how.', 'error')

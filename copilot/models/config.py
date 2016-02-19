@@ -234,19 +234,15 @@ def get_target_by_actions():
     """
 
     log.info("getting targets (e.g. plugins) sorted by actions")
-    tar_act_dict = {}
-    tdict = get_value_dict("actions")
-    for target in tdict:
-        for action in tdict[target]:
-            if action not in tar_act_dict:
-                tar_act_dict[action] = []
-                tar_act_dict[action].append(target)
-            elif target not in tar_act_dict[action]:
-                tar_act_dict[action].append(target)
-            else:
-                log.debug("Found action {0} in target {1}. This should not occur. A plugin is being examed twice or is somehow duplicated.".format(action, target))
-    log.debug("target/action pairs found: {0}".format(tar_act_dict))
-    return tar_act_dict
+    targets_by_action = {}
+    plugin_actions = get_value_dict("actions")
+    for plugin, action in plugin_actions.items():
+        targets = get_option("target", plugin)
+        targets_by_action.setdefault(action, [])
+        for target in targets:
+            targets_by_action[action].append(target)
+    log.debug("target/action pairs found: {0}".format(targets_by_action))
+    return targets_by_action
 
 
 class Config(object):
