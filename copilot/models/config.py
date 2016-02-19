@@ -236,11 +236,12 @@ def get_target_by_actions():
     log.info("getting targets (e.g. plugins) sorted by actions")
     targets_by_action = {}
     plugin_actions = get_value_dict("actions")
-    for plugin, action in plugin_actions.items():
-        targets = get_option("target", plugin)
-        targets_by_action.setdefault(action, [])
-        for target in targets:
-            targets_by_action[action].append(target)
+    for plugin, actions in plugin_actions.items():
+        for action in actions:
+            targets = get_option("target", plugin)
+            targets_by_action.setdefault(action, [])
+            for target in targets:
+                targets_by_action[action].append(target)
     log.debug("target/action pairs found: {0}".format(targets_by_action))
     return targets_by_action
 
