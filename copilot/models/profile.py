@@ -1,12 +1,7 @@
-import string
-from copilot import bcrypt, db
+from copilot import db
 from flask.ext.login import UserMixin
-import csv
 import os
-import uuid
-import subprocess
-from copilot.utils.plugin import get_plugin_from_rules
-from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions, get_config_writer, ProfileConfig, ProfileWriter
+from copilot.models.config import get_config_dir, get_config_writer, ProfileConfig, ProfileWriter, get_plugin_from_rules
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs
 from werkzeug import secure_filename

@@ -155,6 +155,38 @@ def get_value_list(option):
     log.debug("values found: {0}".format(plist))
     return plist
 
+def get_plugin_from_rules(action, target):
+    """ Get a plugin name from an action & target rule pair.
+    """
+    log.info("Obtaining plugin name from rule pair" +
+             "{0} : {1}".format(action, target))
+    all_actions = get_value_dict("actions")
+    all_targets = get_value_dict("target")
+    plugins = []
+
+    for plugin_name, actions in all_actions.items():
+        if action in actions:
+            log.debug("Plugin {0} has the action".format(plugin_name))
+            if target in all_targets.get("target", []):
+                log.debug("Plugin {0} has the target".format(plugin_name))
+                plugins.append(plugin_name)
+                log.info("Plugin {0} contained the rule pair.".format(plugin_name))
+
+    if len(plugins == 1):
+        log.info("Plugin {0} identified as target plugin.".format(plugins))
+        return plugins[0]
+    elif len(plugins) > 1:
+        log.warn("Multiple plugins found that support the rule pair" +
+                 "{0} : {1}. This is not allowed.".format(action, target) +
+                 " Using first plugin: {2}".format(plugins[0]))
+        return plugins[0]
+    else:
+        log.warn("No plugins found that matched the " +
+                 "{0}:{1} rule pair.".format(action, target))
+        raise ValueError("No plugins found that matched the " +
+                         "{0}:{1} rule pair.".format(action, target))
+
+
 def get_value_dict(option):
     """Get a dict containing the value of an option for each plugin.
 
