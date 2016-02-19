@@ -8,12 +8,10 @@
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">Plugins & Services</h2>
     </div>
-    <div class="mdl-card__media">
-    </div>
     <div class="mdl-card__supporting-text">
         Click on a service to restart it.
     </div>
-    <div class="mdl-card__actions">
+    <div class="mdl-card__actions mdl-card--border">
         <div class="plugin-list-action mdl-list">
             {% for name in services %}
             {% if services[name] == "RUNNING" %}

@@ -127,3 +127,7 @@ html, body {
   color: #fff;
   background: #46B6AC;
 }
+
+div.card-padding {
+    width:50%;
+}
