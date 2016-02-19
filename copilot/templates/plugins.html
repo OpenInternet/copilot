@@ -19,7 +19,7 @@
             {% if services[name] == "RUNNING" %}
             <div class="mdl-list__item">
                 <span class="mdl-list__item-primary-content">
-                    <i class="material-icons mdl-list__item-avatar">extension</i>
+                    <i class="material-icons mdl-list__item-avatar">check</i>
                     <span>{{ name }}</span>
                 </span>
                 <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">settings_backup_restore</i></a>
@@ -27,10 +27,10 @@
             {% else %}
             <div class="mdl-list__item">
                 <span class="mdl-list__item-primary-content">
-                    <i class="material-icons mdl-list__item-avatar">warning</i>
+                    <i class="material-icons mdl-list__item-avatar">close</i>
                     <span>{{ name }}</span>
                 </span>
-                <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">settings_backup_restore</i></a>
+                <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">refresh</i></a>
             </div>
             {% endif %}
             {% endfor %}
