@@ -412,7 +412,8 @@ class ProfileConfig(object):
         for target in self.data:
             if target in _val_targets:
                 for action in self.data[target]:
-                    if action in get_valid_actions(target):
+                    plugin_name = get_plugin_from_rules(action, target)
+                    if action in get_valid_actions(plugin_name):
                         for sub in self.data[target][action]:
                             rules.append([action, target, sub])
         log.debug("Found rules: {0}".format(rules))
