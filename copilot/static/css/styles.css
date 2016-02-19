@@ -119,9 +119,20 @@ html, body {
     max-width: 400px;
 }
 
+.mdl-card__title {
+    color: #fff;
+    background: #72afb7;
+}
+
+/*
 .plugin-list > .mdl-card__title {
   color: #fff;
-  background: #46B6AC;
+  background: #72afb7;
+}
+*/
+
+.alert_error > .mdl-card__title {
+  background: #f25d23;
 }
 
 div.card-padding {
