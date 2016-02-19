@@ -80,10 +80,15 @@ def get_config_writer(name):
     # Get plugin directory from system COPIOT_PLUGINS_DIRECTORY
     plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
     sys.path.append(plugin_dir)
+    log.debug("After adding plugin_dir python path is: {0}".format(sys.path))
 
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
-    config = importlib.import_module('plugins.{0}.config'.format(name))
+    try:
+        config = importlib.import_module('plugins.{0}.config'.format(name))
+    except ImportError as _e:
+        log.error("Could not import plugin {0}".format(name))
+        raise ImportError(_e)
     log.debug("{0} contains {1}".format(config.__name__, dir(config)))
     writer = config.ConfigWriter()
     return writer
