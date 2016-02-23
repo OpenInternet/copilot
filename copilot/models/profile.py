@@ -1,11 +1,7 @@
-import string
-from copilot import bcrypt, db
+from copilot import db
 from flask.ext.login import UserMixin
-import csv
 import os
-import uuid
-import subprocess
-from copilot.models.config import get_config_dir, get_config_file, get_valid_targets, get_valid_actions, get_config_writer, ProfileConfig, ProfileWriter
+from copilot.models.config import get_config_dir, get_config_writer, ProfileConfig, ProfileWriter, get_plugin_from_rules
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs
 from werkzeug import secure_filename
@@ -118,7 +114,8 @@ class Profile(object):
         elif isinstance(ruleset ,list):
             rule = {"action":ruleset[0], "target":ruleset[1], "sub_target":ruleset[2]}
         log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
-        config_obj = get_config_writer(rule['target'])
+        plugin_name = get_plugin_from_rules(rule.get('action',""), rule.get('target',""))
+        config_obj = get_config_writer(plugin_name)
         try:
             config_obj.add_rule([rule['action'], rule['target'], rule['sub_target']])
         except ValueError as _err:
@@ -220,18 +217,14 @@ class Profile(object):
 
         configs = {}
         log.info("looking for config files that need to be written.")
-        for r in self.rules:
-            _action = r[0]
-            _tar = r[1]
-            _sub = r[2]
-            if _tar not in configs:
-                log.debug("Creating a {0} config".format(_tar))
-                configs[_tar] = get_config_writer(_tar)
-                log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[_tar].add_rule([_action, _tar, _sub])
-            else:
-                log.debug("Adding a rule ({0} {1}) to {2} config.".format(_tar, _action, _sub))
-                configs[_tar].add_rule([_action, _tar, _sub])
-        for c in configs:
-            log.debug("Writing {0} config.".format(c))
-            configs[c].write()
+        for rule in self.rules:
+            _action = rule[0]
+            _target = rule[1]
+            _sub_target = rule[2]
+            plugin_name = get_plugin_from_rules(_action, _target)
+            configs.setdefault(plugin_name, get_config_writer(plugin_name))
+            log.debug("Adding a rule ({0} {1}) to {2} config.".format(_action, _target, _sub_target))
+            configs[plugin_name].add_rule([_action, _target, _sub_target])
+        for config, conf_writer in configs.items():
+            log.debug("Writing {0} config.".format(config))
+            conf_writer.write()

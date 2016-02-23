@@ -7,6 +7,7 @@ import re
 import logging
 log = logging.getLogger(__name__)
 
+
 def get_plugins():
     """ Get a list of available plugins.
 
@@ -30,10 +31,10 @@ def is_plugin(name):
     log.debug("Checking if plugin {0} exists".format(name))
     plugins = get_plugins()
     if name in plugins:
-        log.debug("plugin exists.")
+        log.debug("plugin {0} exists.".format(name))
         return True
     else:
-        log.debug("plugin does not exist.")
+        log.debug("plugin {0} does not exist.".format(name))
         return False
 
 

@@ -10,7 +10,7 @@ readonly SETUP_DIR=/tmp/setup
 readonly TESTING=false
 readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
 readonly PLUGINS_BRANCH="master"
-readonly PLUGINS_DIRECTORY="/bin/copilot/"
+readonly COPILOT_PLUGINS_DIRECTORY="/bin/copilot/"
 
 # ==== HARDWARE ====
 
@@ -175,22 +175,22 @@ install_plugins() {
     echo "Installing plugins."
 
     # Create Plugin Directory
-    mkdir "${PLUGINS_DIRECTORY}"
+    mkdir "${COPILOT_PLUGINS_DIRECTORY}"
     # Create global environment variable for copilot to use
-    echo "COPILOT_PLUGINS_DIRECTORY=${PLUGINS_DIRECTORY}" >> /etc/environment
+    echo "COPILOT_PLUGINS_DIRECTORY=${COPILOT_PLUGINS_DIRECTORY}" >> /etc/environment
 
-    cd "${PLUGINS_DIRECTORY}"
+    cd "${COPILOT_PLUGINS_DIRECTORY}"
     echo "Retreiving Plugins from ${PLUGINS_REPO}"
     git clone "${PLUGINS_REPO}" "plugins"
     cd plugins
     git checkout "${PLUGINS_BRANCH}"
 
-    for path in "${PLUGINS_DIRECTORY}"plugins/*; do
+    for path in "${COPILOT_PLUGINS_DIRECTORY}"plugins/*; do
         [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
         echo "Beginning install of plugin $dirname"
         # Run installation script
-        if [ -a "$path"/install ]; then
+        if [ -a "${path}"/install ]; then
             "$path"/install
         fi
         # Add supervisor configs to supervisor
