@@ -7,6 +7,10 @@
 
 {% block body %}
 {{ render_alerts(get_flashed_messages(with_categories=true))}}
+<meta id="all_actions" name="all_actions" content="{% for action in action_pairs %}{{ action }} {% endfor %}">
+<meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }} {% endfor %}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
 <form name="profile_form" action="{{ url_for('profile_save') }}" method="post">
     {{ form.csrf_token }}
     <section class="section--center mdl-grid">
@@ -85,8 +89,6 @@
 
 
 
-<meta id="all_actions" name="all_actions" content="{% for action in action_pairs %}{{ action }} {% endfor %}">
-<meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }} {% endfor %}">
 {% for action in action_pairs %}
     <meta id="pairs-{{ action }}" name="pairs-{{ action }}" content="{% for tar in action_pairs[action] %}{{ tar }} {% endfor %}">
 {% endfor %}
