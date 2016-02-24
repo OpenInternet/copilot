@@ -54,6 +54,7 @@ function addRule() {
     // Get the list object
     var list = document.getElementById("rule_list");
     var addButton = document.getElementById("addButton");
+    componentHandler.upgradeElement(row);
     list.insertBefore(row, addButton);
 }
 
