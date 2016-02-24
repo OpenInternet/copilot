@@ -53,6 +53,31 @@
             <span for="new_rule_button" class="mdl-tooltip">Click to add a <br> new rule to your profile.</span>
         </div>
 
+        <div class="add_new_rule">
+            <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--raised">Save & Apply</button>
+        </div>
+
+
+        <!-- Dialogue -->
+        <dialog class="mdl-dialog">
+            <h4 class="mdl-dialog__title">Where would you like to save your profile?</h4>
+            <div class="mdl-dialog__content">
+                    {% for location in locations %}
+                <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="profile_form" value="{{ location }}">{{ location }}</button>
+                    {% endfor %}
+            </div>
+        </dialog>
+        <script>
+         var dialog = document.querySelector('dialog');
+         var showDialogButton = document.querySelector('#show-dialog');
+         if (! dialog.showModal) {
+             dialogPolyfill.registerDialog(dialog);
+         }
+         showDialogButton.addEventListener('click', function() {
+             dialog.showModal();
+         });
+        </script>
+
 {% endblock %}
 
 
