@@ -138,3 +138,7 @@ html, body {
 div.card-padding {
     width:50%;
 }
+
+.form_field_list {
+    width:100%;
+}
