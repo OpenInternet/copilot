@@ -31,7 +31,8 @@ function addRule() {
     //Create the rule card
     var ruleCard = document.createElement("div");
     ruleCard.className = "mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp";
-    section.appendChild(ruleCard);
+    // Added to section below
+    //section.appendChild(ruleCard);
 
     //Create the rule card title
     var ruleTitleBox = document.createElement("div");
@@ -44,14 +45,14 @@ function addRule() {
     var ruleTitleText = document.createTextNode("Rule");
     ruleTitle.appendChild(ruleTitleText);
     ruleTitleBox.appendChild(ruleTitle);
-    section.appendChild(ruleTitleBox);
+    ruleCard.appendChild(ruleTitleBox);
 
 
     // Create rule card actions section
     var ruleCardActions = document.createElement("div");
     ruleCardActions.className = "mdl-card__actions mdl-card--border";
-    // Added to section later
-    //section.appendChild(ruleCardActions);
+    // Added to rule card later
+    //ruleCard.appendChild(ruleCardActions);
 
 
     // Create the surrounding row div
@@ -72,7 +73,9 @@ function addRule() {
 
     //add row to rule card actions
     ruleCardActions.appendChild(row)
-    section.appendChild(ruleCardActions);
+    ruleCard.appendChild(ruleCardActions);
+    section.appendChild(ruleCard);
+
 
     // Get the list object
     var list = document.getElementById("rule_list");
