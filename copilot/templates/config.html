@@ -22,23 +22,33 @@
                 Configure CoPilot here.
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ render_field(form.ap_name, class='mdl-textfield__input') }}
-                </div>
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ render_field(form.ap_password, class='mdl-textfield__input') }}
-                </div>
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ render_field(form.confirm_ap_pass, class='mdl-textfield__input') }}
-                </div>
-
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ render_field(form.password, class='mdl-textfield__input') }}
-                </div>
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ render_field(form.confirm, class='mdl-textfield__input') }}
-                </div>
-
+                <ul class="mdl-list">
+                    <li class="mdl-list__item">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            {{ render_field(form.ap_name, class='mdl-textfield__input') }}
+                        </div>
+                    </li>
+                    <li class="mdl-list__item">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            {{ render_field(form.ap_password, class='mdl-textfield__input') }}
+                        </div>
+                    </li>
+                    <li class="mdl-list__item">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            {{ render_field(form.confirm_ap_pass, class='mdl-textfield__input') }}
+                        </div>
+                    </li>
+                    <li class="mdl-list__item">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            {{ render_field(form.password, class='mdl-textfield__input') }}
+                        </div>
+                    </li>
+                    <li class="mdl-list__item">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            {{ render_field(form.confirm, class='mdl-textfield__input') }}
+                        </div>
+                    </li>
+                </ul>
                 <div class="mdl-card__actions mdl-card--border">
                 {% if form.old_password %}
                     <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--raised">Submit</button>
