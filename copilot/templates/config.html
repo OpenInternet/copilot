@@ -10,6 +10,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
 
 <section class="section--center mdl-grid">
+    <div>
     <form action="{{ url_for('config') }}" method=post id="config_form">
         {{ form.csrf_token }}
         <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
@@ -75,5 +76,6 @@
      });
     </script>
     {% endif %}
+    </div>
 </section>
 {% endblock %}
