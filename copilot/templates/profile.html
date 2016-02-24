@@ -21,11 +21,10 @@
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <div class="plugin-list-action mdl-list">
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {% set prof_name = form.prof_name|default('new') %}
-                        <input class="mdl-textfield__input" type="text" name="prof_name" pattern=".+" id="prof_name" value="{{ prof_name }}">
-                        <label class="mdl-textfield__label" for="Name">Profile Name</label>
-                        <span class="mdl-textfield__error">You need to give a name to each profile.</span>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            {{ render_field(form.prof_name, class='mdl-textfield__input') }}
+                            <span class="mdl-textfield__error">You need to give a name to each profile.</span>
+                        </div>
                     </div>
                 </div>
             </div>
