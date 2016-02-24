@@ -2,7 +2,7 @@
 <div class="row rule" id="{{field.name}}-group">
         {% for subfield in field %}
         {% if subfield.short_name != "csrf_token" %}
-    <div class="{% if subfield.errors %} error_class{% endif %}">
+    <div class="mdl-cell mdl-cell--3-col {% if subfield.errors %} error_class{% endif %}">
         {# Deal with Errors First #}
         {% if subfield.errors %}
         {% for error in subfield.errors %}
@@ -10,10 +10,8 @@
         {% endfor %}
         {% endif %}
         {# Actual data goes here. #}
-        {{ subfield(class_="u-full-width "+subfield.short_name, onclick="update_from_{0}(this)".format(subfield.short_name)) }}
-        <div class="help">
-            {{ subfield.description }}
-        </div>
+        {{ subfield(class_=subfield.short_name, onclick="update_from_{0}(this)".format(subfield.short_name)) }}
+        <div class="help">{{ subfield.description }}</div>
     </div>
     {% endif %}
     {% endfor %}

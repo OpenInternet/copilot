@@ -65,10 +65,10 @@ def profile(prof_name):
         log.info("New profile being created")
         title = "Profile > New"
         form = forms.NewProfileForm()
-        _targets = get_valid_targets()
-        _actions = get_valid_actions()
-        log.debug("Setting default rule target and action. Targets = {0}, Actions = {1}".format(_targets, _actions))
-        form.rules.append_entry(data={"target":_targets[0], "sub_target":"internews.org", "action":_actions[0]})
+        #_targets = get_valid_targets()
+        #_actions = get_valid_actions()
+        #log.debug("Setting default rule target and action. Targets = {0}, Actions = {1}".format(_targets, _actions))
+        #form.rules.append_entry(data={"target":_targets[0], "sub_target":"internews.org", "action":_actions[0]})
         form.prof_name.data = "new"
 
     #Add the locations a user can save to.
