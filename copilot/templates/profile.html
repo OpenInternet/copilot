@@ -11,7 +11,7 @@
 <meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }} {% endfor %}">
 <script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
 
-<form name="profile_form" action="{{ url_for('profile_save') }}" method="post">
+<form name="profile_form" action="{{ url_for('profile_save') }}" method="post" id="rule_list">
     {{ form.csrf_token }}
     <section class="section--center mdl-grid">
         <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
@@ -34,7 +34,6 @@
 
     <!-- Rules Section -->
 
-    <div id="rule_list">
         {% for item in form.rules %}
         <section class="section--center mdl-grid">
             <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
