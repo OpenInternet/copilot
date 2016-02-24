@@ -19,14 +19,40 @@ function addRule() {
     var groupID = "rules-".concat(idNum, "-", "group");
 
     //Create the surrounding section
-    var section = document.createElement("section")
-    section.className = "section--center mdl-grid"
+    var section = document.createElement("section");
+    section.className = "section--center mdl-grid rule-section";
     section.id = groupID;
 
     //Create the spacer
-    var spacerDiv = document.createElement("div")
-    spacerDiv.className = "mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone"
-    section.appendChild(spacerDiv)
+    var spacerDiv = document.createElement("div");
+    spacerDiv.className = "mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone";
+    section.appendChild(spacerDiv);
+
+    //Create the rule card
+    var ruleCard = document.createElement("div");
+    ruleCard.className = "mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp";
+    section.appendChild(ruleCard);
+
+    //Create the rule card title
+    var ruleTitleBox = document.createElement("div");
+    ruleTitleBox.className = "mdl-card__title";
+
+
+    //Create the rule card title
+    var ruleTitle = document.createElement("h2");
+    ruleTitle.className = "mdl-card__title-text";
+    var ruleTitleText = document.createTextNode("Rule");
+    ruleTitle.appendChild(ruleTitleText);
+    ruleTitleBox.appendChild(ruleTitle);
+    section.appendChild(ruleTitleBox);
+
+
+    // Create rule card actions section
+    var ruleCardActions = document.createElement("div");
+    ruleCardActions.className = "mdl-card__actions mdl-card--border";
+    // Added to section later
+    //section.appendChild(ruleCardActions);
+
 
     // Create the surrounding row div
     var row = document.createElement("div");
@@ -44,9 +70,9 @@ function addRule() {
     var subTargetSelector = addRuleSelector(idNum, "sub_target", targetOptions);
     row.appendChild(subTargetSelector);
 
-    //add row to section
-    section.appendChild(row)
-
+    //add row to rule card actions
+    ruleCardActions.appendChild(row)
+    section.appendChild(ruleCardActions);
 
     // Get the list object
     var list = document.getElementById("rule_list");
@@ -127,7 +153,7 @@ function createRuleData(type, ruleID, options) {
 function getIdNum() {
     // get list of links with 'rules' class
     var curNum
-    var links = document.getElementsByClassName('rule');
+    var links = document.getElementsByClassName('rule-section');
     var last = links[links.length - 1]
     if (typeof last !== 'undefined') {
         var lastID = last.id
