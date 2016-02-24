@@ -3,58 +3,67 @@
 {% from "alert.html" import render_alerts %}
 {% from "submit.html" import render_submit_buttons %}
 
-{% block alert %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
-{% endblock %}
 
 {% block body %}
+{{ render_alerts(get_flashed_messages(with_categories=true))}}
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
 
-  {% if form.error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-      <form action="{{ url_for('config') }}" method=post>
-          {{ form.csrf_token }}
-          <div class="row input_field">
-              <div class="ten columns">
-                  {{ render_field(form.ap_name) }}
-              </div>
-          </div>
-          <div class="row input_field">
-              <div class="ten columns">
-                  {{ render_field(form.ap_password) }}
-              </div>
-          </div>
-          <div class="row input_field">
-              <div class="ten columns">
-                  {{ render_field(form.confirm_ap_pass) }}
-              </div>
-          </div>
-          <div class="row input_field">
-              <div class="ten columns">
-                  {{ render_field(form.password) }}
-              </div>
-          </div>
-          <div class="row input_field">
-              <div class="ten columns">
-                  {{ render_field(form.confirm) }}
-              </div>
-          </div>
-{% endblock %}
+<section class="section--center mdl-grid">
+    <form action="{{ url_for('config') }}" method=post id="config_form">
+        {{ form.csrf_token }}
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
+        </div>
+        <div class="mdl-card plugin-list mdl-cell mdl-cell--8-col mdl-shadow--4dp">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">Settings</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+                Configure CoPilot here.
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <div class="mdl-textfield mdl-js-textfield">
+                    render_field(form.ap_name, class='mdl-textfield__input')
+                </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                    render_field(form.ap_password, class='mdl-textfield__input')
+                </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                    render_field(form.confirm_ap_pass, class='mdl-textfield__input')
+                </div>
 
-{% block submit %}
-          {% if form.old_password %}
-          <a href='#' onclick='overlay()' class="button button-primary blues">Submit</a>
-          <div id="overlay">
-              <div class="paper">
-                  {{ render_field(form.old_password) }}
-                  <div class="submit">
-                      <div class="row input_field">
-                          <input type="submit" name="submit_action" value="Submit" class="button-primary blues">
-                      </div>
-                  </div>
-              </div>
-          </div>
-          {% else %}
-          {{ render_submit_buttons(buttons) }}
-          {% endif %}
-</form>
+                <div class="mdl-textfield mdl-js-textfield">
+                    render_field(form.password, class='mdl-textfield__input')
+                </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                    render_field(form.confirm, class='mdl-textfield__input')
+                </div>
+                <button id="show-dialog" type="button" class="mdl-button">Submit</button>
+            </div>
+        </div>
+    </form>
+    <dialog class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Please enter your current admin password.</h4>
+        <div class="mdl-dialog__content">
+            <div class="mdl-textfield mdl-js-textfield">
+                render_field(form.old_password, class='mdl-textfield__input')
+            </div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="config_form" value="Submit">Submit</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised" type="button" class="mdl-button close">Cancel</button>
+    </dialog>
+    <script>
+     var dialog = document.querySelector('dialog');
+     var showDialogButton = document.querySelector('#show-dialog');
+     if (! dialog.showModal) {
+         dialogPolyfill.registerDialog(dialog);
+     }
+     showDialogButton.addEventListener('click', function() {
+         dialog.showModal();
+     });
+     dialog.querySelector('.close').addEventListener('click', function() {
+         dialog.close();
+     });
+    </script>
+</section>
 {% endblock %}
