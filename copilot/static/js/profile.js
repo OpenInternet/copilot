@@ -18,26 +18,19 @@ function addRule() {
     //create group id
     var groupID = "rules-".concat(idNum, "-", "group");
 
+    //Create the surrounding section
+    var section = document.createElement("section")
+    section.className = "section--center mdl-grid"
+    section.id = groupID;
+
+    //Create the spacer
+    var spacerDiv = document.createElement("div")
+    spacerDiv.className = "mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone"
+    section.appendChild(spacerDiv)
+
     // Create the surrounding row div
     var row = document.createElement("div");
     row.className = "row rule";
-    row.id = groupID;
-
-
-    //Create deletion button
-    //<div class="one columns">
-    //<img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="del_rule()">
-    //</div>
-    //create surounding column item
-    var imgDiv = document.createElement("div");
-    imgDiv.className = "one columns";
-    //create image
-    var delImage = document.createElement("img");
-    delImage.src = "/static/images/delete_rule.png";
-    delImage.onclick = function() { delRule(groupID); };
-    //append image to row
-    imgDiv.appendChild(delImage);
-    row.appendChild(imgDiv);
 
     // Create action rule sub components
     var actionSelector = addRuleSelector(idNum, "action", actionOptions);
@@ -51,11 +44,15 @@ function addRule() {
     var subTargetSelector = addRuleSelector(idNum, "sub_target", targetOptions);
     row.appendChild(subTargetSelector);
 
+    //add row to section
+    section.appendChild(row)
+
+
     // Get the list object
     var list = document.getElementById("rule_list");
     var addButton = document.getElementById("addButton");
-    componentHandler.upgradeElement(row);
-    list.insertBefore(row, addButton);
+    componentHandler.upgradeElement(section);
+    list.insertBefore(section, addButton);
 }
 
 //This deletes the rule that uses this image.
