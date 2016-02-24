@@ -147,15 +147,3 @@ div.card-padding {
 .copilot-form_list {
     min-width:260px;
 }
-
-.section-spacer {
-  flex-grow: 1;
-}
-
-.submit_button {
-  margin: 12px 15px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
