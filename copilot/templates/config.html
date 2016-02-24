@@ -10,11 +10,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
 
 <section class="section--center mdl-grid">
-    <div>
-    <form action="{{ url_for('config') }}" method=post id="config_form">
-        {{ form.csrf_token }}
-        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
-        </div>
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
+    </div>
         <div class="mdl-card mdl-cell mdl-cell--8-col mdl-shadow--4dp">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">Settings</h2>
@@ -23,6 +20,8 @@
                 Configure CoPilot here.
             </div>
             <div class="copilot-form_list mdl-card__actions mdl-card--border">
+                <form action="{{ url_for('config') }}" method=post id="config_form">
+                    {{ form.csrf_token }}
                 <div class="mdl-textfield mdl-js-textfield">
                     {{ render_field(form.ap_name, class='mdl-textfield__input') }}
                 </div>
@@ -76,6 +75,5 @@
      });
     </script>
     {% endif %}
-    </div>
 </section>
 {% endblock %}
