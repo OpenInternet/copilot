@@ -40,11 +40,13 @@
                 </div>
 
                 <div class="mdl-card__actions mdl-card--border">
+                    <div class="mdl-cell mdl-cell--12-col">
                 {% if form.old_password %}
                     <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--raised">Submit</button>
                 {% else %}
                     <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="config_form" value="Submit">Submit</button>
-                {% endif %}
+                    {% endif %}
+                    </div>
                 </div>
 
             </div>
