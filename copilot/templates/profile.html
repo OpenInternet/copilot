@@ -9,7 +9,6 @@
 {{ render_alerts(get_flashed_messages(with_categories=true))}}
 <form name="profile_form" action="{{ url_for('profile_save') }}" method="post">
     {{ form.csrf_token }}
-
     <section class="section--center mdl-grid">
         <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
         </div>
@@ -18,15 +17,12 @@
                 <h2 class="mdl-card__title-text">CoPilot Profile</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                Customize your CoPilot profile below.
+                Give your CoPilot profile a name.
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <div class="plugin-list-action mdl-list">
-                        <div class="mdl-textfield mdl-js-textfield">
-                            {{ render_field(form.prof_name, class='mdl-textfield__input') }}
-                            <span class="mdl-textfield__error">You need to give a name to each profile.</span>
-                        </div>
-                    </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                    {{ render_field(form.prof_name, class='mdl-textfield__input') }}
+                    <span class="mdl-textfield__error">You need to give a name to each profile.</span>
                 </div>
             </div>
         </div>
@@ -41,35 +37,20 @@
             </div>
             <div class="mdl-card profile-list mdl-cell mdl-cell--8-col mdl-shadow--4dp">
                 <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">CoPilot Rule</h2>
+                    <h2 class="mdl-card__title-text">Rule</h2>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    {% for subfield in field %}
-                        {% if subfield.short_name != "csrf_token" %}
-                            {# Deal with Errors First #}
-                            {% if subfield.errors %}
-                                {% for error in subfield.errors %}
-                                    <p class="error">{{ error }}</p>
-                                {% endfor %}
-                            {% endif %}
-                            {# Actual data goes here. #}
-                            {{ subfield(class_="u-full-width "+subfield.short_name,
-                               onclick="update_from_{0}(this)".format(subfield.short_name)) }}
-                            <div class="help">
-                                {{ subfield.description }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
+                    {{ render_rules(item) }}
+                </div>
             </div>
-            </div>
+        </section>
     <!-- New rule button -->
-    <div class="add_new_rule">
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" id="new_rule_button">
-            <i class="material-icons">add</i>
-        </button>
-        <span for="new_rule_button" class="mdl-tooltip">Click to add a <br> new rule to your profile.</span>
-    </div>
+        <div class="add_new_rule">
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" id="new_rule_button">
+                <i class="material-icons">add</i>
+            </button>
+            <span for="new_rule_button" class="mdl-tooltip">Click to add a <br> new rule to your profile.</span>
+        </div>
 
 
 
