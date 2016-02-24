@@ -147,3 +147,7 @@ div.card-padding {
 .copilot-form_list {
     min-width:260px;
 }
+
+.section-spacer {
+  flex-grow: 1;
+}
