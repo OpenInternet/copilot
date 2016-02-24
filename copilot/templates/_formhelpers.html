@@ -1,6 +1,6 @@
 {% macro render_field(field) %}
-  {{ field.label }}
   {{ field(**kwargs)|safe }}
+  render_field(field.label, class='mdl-textfield__label')
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}
