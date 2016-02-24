@@ -97,7 +97,7 @@ function addRuleSelector(idNum, type, options) {
 
     //Create span
     var ruleDiv = document.createElement("div");
-    ruleDiv.className = "three columns";
+    ruleDiv.className = "mdl-cell mdl-cell--3-col";
 
     // Create Data
     var data = createRuleData(type, ruleID, options);
