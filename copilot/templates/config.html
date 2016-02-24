@@ -23,20 +23,20 @@
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <div class="mdl-textfield mdl-js-textfield">
-                    render_field(form.ap_name, class='mdl-textfield__input')
+                    {{ render_field(form.ap_name, class='mdl-textfield__input') }}
                 </div>
                 <div class="mdl-textfield mdl-js-textfield">
-                    render_field(form.ap_password, class='mdl-textfield__input')
+                    {{ render_field(form.ap_password, class='mdl-textfield__input') }}
                 </div>
                 <div class="mdl-textfield mdl-js-textfield">
-                    render_field(form.confirm_ap_pass, class='mdl-textfield__input')
+                    {{ render_field(form.confirm_ap_pass, class='mdl-textfield__input') }}
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield">
-                    render_field(form.password, class='mdl-textfield__input')
+                    {{ render_field(form.password, class='mdl-textfield__input') }}
                 </div>
                 <div class="mdl-textfield mdl-js-textfield">
-                    render_field(form.confirm, class='mdl-textfield__input')
+                    {{ render_field(form.confirm, class='mdl-textfield__input') }}
                 </div>
                 <button id="show-dialog" type="button" class="mdl-button">Submit</button>
             </div>
@@ -46,7 +46,7 @@
         <h4 class="mdl-dialog__title">Please enter your current admin password.</h4>
         <div class="mdl-dialog__content">
             <div class="mdl-textfield mdl-js-textfield">
-                render_field(form.old_password, class='mdl-textfield__input')
+                {{ render_field(form.old_password, class='mdl-textfield__input') }}
             </div>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="config_form" value="Submit">Submit</button>
