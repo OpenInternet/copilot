@@ -148,6 +148,6 @@ div.card-padding {
     min-width:260px;
 }
 
-.rule_list .rule {
+.rule_section .rule {
     display:flex;
 }
