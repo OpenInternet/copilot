@@ -6,7 +6,7 @@ from copilot.models import profile as mdl_prof
 from copilot.views import forms
 
 from flask.ext.wtf import Form
-from copilot.models.config import get_valid_actions, get_valid_targets, get_target_by_actions
+from copilot.models.config import get_valid_actions, get_valid_targets, get_target_by_actions, get_targets_with_subtargets
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs, get_likely_usb, is_usb
 
@@ -77,11 +77,13 @@ def profile(prof_name):
         locations.append("USB")
     action_pairs = get_target_by_actions()
     all_targets = get_valid_targets()
+    has_subtarget = get_targets_with_subtargets()
     return render_template('profile.html',
                            title=title,
                            form=form,
                            locations=locations,
                            action_pairs=action_pairs,
+                           has_subtarget=has_subtarget,
                            all_targets=all_targets)
 
 @app.route('/profile/current', methods=["GET", "POST"])

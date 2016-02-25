@@ -69,6 +69,27 @@ def get_valid_targets():
     log.info("getting valid targets.")
     return get_unique_values("target")
 
+def get_plugins_with_subtargets():
+    plugin_values = get_value_list("has_subtarget")
+    has_subtarget = []
+    for pairs in plugin_values:
+        plugin = pairs[0]
+        values = pairs[1]
+        if "true" in values:
+            has_subtarget.append(plugin)
+    return has_subtarget
+
+def get_targets_with_subtargets():
+    plugins = get_plugins_with_subtargets()
+    all_targets = get_value_list("target")
+    targets = []
+    for pairs in all_targets:
+        plugin = pairs[0]
+        values = pairs[1]
+        if plugin in plugins:
+            targets += values
+    return targets
+
 def get_config_writer(name):
     """Get a plugins config file writer object.
 

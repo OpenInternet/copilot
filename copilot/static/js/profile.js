@@ -1,8 +1,8 @@
 
 //Rule Defaults
 // Ignore the ugly one liners.
-var targetOptions = document.getElementById("all_targets").content.split(" ").filter(function(el) {return el.length != 0});
-var actionOptions = document.getElementById("all_actions").content.split(" ").filter(function(el) {return el.length != 0});
+var targetOptions = document.getElementById("all_targets").content.split("|").filter(function(el) {return el.length != 0});
+var actionOptions = document.getElementById("all_actions").content.split("|").filter(function(el) {return el.length != 0});
 var subTargetDefault = "internews.org";
 var helpText = {}
 helpText.action = "The action to be taken against the \"targeted\" traffic. e.g. block, throttle, redirect, or monitor."
@@ -135,7 +135,22 @@ function createRuleData(type, ruleID, options) {
         // Create input element
         data = document.createElement("select");
         data.className = "mdl-selectfield"
+
+        // Don't display targets until actions have been chosen
+        if (type == "target") {
+            data.display = "none"
+        }
+
         // Add all options to the select object
+        var defaultOption = document.createElement("option");
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.value = "";
+        var defaultContent = document.createTextNode("Choose a "+type);
+        defaultOption.appendChild(defaultContent);
+        data.appendChild(defaultOption);
+
+        // Add all proper options to object
         for(var i = 0; i < options.length; i++) {
             // <option selected value="block">block</option>
             var dataOption = document.createElement("option");
@@ -148,6 +163,7 @@ function createRuleData(type, ruleID, options) {
         data.className = "mdl-textfield mdl-js-textfield";
         data.type = "text"
         data.value = subTargetDefault
+        data.display = "none" //don't displat until needed
     }
 
     //Set Generic Properties
@@ -196,17 +212,34 @@ function update_from_action(id) {
     var selector_type = selector.options[selector.selectedIndex].value
     // get metadata object data of action target pairs
     var raw_targets = document.getElementById('pairs-'.concat(selector_type)).content;
-    var targets = raw_targets.split(" ").filter(function(el) {return el.length != 0})
+    var targets = raw_targets.split("|").filter(function(el) {return el.length != 0})
 
     // get the target selector we will be modifying
     var targetObj = document.getElementById('rules-'.concat(idNum, "-", "target"));
     // clear all options from it
     targetObj.options.length=0
+    targetObj.display = "inline-block"
     // repopulate the options
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
     }
 }
 
-function update_from_target(selector) {}
+function update_from_target(selector) {
+    var selector = document.getElementById(id)
+    var idNum = id.split("-")[1]
+    var selector_type = selector.options[selector.selectedIndex].value
+    // get metadata object data of action target pairs
+    var sub_target_list = document.getElementById('has_subtarget').content;
+    var has_sub_targets = sub_target_list.split("|").filter(function(el) {return el.length != 0})
+
+    // get the target selector we will be modifying
+    var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
+    if (selector_type in has_sub_targets) {
+        subTargetObj.display = "inline-block"
+    } else {
+        subTargetObj.display = "none"
+    }
+}
+
 function update_from_sub_target(selector) {}
