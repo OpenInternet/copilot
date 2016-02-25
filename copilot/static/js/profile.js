@@ -136,7 +136,7 @@ function createRuleData(type, ruleID, options) {
 
         // Don't display targets until actions have been chosen
         if (type == "target") {
-            data.style.display = "none"
+            data.style.display = "hidden";
         }
 
         // Add all options to the select object
@@ -159,9 +159,9 @@ function createRuleData(type, ruleID, options) {
     } else if (type == "sub_target") {
         data = document.createElement("input");
         data.className = "mdl-textfield mdl-js-textfield";
-        data.type = "text"
-        data.value = subTargetDefault
-        data.style.display = "none" //don't display until needed
+        data.type = "text";
+        data.value = subTargetDefault;
+        data.style.display = "hidden";
     }
 
     //Set Generic Properties
@@ -236,7 +236,7 @@ function update_from_target(id) {
     if (selector_type in has_sub_targets) {
         subTargetObj.display = "inline-block"
     } else {
-        subTargetObj.display = "none"
+        subTargetObj.display = "hidden"
     }
 }
 
