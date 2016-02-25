@@ -74,7 +74,7 @@
 
 <!-- Dialogue -->
 <dialog class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Where would you like to save your profile?</h4>
+    <strong class="mdl-dialog__title">Where would you like to save your profile?</strong>
     <div class="mdl-dialog__content">
         {% for location in locations %}
         <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="profile_form" name="submit_action" value="{{ location }}">{{ location }}</button>

@@ -51,7 +51,7 @@
     </form>
     {% if form.old_password %}
     <dialog class="mdl-dialog">
-        <h4 class="mdl-dialog__title">Please enter your current admin password.</h4>
+        <strong class="mdl-dialog__title">Please enter your current admin password.</strong>
         <div class="mdl-dialog__content">
             <div class="mdl-textfield mdl-js-textfield">
                 {{ render_field(form.old_password, class='mdl-textfield__input') }}
