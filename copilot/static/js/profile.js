@@ -134,6 +134,8 @@ function createRuleData(type, ruleID, options) {
         // Create input element
         //<input class="mdl-textfield__input" value="VALUE" type="text" id="rule-0-action" readonly tabIndex="-1" />
         data = document.createElement("input");
+        data.readOnly = true;
+        data.tabIndex="-1"
 
         // Create Option List
         optionList = document.createElement("ul");
