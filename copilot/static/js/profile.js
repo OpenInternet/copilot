@@ -216,7 +216,7 @@ function update_from_action(id) {
     var targetObj = document.getElementById('rules-'.concat(idNum, "-", "target"));
     // clear all options from it
     targetObj.options.length=0
-    targetObj.visibility = "visible"
+    targetObj.style.visibility = "visible"
     // repopulate the options
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
@@ -234,9 +234,9 @@ function update_from_target(id) {
     // get the target selector we will be modifying
     var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
     if (selector_type in has_sub_targets) {
-        subTargetObj.visibility = "visible"
+        subTargetObj.style.visibility = "visible"
     } else {
-        subTargetObj.visibility = "hidden"
+        subTargetObj.style.visibility = "hidden"
     }
 }
 
