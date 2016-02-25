@@ -252,7 +252,7 @@ function update_from_action(id) {
     // Change the Rule Title
     var ruleTitle = document.getElementById('rule-title-'.concat(idNum));
     var selector_string = selector_type.charAt(0).toUpperCase() + selector_type.slice(1);
-    ruleTitle.nodeValue = selector_string + "Rule";
+    ruleTitle.textContent = selector_string + "Rule";
 }
 
 function update_from_target(id) {
