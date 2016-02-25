@@ -125,6 +125,16 @@ function addRuleSelector(idNum, type, options) {
     return ruleDiv
 }
 
+function getDefaultOption(type) {
+    var defaultOption = document.createElement("option");
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    defaultOption.value = "";
+    var defaultContent = document.createTextNode("Choose your "+type);
+    defaultOption.appendChild(defaultContent);
+    return defaultOption
+}
+
 //Creates a html rule object using material design select
 // https://github.com/CreativeIT/getmdl-select
 function createRuleData(type, ruleID, options) {
@@ -140,12 +150,7 @@ function createRuleData(type, ruleID, options) {
         }
 
         // Add all options to the select object
-        var defaultOption = document.createElement("option");
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        defaultOption.value = "";
-        var defaultContent = document.createTextNode("Choose your "+type);
-        defaultOption.appendChild(defaultContent);
+        defaultOption = getDefaultOption(type)
         data.appendChild(defaultOption);
 
         // Add all proper options to object
@@ -219,6 +224,8 @@ function update_from_action(id) {
     targetObj.options.length=0
     targetObj.style.visibility = "visible"
     // repopulate the options
+    defaultOption = getDefaultOption("target")
+    targetObj.appendChild(defaultOption);
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
     }
