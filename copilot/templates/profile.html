@@ -53,48 +53,50 @@
             </div>
         </section>
         {% endfor %}
-
-        <!-- New rule button -->
-        <div class="add_new_rule" id="addButton">
-            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" type="button" onclick="addRule(); return false;">
-                <i class="material-icons">add</i>
-            </button>
-            <span for="new_rule_button" class="mdl-tooltip">Click to add a <br> new rule to your profile.</span>
-        </div>
-
-        <div class="add_new_rule">
-            <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--raised">Save & Apply</button>
-        </div>
-
-    </div>
 </form>
 
-        <!-- Dialogue -->
-        <dialog class="mdl-dialog">
-            <h4 class="mdl-dialog__title">Where would you like to save your profile?</h4>
-            <div class="mdl-dialog__content">
-                    {% for location in locations %}
-                <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="profile_form" name="submit_action" value="{{ location }}">{{ location }}</button>
-                    {% endfor %}
+        <section class="section--center mdl-grid">
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
             </div>
-        </dialog>
-        <script>
-         var dialog = document.querySelector('dialog');
-         var showDialogButton = document.querySelector('#show-dialog');
-         if (! dialog.showModal) {
-             dialogPolyfill.registerDialog(dialog);
-         }
-         showDialogButton.addEventListener('click', function() {
-             dialog.showModal();
-         });
-        </script>
+            <!-- New rule button -->
+            <div class="add_new_rule" id="addButton">
+                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" type="button" onclick="addRule(); return false;">
+                    <i class="material-icons">add</i>
+                </button>
+                <span for="new_rule_button" class="mdl-tooltip">Click to add a <br> new rule to your profile.</span>
+            </div>
 
+            <div class="add_new_rule">
+                <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--raised">Save & Apply</button>
+            </div>
+        </div>
+        </section>
+
+<!-- Dialogue -->
+<dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Where would you like to save your profile?</h4>
+    <div class="mdl-dialog__content">
+        {% for location in locations %}
+        <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="profile_form" name="submit_action" value="{{ location }}">{{ location }}</button>
+        {% endfor %}
+    </div>
+</dialog>
+<script>
+ var dialog = document.querySelector('dialog');
+ var showDialogButton = document.querySelector('#show-dialog');
+ if (! dialog.showModal) {
+     dialogPolyfill.registerDialog(dialog);
+ }
+ showDialogButton.addEventListener('click', function() {
+     dialog.showModal();
+ });
+</script>
 {% endblock %}
 
 
 
 
-
+{% block unusedblock %}
 
 {% for action in action_pairs %}
     <meta id="pairs-{{ action }}" name="pairs-{{ action }}" content="{% for tar in action_pairs[action] %}{{ tar }} {% endfor %}">
@@ -138,6 +140,7 @@
         </div>
     </div>
 
+    {% endblock %}
 
 {% block submit %}
     <a href='#' onclick='overlay()' class="button button-primary blues">Save & Apply</a>

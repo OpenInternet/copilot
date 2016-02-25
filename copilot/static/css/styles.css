@@ -199,6 +199,6 @@ select:focus {
   pointer-events: none;
 }
 
-mdl-button-right {
+.mdl-button-right {
     float:right;
 }

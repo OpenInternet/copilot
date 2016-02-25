@@ -7,8 +7,6 @@
 {% block body %}
 {{ render_alerts(get_flashed_messages(with_categories=true))}}
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
-
 <section class="section--center mdl-grid">
     <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
     </div>
@@ -60,7 +58,6 @@
             </div>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="config_form" value="Submit">Submit</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised" type="button" class="mdl-button close">Cancel</button>
     </dialog>
     <script>
      var dialog = document.querySelector('dialog');
@@ -70,9 +67,6 @@
      }
      showDialogButton.addEventListener('click', function() {
          dialog.showModal();
-     });
-     dialog.querySelector('.close').addEventListener('click', function() {
-         dialog.close();
      });
     </script>
     {% endif %}
