@@ -42,6 +42,7 @@ function addRule() {
     //Create the rule card title
     var ruleTitle = document.createElement("h2");
     ruleTitle.className = "mdl-card__title-text";
+    ruleTitle.id = "rule-title-" + groupID
     var ruleTitleText = document.createTextNode("Rule");
     ruleTitle.appendChild(ruleTitleText);
     ruleTitleBox.appendChild(ruleTitle);
@@ -236,15 +237,9 @@ function update_from_action(id) {
     subTargetObj.style.visibility = "hidden"
 
     // Change the Rule Title
-    var ruleTitle = document.getElementById('rules-'.concat(idNum, "-", "group"));
-    for (var i = 0; i < ruleTitle.childNodes.length; i++) {
-        if (ruleTitle.childNodes[i].className == "mdl-card__title-text") {
-            var title = ruleTitle.childNodes[i];
-            selector_string = selector_type.charAt(0).toUpperCase() + selector_type.slice(1);
-            title.nodeValue = selector_string + "Rule"
-            break;
-        }
-    }
+    var ruleTitle = document.getElementById('rule-title-'.concat(idNum));
+    var selector_string = selector_type.charAt(0).toUpperCase() + selector_type.slice(1);
+    title.nodeValue = selector_string + "Rule";
 }
 
 function update_from_target(id) {
