@@ -93,9 +93,9 @@ function addRule() {
 
     // Get the list object
     var list = document.getElementById("profile_form");
-    var addButton = document.getElementById("addButton");
+    var buttonSection = document.getElementById("buttonSection");
     componentHandler.upgradeElement(section);
-    list.insertBefore(section, addButton);
+    list.insertBefore(section, buttonSection);
 }
 
 //This deletes the rule that uses this image.
