@@ -136,7 +136,7 @@ function createRuleData(type, ruleID, options) {
 
         // Don't display targets until actions have been chosen
         if (type == "target") {
-            data.display = "none"
+            data.style.display = "none"
         }
 
         // Add all options to the select object
@@ -144,7 +144,7 @@ function createRuleData(type, ruleID, options) {
         defaultOption.disabled = true;
         defaultOption.selected = true;
         defaultOption.value = "";
-        var defaultContent = document.createTextNode("Choose a "+type);
+        var defaultContent = document.createTextNode("Choose your "+type);
         defaultOption.appendChild(defaultContent);
         data.appendChild(defaultOption);
 
@@ -161,7 +161,7 @@ function createRuleData(type, ruleID, options) {
         data.className = "mdl-textfield mdl-js-textfield";
         data.type = "text"
         data.value = subTargetDefault
-        data.display = "none" //don't displat until needed
+        data.style.display = "none" //don't display until needed
     }
 
     //Set Generic Properties
