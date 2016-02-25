@@ -235,7 +235,7 @@ function update_from_target(id) {
     console.log(has_sub_targets)
     // get the target selector we will be modifying
     var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
-    if (selector_type in has_sub_targets) {
+    if (has_sub_targets.indexOf(selector_type) > -1) {
         subTargetObj.style.visibility = "visible"
     } else {
         subTargetObj.style.visibility = "hidden"
