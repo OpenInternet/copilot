@@ -200,7 +200,8 @@ function update_from_selector(id) {
 
 //update the target based upon an action
 function update_from_action(id) {
-    var idNum = id.split("-")[1]
+    var selector = document.getElementById(id)
+    var idNum = selector.id.split("-")[1]
     // get metadata object data of action target pairs
     var raw_targets = document.getElementById('pairs-'.concat(selector.value)).content;
     var targets = raw_targets.split(" ").filter(function(el) {return el.length != 0})
