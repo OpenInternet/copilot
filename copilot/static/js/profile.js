@@ -136,7 +136,7 @@ function createRuleData(type, ruleID, options) {
 
         // Don't display targets until actions have been chosen
         if (type == "target") {
-            data.style.display = "hidden";
+            data.style.visibility = "hidden";
         }
 
         // Add all options to the select object
@@ -161,7 +161,7 @@ function createRuleData(type, ruleID, options) {
         data.className = "mdl-textfield mdl-js-textfield";
         data.type = "text";
         data.value = subTargetDefault;
-        data.style.display = "hidden";
+        data.style.visibility = "hidden";
     }
 
     //Set Generic Properties
@@ -216,7 +216,7 @@ function update_from_action(id) {
     var targetObj = document.getElementById('rules-'.concat(idNum, "-", "target"));
     // clear all options from it
     targetObj.options.length=0
-    targetObj.display = "inline-block"
+    targetObj.visibility = "visible"
     // repopulate the options
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
@@ -234,9 +234,9 @@ function update_from_target(id) {
     // get the target selector we will be modifying
     var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
     if (selector_type in has_sub_targets) {
-        subTargetObj.display = "inline-block"
+        subTargetObj.visibility = "visible"
     } else {
-        subTargetObj.display = "hidden"
+        subTargetObj.visibility = "hidden"
     }
 }
 
