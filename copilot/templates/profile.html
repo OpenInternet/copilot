@@ -10,8 +10,6 @@
 <meta id="all_actions" name="all_actions" content="{% for action in action_pairs %}{{ action }} {% endfor %}">
 <meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }} {% endfor %}">
 <script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/getmdl-select.min.css') }}">
-<script type="text/javascript" src="{{ url_for('static', filename='js/getmdl-select.min.js') }}"></script>
 
 <form name="profile_form" action="{{ url_for('profile_save') }}" method="post" id="rule_list">
     {{ form.csrf_token }}
