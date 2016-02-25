@@ -180,7 +180,7 @@ function createRuleData(type, ruleID, options) {
 function getIdNum() {
     // get list of links with 'rules' class
     var curNum
-    var links = document.getElementsByClassName('rule-section');
+    var links = document.getElementsByClassName('rule');
     var last = links[links.length - 1]
     if (typeof last !== 'undefined') {
         var lastID = last.id
