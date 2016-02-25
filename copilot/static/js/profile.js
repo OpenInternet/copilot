@@ -163,7 +163,7 @@ function createRuleData(type, ruleID, options) {
         }
     } else if (type == "sub_target") {
         data = document.createElement("input");
-        data.className = "mdl-textfield mdl-js-textfield";
+        data.className = "mdl-textfield__input";
         data.type = "text";
         data.value = subTargetDefault;
         data.style.visibility = "hidden";
@@ -229,6 +229,8 @@ function update_from_action(id) {
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
     }
+    var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
+    subTargetObj.style.visibility = "visible"
 }
 
 function update_from_target(id) {
