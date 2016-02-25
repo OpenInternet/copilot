@@ -192,6 +192,7 @@ function getIdNum() {
 }
 
 function update_from_selector(id) {
+    console.log(id);
     var selector_type = id.split("-")[2]
     if (selector_type == "action") {
         update_from_action(id)
@@ -230,7 +231,8 @@ function update_from_target(id) {
     // get metadata object data of action target pairs
     var sub_target_list = document.getElementById('has_subtarget').content;
     var has_sub_targets = sub_target_list.split("|").filter(function(el) {return el.length != 0})
-
+    console.log(sub_target_list)
+    console.log(has_sub_targets)
     // get the target selector we will be modifying
     var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
     if (selector_type in has_sub_targets) {
