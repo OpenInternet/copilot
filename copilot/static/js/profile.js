@@ -132,25 +132,16 @@ function createRuleData(type, ruleID, options) {
     var data, optionList;
     if (type == "action" || type == "target") {
         // Create input element
-        //<input class="mdl-textfield__input" value="VALUE" type="text" id="rule-0-action" readonly tabIndex="-1" />
-        data = document.createElement("input");
-        data.readOnly = true;
-        data.tabIndex="-1"
-
-        // Create Option List
-        optionList = document.createElement("ul");
-        optionList.className = "mdl-textfield__label";
-        optionList.for = ruleID;
-
+        data = document.createElement("select");
+        data.className = "mdl-selectfield"
         // Add all options to the select object
         for(var i = 0; i < options.length; i++) {
             // <option selected value="block">block</option>
-            var dataOption = document.createElement("li");
+            var dataOption = document.createElement("option");
             var dataContent = document.createTextNode(options[i]);
             dataOption.appendChild(dataContent);
-            optionList.appendChild(dataOption);
+            data.appendChild(dataOption);
         }
-        data.appendChild(optionList);
         //Set the class of the data objects to be the name of the type of object that they are.
         data.className = type
     } else if (type == "sub_target") {
@@ -163,7 +154,6 @@ function createRuleData(type, ruleID, options) {
     //Set Generic Properties
     data.id = ruleID;
     data.addEventListener('click', function(){update_from_selector(ruleID)});
-    data.className = "u-full-width " + type;
     data.name = ruleID;
     return data
 }
