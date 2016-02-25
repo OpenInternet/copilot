@@ -80,7 +80,8 @@ function addRule() {
     var icon = document.createElement("i");
     icon.className = "material-icons"
     var iconText = document.createTextNode("remove");
-    delButton.appendChild(iconText);
+    icon.appendChild(iconText);
+    delButton.appendChild(icon);
 
 
     //add row to rule card actions
