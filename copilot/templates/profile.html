@@ -96,6 +96,8 @@
 {% endfor %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/getmdl-select.min.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/getmdl-select.min.js') }}"></script>
 <form name="profile_form" action="{{ url_for('profile_save') }}" method="post">
     {{ form.csrf_token }}
     <div id="rule_list">
