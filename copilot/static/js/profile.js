@@ -192,7 +192,6 @@ function update_from_selector(selector) {
         update_from_action(selector)
     } else if (selector_type == "target") {
         update_from_target(selector)
-    }
     } else if (selector_type == "sub_target") {
         update_from_sub_target(selector)
     }
