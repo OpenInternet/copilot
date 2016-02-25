@@ -160,7 +160,7 @@ function createRuleData(type, ruleID, options) {
 
     //Set Generic Properties
     data.id = ruleID;
-    data.addEventListener('click', update_from_selector);
+    data.addEventListener('click', function(){update_from_selector(ruleID)});
     data.className = "u-full-width " + type;
     data.name = ruleID;
     return data
@@ -186,21 +186,21 @@ function getIdNum() {
     return curNum
 }
 
-function update_from_selector(selector) {
-    var selector_type = selector.id.split("-")[2]
+function update_from_selector(id) {
+    var selector_type = id.split("-")[2]
     if (selector_type == "action") {
-        update_from_action(selector)
+        update_from_action(id)
     } else if (selector_type == "target") {
-        update_from_target(selector)
+        update_from_target(id)
     } else if (selector_type == "sub_target") {
-        update_from_sub_target(selector)
+        update_from_sub_target(id)
     }
 }
 
 
 //update the target based upon an action
-function update_from_action(selector) {
-    var idNum = selector.id.split("-")[1]
+function update_from_action(id) {
+    var idNum = id.split("-")[1]
     // get metadata object data of action target pairs
     var raw_targets = document.getElementById('pairs-'.concat(selector.value)).content;
     var targets = raw_targets.split(" ").filter(function(el) {return el.length != 0})
