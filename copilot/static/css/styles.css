@@ -198,3 +198,7 @@ select:focus {
   border-top: 0.375em solid rgba(0, 0, 0, 0.12);
   pointer-events: none;
 }
+
+mdl-button-right {
+    float:right;
+}

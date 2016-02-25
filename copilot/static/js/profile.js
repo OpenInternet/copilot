@@ -42,7 +42,7 @@ function addRule() {
     //Create the rule card title
     var ruleTitle = document.createElement("h2");
     ruleTitle.className = "mdl-card__title-text";
-    ruleTitle.id = "rule-title-" + groupID
+    ruleTitle.id = "rule-title-" + idNum;
     var ruleTitleText = document.createTextNode("Rule");
     ruleTitle.appendChild(ruleTitleText);
     ruleTitleBox.appendChild(ruleTitle);
@@ -72,8 +72,20 @@ function addRule() {
     var subTargetSelector = addRuleSelector(idNum, "sub_target", targetOptions);
     row.appendChild(subTargetSelector);
 
+    // Create delete Rule button
+    var delButton = document.createElement("button");
+    delButton.className = "mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right";
+    delImage.onclick = function() { delRule(groupID); };
+    // Add icon to button
+    var icon = document.createElement("i");
+    icon.className = "material-icons"
+    var iconText = document.createTextNode("remove");
+    delButton.appendChild(iconText);
+
+
     //add row to rule card actions
     ruleCardActions.appendChild(row)
+    ruleCardActions.appendChild(delButton)
     ruleCard.appendChild(ruleCardActions);
     section.appendChild(ruleCard);
 
