@@ -75,7 +75,7 @@ function addRule() {
     // Create delete Rule button
     var delButton = document.createElement("button");
     delButton.className = "mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right";
-    delImage.onclick = function() { delRule(groupID); };
+    delButton.onclick = function() { delRule(groupID); };
     // Add icon to button
     var icon = document.createElement("i");
     icon.className = "material-icons"
