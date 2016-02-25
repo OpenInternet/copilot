@@ -230,8 +230,21 @@ function update_from_action(id) {
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
     }
+
+    // Hide sub target always
     var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
     subTargetObj.style.visibility = "hidden"
+
+    // Change the Rule Title
+    var ruleTitle = document.getElementById('rules-'.concat(idNum, "-", "group"));
+    for (var i = 0; i < ruleTitle.childNodes.length; i++) {
+        if (ruleTitle.childNodes[i].className == "mdl-card__title-text") {
+            var title = ruleTitle.childNodes[i];
+            selector_string = selector_type.charAt(0).toUpperCase() + selector_type.slice(1);
+            title.nodeValue = selector_string + "Rule"
+            break;
+        }
+    }
 }
 
 function update_from_target(id) {
