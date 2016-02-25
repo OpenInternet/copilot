@@ -16,7 +16,7 @@
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
 
-<form name="profile_form" action="{{ url_for('profile_save') }}" method="post" id="rule_list">
+<form name="profile_form" action="{{ url_for('profile_save') }}" method="post" id="profile_form">
     {{ form.csrf_token }}
     <section class="section--center mdl-grid">
         <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">

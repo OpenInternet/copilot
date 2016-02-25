@@ -78,7 +78,7 @@ function addRule() {
 
 
     // Get the list object
-    var list = document.getElementById("rule_list");
+    var list = document.getElementById("profile_form");
     var addButton = document.getElementById("addButton");
     componentHandler.upgradeElement(section);
     list.insertBefore(section, addButton);
@@ -230,7 +230,7 @@ function update_from_action(id) {
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
     }
     var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
-    subTargetObj.style.visibility = "visible"
+    subTargetObj.style.visibility = "hidden"
 }
 
 function update_from_target(id) {
