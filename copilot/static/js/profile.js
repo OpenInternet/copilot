@@ -129,7 +129,7 @@ function addRuleSelector(idNum, type, options) {
 //Creates a html rule object using material design select
 // https://github.com/CreativeIT/getmdl-select
 function createRuleData(type, ruleID, options) {
-    var data, optionList;
+    var data;
     if (type == "action" || type == "target") {
         // Create input element
         data = document.createElement("select");
@@ -142,8 +142,6 @@ function createRuleData(type, ruleID, options) {
             dataOption.appendChild(dataContent);
             data.appendChild(dataOption);
         }
-        //Set the class of the data objects to be the name of the type of object that they are.
-        data.className = type
     } else if (type == "sub_target") {
         data = document.createElement("input");
         data.className = "mdl-textfield mdl-js-textfield";
