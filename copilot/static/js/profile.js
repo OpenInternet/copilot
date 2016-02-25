@@ -5,9 +5,9 @@ var targetOptions = document.getElementById("all_targets").content.split(" ").fi
 var actionOptions = document.getElementById("all_actions").content.split(" ").filter(function(el) {return el.length != 0});
 var subTargetDefault = "internews.org";
 var helpText = {}
-helpText.action = ""
-helpText.target = ""
-helpText.subTarget = ""
+helpText.action = "The action to be taken against the \"targeted\" traffic. e.g. block, throttle, redirect, or monitor."
+helpText.target = "The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL."
+helpText.subTarget = "A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic."
 
 
 //Add a rule to the rule list
@@ -97,7 +97,7 @@ function addRuleSelector(idNum, type, options) {
 
     //Create span
     var ruleDiv = document.createElement("div");
-    ruleDiv.className = "mdl-cell mdl-cell--3-col";
+    ruleDiv.className = "mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select mdl-cell mdl-cell--3-col ";
 
     // Create Data
     var data = createRuleData(type, ruleID, options);
@@ -107,46 +107,60 @@ function addRuleSelector(idNum, type, options) {
 
     //create help
     //<div class="help"> {{help goes here}} </div>
-    var help = document.createElement("div");
-    help.className = "help"
+    var label = document.createElement("label");
+    label.className = "mdl-textfield__label"
+    label.for = ruleID
     //get help text from above
-    var text = document.createTextNode(helpText[type]);
-    help.appendChild(text);
-    ruleDiv.appendChild(help);
+    var labelText = document.createTextNode(type);
+    label.appendChild(labelText);
+    ruleDiv.appendChild(label);
+
+    var tooltip = document.createElement("div");
+    tooltip.className = "mdl-tooltip mdl-tooltip--large"
+    tooltip.for = ruleID
+    //get help text from above
+    var tooltipText = document.createTextNode(helpText[type]);
+    tooltip.appendChild(tooltipText);
+    ruleDiv.appendChild(tooltip);
 
     return ruleDiv
 }
 
-//Creates a html rule object
-// <select id="rules-0-action" class="u-full-width action" name="rules-0-action">
-// <option value="block" selected="">block</option>
-// </select>
+//Creates a html rule object using material design select
+// https://github.com/CreativeIT/getmdl-select
 function createRuleData(type, ruleID, options) {
-    var data;
+    var data, optionList;
     if (type == "action" || type == "target") {
-        // <select id="rules-2-action" name="rules-2-action">
-        data = document.createElement("select");
+        // Create input element
+        //<input class="mdl-textfield__input" value="VALUE" type="text" id="rule-0-action" readonly tabIndex="-1" />
+        data = document.createElement("input");
+
+        // Create Option List
+        optionList = document.createElement("ul");
+        optionList.className = "mdl-textfield__label";
+        optionList.for = ruleID;
+
         // Add all options to the select object
         for(var i = 0; i < options.length; i++) {
             // <option selected value="block">block</option>
-            var dataOption = document.createElement("option");
-            dataOption.value = options[i];
+            var dataOption = document.createElement("li");
             var dataContent = document.createTextNode(options[i]);
             dataOption.appendChild(dataContent);
-            data.appendChild(dataOption);
+            optionList.appendChild(dataOption);
         }
+        data.appendChild(optionList);
         //Set the class of the data objects to be the name of the type of object that they are.
         data.className = type
     } else if (type == "sub_target") {
         data = document.createElement("input");
+        data.className = "mdl-textfield mdl-js-textfield";
         data.type = "text"
         data.value = subTargetDefault
     }
+
     //Set Generic Properties
     data.id = ruleID;
-    data.addEventListener('click', update_from_action)
-/*    var onclickstring = "update_from_";
-    data.onclick = onclickstring.concat(type, "(this)");*/
+    data.addEventListener('click', update_from_selector);
     data.className = "u-full-width " + type;
     data.name = ruleID;
     return data
@@ -170,6 +184,18 @@ function getIdNum() {
     }
     // return that number
     return curNum
+}
+
+function update_from_selector(selector) {
+    var selector_type = selector.id.split("-")[2]
+    if (selector_type == "action") {
+        update_from_action(selector)
+    } else if (selector_type == "target") {
+        update_from_target(selector)
+    }
+    } else if (selector_type == "sub_target") {
+        update_from_sub_target(selector)
+    }
 }
 
 
