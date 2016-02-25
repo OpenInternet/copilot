@@ -99,12 +99,6 @@ function addRuleSelector(idNum, type, options) {
     var ruleDiv = document.createElement("div");
     ruleDiv.className = "mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select mdl-cell mdl-cell--3-col ";
 
-    // Create Data
-    var data = createRuleData(type, ruleID, options);
-
-    // Add table items to span
-    ruleDiv.appendChild(data);
-
     //create help
     //<div class="help"> {{help goes here}} </div>
     var label = document.createElement("label");
@@ -114,6 +108,13 @@ function addRuleSelector(idNum, type, options) {
     var labelText = document.createTextNode(type);
     label.appendChild(labelText);
     ruleDiv.appendChild(label);
+
+    // Create Data
+    var data = createRuleData(type, ruleID, options);
+
+    // Add table items to span
+    ruleDiv.appendChild(data);
+
 
     var tooltip = document.createElement("div");
     tooltip.className = "mdl-tooltip mdl-tooltip--large"
@@ -151,7 +152,7 @@ function createRuleData(type, ruleID, options) {
 
     //Set Generic Properties
     data.id = ruleID;
-    data.addEventListener('click', function(){update_from_selector(ruleID)});
+    data.addEventListener('click', update_from_selector);
     data.name = ruleID;
     return data
 }
@@ -176,7 +177,8 @@ function getIdNum() {
     return curNum
 }
 
-function update_from_selector(id) {
+function update_from_selector(selector) {
+    console.log(selector)
     var selector_type = id.split("-")[2]
     if (selector_type == "action") {
         update_from_action(id)
