@@ -152,7 +152,7 @@ function createRuleData(type, ruleID, options) {
 
     //Set Generic Properties
     data.id = ruleID;
-    data.addEventListener('click', update_from_selector);
+    data.addEventListener('click', function(){update_from_selector(ruleID)});
     data.name = ruleID;
     return data
 }
@@ -177,8 +177,7 @@ function getIdNum() {
     return curNum
 }
 
-function update_from_selector(selector) {
-    console.log(selector)
+function update_from_selector(id) {
     var selector_type = id.split("-")[2]
     if (selector_type == "action") {
         update_from_action(id)
@@ -193,9 +192,10 @@ function update_from_selector(selector) {
 //update the target based upon an action
 function update_from_action(id) {
     var selector = document.getElementById(id)
-    var idNum = selector.id.split("-")[1]
+    var idNum = id.split("-")[1]
+    var selector_type = selector.options[selector.selectedIndex].value
     // get metadata object data of action target pairs
-    var raw_targets = document.getElementById('pairs-'.concat(selector.value)).content;
+    var raw_targets = document.getElementById('pairs-'.concat(selector_type)).content;
     var targets = raw_targets.split(" ").filter(function(el) {return el.length != 0})
 
     // get the target selector we will be modifying
