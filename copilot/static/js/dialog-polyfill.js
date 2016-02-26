@@ -338,10 +338,9 @@
     // top layer, where z-index has no effect.
     this.overlay = document.createElement('div');
     this.overlay.className = '_dialog_overlay';
-    this.overlay.id = '_dialog_overlay';
-    this.overlay.addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
+    //this.overlay.addEventListener('click', function(e) {
+    //  e.stopPropagation();
+    //});
 
     this.handleKey_ = this.handleKey_.bind(this);
     this.handleFocus_ = this.handleFocus_.bind(this);
