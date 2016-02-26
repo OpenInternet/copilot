@@ -241,6 +241,6 @@ section .section__circle-container > .section__circle-container__circle {
 }
 
 
-.mdl-list__item-icon, .material-icons.mdl-list__item-avatar, .service_down {
+.mdl-list__item-icon, .material-icons.mdl-list__item-avatar.service_down {
     background-color: #f25d23;
 }
