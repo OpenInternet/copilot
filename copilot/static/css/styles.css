@@ -234,10 +234,8 @@ section .section__circle-container > .section__circle-container__circle {
      color: #72afb7;
 }
 
-.mdl-list__item-icon, .mdl-list__item-icon.material-icons.mdl-list_big-item-icon {
-  width: 20px;
-  height: 20px;
-  font-size:44px;
-  position:relative;
-  bottom:20px;
+.mdl-list__item-icon, .mdl-list__item-icon.material-icons, .mdl-list_big-item-icon {
+  font-size: 44px;
+  position: relative;
+  bottom: 20px;
 }
