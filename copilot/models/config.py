@@ -416,7 +416,11 @@ class ProfileConfig(object):
         self.parser = ProfileParser()
         if self.valid():
             self.data = self.build_map()
-        self.rules = self.get_rules()
+        try:
+            self.rules = self.get_rules()
+        except AttributeError:
+            raise ValueError("Config file may be properly formatted but " +
+                             " the rules found in the config seem to be corrupted.")
 
     def get_rules(self):
         """ Returns a list of rules.
