@@ -216,17 +216,8 @@ section .section__circle-container > .section__circle-container__circle {
 }
 
 #load-profile-button {
-    position: relative;
-    overflow: hidden;
-}
-
-#load-profile-button input {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    opacity: 0.001
+  height: 0;
+  width: 0;
 }
 
 .login_card > .mdl-card__title {
