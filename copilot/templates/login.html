@@ -8,13 +8,6 @@
 {% endblock %}
 
 {% block body %}
-<style>
- .login_card > .mdl-card__title {
-     background:
-     url("{{ url_for('static', filename='images/face_smile_48.png') }}") bottom right 15% no-repeat #fff;
-     color: #72afb7;
- }
-</style>
 <section class="section--center mdl-grid">
     <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
     </div>
@@ -30,7 +23,7 @@
                     <label class="mdl-textfield__label" for="password">Password</label>
                     <span class="mdl-textfield__error">Passwords must be between 3 and 31 characters long.</span>
                 </div>
-                <button class="mdl-button mdl-js-button mdl-button--raised" onchange="this.form.submit()">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onchange="this.form.submit()">
                     Login
                 </button>
             </form>

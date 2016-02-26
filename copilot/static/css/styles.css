@@ -184,6 +184,7 @@ select:focus {
   font-family: 'Roboto','Helvetica','Arial',sans-serif;
   position: relative;
 }
+
 .mdl-selectfield:after {
   position: absolute;
   top: 0.75em;
@@ -226,4 +227,9 @@ section .section__circle-container > .section__circle-container__circle {
     left: 0;
     right: 0;
     opacity: 0.001
+}
+
+.login_card > .mdl-card__title {
+     background: #fff;
+     color: #72afb7;
 }
