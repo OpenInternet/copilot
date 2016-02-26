@@ -233,3 +233,12 @@ section .section__circle-container > .section__circle-container__circle {
      background: #fff;
      color: #72afb7;
 }
+
+
+.mdl-list_big-item-icon {
+  width: 20px;
+  height: 20px;
+  font-size:44px;
+  position:relative;
+  bottom:20px;
+}
