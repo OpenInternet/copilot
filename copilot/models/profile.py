@@ -116,12 +116,12 @@ class Profile(object):
                     "target":ruleset[1],
                     "sub_target":ruleset[2]}
             # Rules without sub-targets need a default to ignore
-            log.debug("sub_target is |{0}|".format(rule['sub_target']))
-            if rule['sub_target'] == "":
-                log.debug("sub_target is an empty string")
-                rule['sub_target'] = "SUB_TARGET_NOT_GIVEN"
-            else:
-                log.debug("sub_target is of type {0}".format(type(rule['sub_target'])))
+        log.debug("sub_target is |{0}|".format(rule['sub_target']))
+        if rule['sub_target'] == "":
+            log.debug("sub_target is an empty string")
+            rule['sub_target'] = "SUB_TARGET_NOT_GIVEN"
+        else:
+            log.debug("sub_target is of type {0}".format(type(rule['sub_target'])))
         log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
         plugin_name = get_plugin_from_rules(rule.get('action',""), rule.get('target',""))
         config_obj = get_config_writer(plugin_name)
