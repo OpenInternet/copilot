@@ -3,9 +3,6 @@
 {% from "submit.html" import render_submit_buttons %}
 {% from "_formhelpers.html" import render_field %}
 
-{% block alert %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
-{% endblock %}
 
 {% block body %}
 <section class="section--center mdl-grid">

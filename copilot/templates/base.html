@@ -63,9 +63,12 @@
         </div>
         <main class="mdl-layout__content mdl-color--grey-100">
             <div class="main-content">
-                    <!-- INSERT MAIN CONTENT HERE -->
-                    {% block body %}{% endblock %}
-                    {% block submit %}{% endblock %}
+                <!-- INSERT MAIN CONTENT HERE -->
+                {% block alert %}
+                {{ render_alerts(get_flashed_messages(with_categories=true))}}
+                {% endblock %}
+                {% block body %}{% endblock %}
+                {% block submit %}{% endblock %}
             </div>
         </main>
     </div>
