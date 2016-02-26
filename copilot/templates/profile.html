@@ -114,6 +114,9 @@
  }
  showDialogButton.addEventListener('click', function() {
      dialog.showModal();
+     // Remove the ovelay that does not work on firefox
+     var overlay = document.getElementsByClassName(_dialog_overlay')
+     document.body.removeChild(overlay)
  });
 </script>
 {% endblock %}
