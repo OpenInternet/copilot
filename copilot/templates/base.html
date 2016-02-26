@@ -50,6 +50,7 @@
                 {% elif category == "success" %}
                     {% set emotion = "fire" %}
                 {% endif %}
+                {% endfor %}
                 {% set emotion = emotion|default('smile') %}
                 <img src="{{ url_for('static', filename='images/face_'+emotion+'_128.png') }}" class="copilot-avatar">
             </header>
