@@ -141,7 +141,7 @@ def profile_load():
     if profiles == []:
         flash('You don\'t seem to have any profiles saved on this device.', 'error')
         flash('To create a new profile choose "New" in the menu on the top left.', 'success')
-        return redirect(url_for('error', face="suprise"))
+        return redirect(url_for("profile"))
 
     return render_template('load.html',
                            title="Profile > Load",
@@ -197,7 +197,7 @@ def profile_save():
         else:
             log.debug("See! This is why we don't accept user input. I gave you just fine USB directories, and you give me this. What do you want me to do with this?")
             flash("Location {0} does not exist. Cannot save a profile to a non-existant folder, non mounted USB drive, or un-allowed folder. Did you unplug the usb between page loads?".format(save_dir), "error")
-            return redirect(url_for('error'))
+            return redirect(url_for("profile"))
 
         prof_name = form.prof_name.data
         profile = mdl_prof.Profile(form.prof_name.data)
@@ -220,4 +220,4 @@ def profile_save():
     else:
         log.debug(form.errors)
         flash('We could not save your profile at this time. It seems to be invalid, but we don\'t know how.', 'error')
-        return redirect(url_for('error'))
+        return redirect(url_for("profile"))
