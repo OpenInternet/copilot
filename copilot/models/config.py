@@ -254,17 +254,16 @@ def get_target_by_actions():
     by the co-pilot.) that the action can be used against.
     """
 
-    log.info("getting targets (e.g. plugins) sorted by actions")
-    targets_by_action = {}
-    plugin_actions = get_value_dict("actions")
-    for plugin, actions in plugin_actions.items():
+    log.info("getting targets sorted by actions")
+    action_target_pairings = {}
+    actions_per_plugin = get_value_dict("actions")
+    targets_per_plugin = get_value_dict("target")
+    for plugin, actions in actions_per_plugin.items():
         for action in actions:
-            targets = get_option("target", plugin)
-            targets_by_action.setdefault(action, [])
-            for target in targets:
-                targets_by_action[action].append(target)
-    log.debug("target/action pairs found: {0}".format(targets_by_action))
-    return targets_by_action
+            for target in targets_per_plugin.get(plugin, []):
+                action_target_pairings.setdefault(action, []).append(target)
+    log.debug("action to target sets found: {0}".format(action_target_pairings))
+    return action_target_pairings
 
 
 class Config(object):
