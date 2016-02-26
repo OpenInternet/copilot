@@ -7,7 +7,12 @@
   </div>
   <div class="mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp">
     <div class="mdl-card__title">
-      <h2 class="mdl-card__title-text" id="{{field.name}}-title"> Rule</h2>
+      {% for subfield in field %}
+      {% if subfield.short_name == "action" %}
+      {% set actionType = subfield.raw_data %}
+      {% endif %}
+      {% endfor %}
+      <h2 class="mdl-card__title-text" id="{{field.name}}-title">{{ actionType }} Rule</h2>
     </div>
     <div class="mdl-card__actions mdl-card--border">
       <div class="row rule">
