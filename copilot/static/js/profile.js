@@ -3,7 +3,7 @@
 // Ignore the ugly one liners.
 var targetOptions = document.getElementById("all_targets").content.split("|").filter(function(el) {return el.length != 0});
 var actionOptions = document.getElementById("all_actions").content.split("|").filter(function(el) {return el.length != 0});
-var subTargetDefault = "internews.org";
+var subTargetDefault = "";
 var helpText = {}
 helpText.action = "The action to be taken against the \"targeted\" traffic. e.g. block, throttle, redirect, or monitor."
 helpText.target = "The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL."
