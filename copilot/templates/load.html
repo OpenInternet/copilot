@@ -21,7 +21,7 @@
                 <div class="section__circle-container mdl-cell mdl-cell--1-col mdl-cell--1-col-phone">
                     <div class="section__circle-container__circle mdl-color--primary"></div>
                 </div>
-                <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                <div class="section__text mdl-cell mdl-cell--11-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
                     <h2 class="squished_headers"><a  href="/profile/edit/{{ name }}">{{ name }}</a></h2>
                 </div>
                 {% endfor %}
@@ -41,7 +41,10 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <form action="{{ url_for('profile_upload') }}" method=post enctype=multipart/form-data>
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="file" name="file" onchange="this.form.submit()">Upload</button>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="file" name="file" id="load-profile-button" onchange="this.form.submit()">
+                    <input type="file">
+                    Upload
+                </button>
             </form>
         </div>
     </div>

@@ -207,9 +207,23 @@ section .section__circle-container > .section__circle-container__circle {
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  margin: 8px 0;
+  margin: 16px;
 }
 
 .squished_headers {
     margin:0;
+}
+
+#load-profile-button {
+    position: relative;
+    overflow: hidden;
+}
+
+#load-profile-button input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0.001
 }
