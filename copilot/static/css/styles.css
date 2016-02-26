@@ -209,3 +209,7 @@ section .section__circle-container > .section__circle-container__circle {
   border-radius: 16px;
   margin: 8px 0;
 }
+
+.squished_headers {
+    margin:0;
+}

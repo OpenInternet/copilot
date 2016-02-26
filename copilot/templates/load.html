@@ -18,11 +18,11 @@
         </div>
         <div class="mdl-card__actions mdl-card--border mdl-grid mdl-grid--no-spacing">
                 {% for name in profiles %}
-                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                <div class="section__circle-container mdl-cell mdl-cell--1-col mdl-cell--1-col-phone">
                     <div class="section__circle-container__circle mdl-color--primary"></div>
                 </div>
                 <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                    <h4><a  href="/profile/edit/{{ name }}">{{ name }}</a></h4>
+                    <h2 class="squished_headers"><a  href="/profile/edit/{{ name }}">{{ name }}</a></h2>
                 </div>
                 {% endfor %}
         </div>
