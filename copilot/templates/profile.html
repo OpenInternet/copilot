@@ -96,11 +96,14 @@
 
 <!-- Dialogue -->
 <dialog class="mdl-dialog">
-    <strong class="mdl-dialog__title">Where would you like to save your profile?</strong>
+    <h5 class="mdl-dialog__title">Save</h5>
     <div class="mdl-dialog__content">
-        {% for location in locations %}
-        <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" form="profile_form" name="submit_action" value="{{ location }}">{{ location }}</button>
-        {% endfor %}
+      <p> Where would you like to save your profile?</p>
+    </div>
+    <div class="mdl-dialog__actions">
+      {% for location in locations %}
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" form="profile_form" name="submit_action" value="{{ location }}">{{ location }}</button>
+      {% endfor %}
     </div>
 </dialog>
 <script>
