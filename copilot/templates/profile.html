@@ -1,8 +1,40 @@
 {% extends "base.html" %}
-{% from "rule_item.html" import render_rules %}
 {% from "alert.html" import render_alerts %}
 {% from "submit.html" import render_submit_buttons %}
 {% from "_formhelpers.html" import render_field %}
+
+
+{% macro render_rules(field) %}
+<section class="section--center mdl-grid rule-section rule_block" id="{{field.name}}-group">
+  <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
+  </div>
+  <div class="mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text" id="{{field.name}}-title"> Rule</h2>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <div class="row rule">
+          {% for subfield in field %}
+          {% if subfield.short_name != "csrf_token" %}
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select mdl-cell mdl-cell--3-col ">
+            {{ subfield(class_="mdl-selectfield", onclick="update_from_{0}(this)".format(subfield.short_name)) }}
+            <!-- TODO Add the tooltip back into the compiled versions
+                 <div class="mdl-tooltip mdl-tooltip--large">The action to be taken against the "targeted" traffic. e.g. block, throttle, redirect, or monitor.</div>
+          </div>
+          <div class="mdl-tooltip mdl-tooltip--large">The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL.</div>
+          <div class="mdl-tooltip mdl-tooltip--large">"A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic."</div>
+          -->
+          </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right">
+        <i class="material-icons">remove</i>
+      </button>
+    </div>
+  </div>
+</section>
+{% endmacro %}
 
 
 {% block body %}
@@ -14,7 +46,8 @@
 {% endfor %}
 <meta id="has_subtarget" name="has_subtarget" content="{% for plugin in has_subtarget %}{{ plugin }}|{% endfor %}">
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}">
+</script>
 
 <form name="profile_form" action="{{ url_for('profile_save') }}" method="post" id="profile_form">
     {{ form.csrf_token }}
@@ -39,20 +72,9 @@
 
     <!-- Rules Section -->
 
-        {% for item in form.rules %}
-    <section class="section--center mdl-grid rule-section">
-            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
-            </div>
-            <div class="mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp">
-                <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">Rule</h2>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    {{ render_rules(item) }}
-                </div>
-            </div>
-        </section>
-        {% endfor %}
+    {% for item in form.rules %}
+        {{ render_rules(item) }}
+    {% endfor %}
 
         <section class="section--center mdl-grid" id="buttonSection">
             <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">

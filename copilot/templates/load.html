@@ -14,19 +14,16 @@
             <h2 class="mdl-card__title-text">Load</h2>
         </div>
         <div class="mdl-card__supporting-text">
-            Load profiles on CoPilot.
+            Load profiles on CoPilot. Upon selecting a profile you will be redirected to that profiles page to edit or apply the loaded profile.
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <div class="plugin-list-action mdl-list">
                 {% for name in profiles %}
-                <div class="mdl-list__item">
-                    <a  href="/profile/edit/{{ name }}">
-                        <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-avatar">vpn_lock</i>
-                            <span>{{ name }}</span>
-                        </span>
-                    </a>
-                    <a class="mdl-list__item-secondary-action" href="/profile/edit/{{ name }}"><i class="material-icons">vpn_block</i></a>
+                <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                    <div class="section__circle-container__circle mdl-color--primary"></div>
+                </div>
+                <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                    <h4><a  href="/profile/edit/{{ name }}">{{ name }}</a></h4>
                 </div>
                  {% endfor %}
             </div>

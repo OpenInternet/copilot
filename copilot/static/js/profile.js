@@ -7,7 +7,7 @@ var subTargetDefault = "internews.org";
 var helpText = {}
 helpText.action = "The action to be taken against the \"targeted\" traffic. e.g. block, throttle, redirect, or monitor."
 helpText.target = "The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL."
-helpText.subTarget = "A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic."
+helpText.sub_target = "A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic."
 
 
 //Add a rule to the rule list
@@ -42,7 +42,7 @@ function addRule() {
     //Create the rule card title
     var ruleTitle = document.createElement("h2");
     ruleTitle.className = "mdl-card__title-text";
-    ruleTitle.id = "rule-title-" + idNum;
+    ruleTitle.id = "rules-".concat(idNum, "-", "title");
     var ruleTitleText = document.createTextNode("Rule");
     ruleTitle.appendChild(ruleTitleText);
     ruleTitleBox.appendChild(ruleTitle);
@@ -250,7 +250,7 @@ function update_from_action(id) {
     subTargetObj.style.visibility = "hidden"
 
     // Change the Rule Title
-    var ruleTitle = document.getElementById('rule-title-'.concat(idNum));
+    var ruleTitle = document.getElementById("rules-".concat(idNum, "-", "title"));
     var selector_string = selector_type.charAt(0).toUpperCase() + selector_type.slice(1);
     ruleTitle.textContent = selector_string + " Rule";
 }
