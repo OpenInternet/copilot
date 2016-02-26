@@ -43,17 +43,11 @@
         </header>
         <div class="copilot-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
             <header class="copilot-drawer-header">
-                {% if get_flashed_messages(with_categories=true) %}
-                    {% for category, message in get_flashed_messages(with_categories=true)[0] %}
-                <!-- Check for error face first -->
-                       {% if category == "error" %}
+                {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
                 <img src="{{ url_for('static', filename='images/face_frown_128.png') }}" class="copilot-avatar">
-                       {% elif category == "success" %}
+                {% elif get_flashed_messages(category_filter=["success"]) %}
                 <img src="{{ url_for('static', filename='images/face_fire_128.png') }}" class="copilot-avatar">
-                       {% else %}
-                <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">
-                       {% endif %}
-                    {% endfor %}
                 {% else %}
                 <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">
                 {% endif %}
