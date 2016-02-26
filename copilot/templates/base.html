@@ -51,6 +51,7 @@
                 {% else %}
                 <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">
                 {% endif %}
+                {% endwith %}
             </header>
             <!-- TODO make background of head change with emotion -->
             <nav class="copilot-navigation mdl-navigation mdl-color--blue-grey-800">
