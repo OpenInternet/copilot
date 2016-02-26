@@ -63,7 +63,7 @@ def info():
     """
     profile = get_profile_status()
     access_point = get_ap_status()
-    status = [{"icon" : "whatshot",
+    status = [{"icon" : "vpn_lock",
                "name" : "Profile",
               "value" : profile['value'],
               "status" : profile['status'],
