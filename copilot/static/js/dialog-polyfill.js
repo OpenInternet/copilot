@@ -336,8 +336,8 @@
     // the dialogs on the pending dialog stack are positioned below it. In the
     // actual implementation, the modal dialog stacking is controlled by the
     // top layer, where z-index has no effect.
-    this.overlay = document.createElement('div');
-    this.overlay.className = '_dialog_overlay';
+    //this.overlay = document.createElement('div');
+    //this.overlay.className = '_dialog_overlay';
     //this.overlay.addEventListener('click', function(e) {
     //  e.stopPropagation();
     //});
@@ -366,7 +366,7 @@
    * handlers.
    */
   dialogPolyfill.DialogManager.prototype.blockDocument = function() {
-    document.body.appendChild(this.overlay);
+    //document.body.appendChild(this.overlay);
     document.body.addEventListener('focus', this.handleFocus_, true);
     document.addEventListener('keydown', this.handleKey_);
     document.addEventListener('DOMNodeRemoved', this.handleRemove_);
@@ -377,7 +377,7 @@
    * dialogs are visible.
    */
   dialogPolyfill.DialogManager.prototype.unblockDocument = function() {
-    document.body.removeChild(this.overlay);
+    //document.body.removeChild(this.overlay);
     document.body.removeEventListener('focus', this.handleFocus_, true);
     document.removeEventListener('keydown', this.handleKey_);
     document.removeEventListener('DOMNodeRemoved', this.handleRemove_);
@@ -388,7 +388,7 @@
 
     for (var i = 0; i < this.pendingDialogStack.length; i++) {
       if (i == this.pendingDialogStack.length - 1) {
-        this.overlay.style.zIndex = zIndex++;
+        //this.overlay.style.zIndex = zIndex++;
       }
       this.pendingDialogStack[i].updateZIndex(zIndex++, zIndex++);
     }
