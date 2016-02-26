@@ -9,7 +9,8 @@
     <div class="mdl-card__title">
       {% for subfield in field %}
       {% if subfield.short_name == "action" %}
-      {% set actionType = subfield.raw_data %}
+      {% set actionType = subfield.data %}
+      actionType
       {% endif %}
       {% endfor %}
       <h2 class="mdl-card__title-text" id="{{field.name}}-title">{{ actionType }} Rule</h2>
