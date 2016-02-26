@@ -95,7 +95,7 @@
 </form>
 
 <!-- Dialogue -->
-<dialog class="mdl-dialog">
+<dialog class="mdl-dialog" id="profile-save-dialogue">
     <h5 class="mdl-dialog__title">Save</h5>
     <div class="mdl-dialog__content">
       <p> Where would you like to save your profile?</p>
@@ -113,7 +113,8 @@
      dialogPolyfill.registerDialog(dialog);
  }
  showDialogButton.addEventListener('click', function() {
-     dialog.showModal();
+ dialog.showModal();
+ document.getElementById("profile-save-dialogue").focus();
  });
 </script>
 {% endblock %}
