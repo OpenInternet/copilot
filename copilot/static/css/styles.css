@@ -203,7 +203,7 @@ select:focus {
     float:right;
 }
 
-.mdl-demo section .section__circle-container > .section__circle-container__circle {
+section .section__circle-container > .section__circle-container__circle {
   width: 32px;
   height: 32px;
   border-radius: 16px;
