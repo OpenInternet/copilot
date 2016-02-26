@@ -63,12 +63,12 @@ def info():
     """
     profile = get_profile_status()
     access_point = get_ap_status()
-    status = [{"icon" : "profile",
+    status = [{"icon" : "whatshot",
                "name" : "Profile",
               "value" : profile['value'],
               "status" : profile['status'],
                "url" : "profile_current"},
-              {"icon":"wifi",
+              {"icon":"wifi_tethering",
                "name" : "Access Point Name",
                "value":access_point['value'],
                "status":access_point['status'],

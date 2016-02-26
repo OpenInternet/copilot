@@ -1,12 +1,8 @@
 {% extends "base.html" %}
 {% from "_formhelpers.html" import render_field %}
-{% from "alert.html" import render_alerts %}
-{% from "submit.html" import render_submit_buttons %}
 
 
 {% block body %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
-
 <section class="section--center mdl-grid">
     <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
     </div>

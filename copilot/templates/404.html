@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <h1>Page Not Found</h1>
-  <p>What you were looking for is just not there.
-  <p><a href="{{ url_for('index') }}">go somewhere nice</a>
+<div class="mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title mdl-card--expand">
+        <h2 class="mdl-card__title-text">Page Not Found</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        What you were looking for is just not here.
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <a href="{{ url_for('index') }}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            Click here to try somewhere else.
+        </a>
+    </div>
+</div>
 {% endblock %}

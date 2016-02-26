@@ -1,8 +1,5 @@
 {% extends "base.html" %}
-{% from "alert.html" import render_alerts %}
-{% from "submit.html" import render_submit_buttons %}
 {% from "_formhelpers.html" import render_field %}
-
 
 {% macro render_rules(field) %}
 <section class="section--center mdl-grid rule-section rule_block" id="{{field.name}}-group">
@@ -38,7 +35,6 @@
 
 
 {% block body %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
 <meta id="all_actions" name="all_actions" content="{% for action in action_pairs %}{{ action }}|{% endfor %}">
 <meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }}|{% endfor %}">
 {% for action in action_pairs %}
