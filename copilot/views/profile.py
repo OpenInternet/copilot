@@ -6,7 +6,7 @@ from copilot.models import profile as mdl_prof
 from copilot.views import forms
 
 from flask.ext.wtf import Form
-from copilot.models.config import get_valid_actions, get_valid_targets, get_config_dir, get_target_by_actions
+from copilot.models.config import get_valid_actions, get_valid_targets, get_target_by_actions, get_targets_with_subtargets
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs, get_likely_usb, is_usb
 
@@ -65,10 +65,10 @@ def profile(prof_name):
         log.info("New profile being created")
         title = "Profile > New"
         form = forms.NewProfileForm()
-        _targets = get_valid_targets()
-        _actions = get_valid_actions()
-        log.debug("Setting default rule target and action. Targets = {0}, Actions = {1}".format(_targets, _actions))
-        form.rules.append_entry(data={"target":_targets[0], "sub_target":"internews.org", "action":_actions[0]})
+        #_targets = get_valid_targets()
+        #_actions = get_valid_actions()
+        #log.debug("Setting default rule target and action. Targets = {0}, Actions = {1}".format(_targets, _actions))
+        #form.rules.append_entry(data={"target":_targets[0], "sub_target":"internews.org", "action":_actions[0]})
         form.prof_name.data = "new"
 
     #Add the locations a user can save to.
@@ -77,11 +77,13 @@ def profile(prof_name):
         locations.append("USB")
     action_pairs = get_target_by_actions()
     all_targets = get_valid_targets()
+    has_subtarget = get_targets_with_subtargets()
     return render_template('profile.html',
                            title=title,
                            form=form,
                            locations=locations,
                            action_pairs=action_pairs,
+                           has_subtarget=has_subtarget,
                            all_targets=all_targets)
 
 @app.route('/profile/current', methods=["GET", "POST"])
@@ -139,7 +141,7 @@ def profile_load():
     if profiles == []:
         flash('You don\'t seem to have any profiles saved on this device.', 'error')
         flash('To create a new profile choose "New" in the menu on the top left.', 'success')
-        return redirect(url_for('error', face="suprise"))
+        return redirect(url_for("profile"))
 
     return render_template('load.html',
                            title="Profile > Load",
@@ -195,7 +197,7 @@ def profile_save():
         else:
             log.debug("See! This is why we don't accept user input. I gave you just fine USB directories, and you give me this. What do you want me to do with this?")
             flash("Location {0} does not exist. Cannot save a profile to a non-existant folder, non mounted USB drive, or un-allowed folder. Did you unplug the usb between page loads?".format(save_dir), "error")
-            return redirect(url_for('error'))
+            return redirect(url_for("profile"))
 
         prof_name = form.prof_name.data
         profile = mdl_prof.Profile(form.prof_name.data)
@@ -215,8 +217,7 @@ def profile_save():
 
         flash('Profile "{0}" has been applied!'.format(form.prof_name.data), 'success')
         return redirect(url_for('profile_current'))
-
     else:
         log.debug(form.errors)
         flash('We could not save your profile at this time. It seems to be invalid, but we don\'t know how.', 'error')
-        return redirect(url_for('error'))
+        return redirect(url_for("profile"))

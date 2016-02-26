@@ -1,4 +1,4 @@
-import os
+import os, sys
 import string
 import importlib
 from urlparse import urlparse
@@ -69,6 +69,27 @@ def get_valid_targets():
     log.info("getting valid targets.")
     return get_unique_values("target")
 
+def get_plugins_with_subtargets():
+    plugin_values = get_value_list("has_subtarget")
+    has_subtarget = []
+    for pairs in plugin_values:
+        plugin = pairs[0]
+        values = pairs[1]
+        if "true" in values:
+            has_subtarget.append(plugin)
+    return has_subtarget
+
+def get_targets_with_subtargets():
+    plugins = get_plugins_with_subtargets()
+    all_targets = get_value_list("target")
+    targets = []
+    for pairs in all_targets:
+        plugin = pairs[0]
+        values = pairs[1]
+        if plugin in plugins:
+            targets += values
+    return targets
+
 def get_config_writer(name):
     """Get a plugins config file writer object.
 
@@ -77,9 +98,22 @@ def get_config_writer(name):
     """
 
     log.info("getting a plugins config writer.")
+    # Get plugin directory from system COPIOT_PLUGINS_DIRECTORY
+    plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
+    log.debug("Plugin directory identified at {0}".format(plugin_dir))
+    sys.path.append(plugin_dir)
+    log.debug("After adding plugin_dir python path is: {0}".format(sys.path))
+
     if not is_plugin(name):
         raise ValueError("{0} is not a plugin.".format(name))
-    config = importlib.import_module('copilot.plugins.{0}.config'.format(name))
+    try:
+        plugin_config_path = "plugins.{0}.config".format(name)
+        log.debug("importing library from {0}".format(plugin_config_path))
+        config = importlib.import_module(plugin_config_path)
+    except ImportError as _e:
+        log.error("Could not import plugin {0}".format(name))
+        log.error(_e)
+        raise ImportError(_e)
     log.debug("{0} contains {1}".format(config.__name__, dir(config)))
     writer = config.ConfigWriter()
     return writer
@@ -151,6 +185,41 @@ def get_value_list(option):
     log.debug("values found: {0}".format(plist))
     return plist
 
+def get_plugin_from_rules(action, target):
+    """ Get a plugin name from an action & target rule pair.
+    """
+    log.info("Obtaining plugin name from rule pair" +
+             "{0} : {1}".format(action, target))
+    all_actions = get_value_dict("actions")
+    all_targets = get_value_dict("target")
+    plugins = set()
+
+    for plugin_name, actions in all_actions.items():
+        if action in actions:
+            log.debug("Plugin {0} has the action".format(plugin_name))
+            if target in all_targets.get(plugin_name, []):
+                log.debug("Plugin {0} has the target".format(plugin_name))
+                plugins.add(plugin_name)
+                log.info("Plugin {0} contained the rule pair.".format(plugin_name))
+
+    log.debug("Plugins found = {0}".format(plugins))
+    if len(plugins) == 1:
+        identified_plugin = plugins.pop()
+        log.info("Plugin {0} identified as target plugin.".format(identified_plugin))
+        return identified_plugin
+    elif len(plugins) > 1:
+        identified_plugin = plugins.pop()
+        log.warn("Multiple plugins found that support the rule pair" +
+                 "{0} : {1}. This is not allowed.".format(action, target) +
+                 " Using first plugin: {2}".format(identified_plugin))
+        return identified_plugin
+    else:
+        log.warn("No plugins found that matched the " +
+                 "{0}:{1} rule pair.".format(action, target))
+        raise ValueError("No plugins found that matched the " +
+                         "{0}:{1} rule pair.".format(action, target))
+
+
 def get_value_dict(option):
     """Get a dict containing the value of an option for each plugin.
 
@@ -185,20 +254,16 @@ def get_target_by_actions():
     by the co-pilot.) that the action can be used against.
     """
 
-    log.info("getting targets (e.g. plugins) sorted by actions")
-    tar_act_dict = {}
-    tdict = get_value_dict("actions")
-    for target in tdict:
-        for action in tdict[target]:
-            if action not in tar_act_dict:
-                tar_act_dict[action] = []
-                tar_act_dict[action].append(target)
-            elif target not in tar_act_dict[action]:
-                tar_act_dict[action].append(target)
-            else:
-                log.debug("Found action {0} in target {1}. This should not occur. A plugin is being examed twice or is somehow duplicated.".format(action, target))
-    log.debug("target/action pairs found: {0}".format(tar_act_dict))
-    return tar_act_dict
+    log.info("getting targets sorted by actions")
+    action_target_pairings = {}
+    actions_per_plugin = get_value_dict("actions")
+    targets_per_plugin = get_value_dict("target")
+    for plugin, actions in actions_per_plugin.items():
+        for action in actions:
+            for target in targets_per_plugin.get(plugin, []):
+                action_target_pairings.setdefault(action, []).append(target)
+    log.debug("action to target sets found: {0}".format(action_target_pairings))
+    return action_target_pairings
 
 
 class Config(object):
@@ -350,7 +415,11 @@ class ProfileConfig(object):
         self.parser = ProfileParser()
         if self.valid():
             self.data = self.build_map()
-        self.rules = self.get_rules()
+        try:
+            self.rules = self.get_rules()
+        except AttributeError:
+            raise ValueError("Config file may be properly formatted but " +
+                             " the rules found in the config seem to be corrupted.")
 
     def get_rules(self):
         """ Returns a list of rules.
@@ -364,7 +433,8 @@ class ProfileConfig(object):
         for target in self.data:
             if target in _val_targets:
                 for action in self.data[target]:
-                    if action in get_valid_actions(target):
+                    plugin_name = get_plugin_from_rules(action, target)
+                    if action in get_valid_actions(plugin_name):
                         for sub in self.data[target][action]:
                             rules.append([action, target, sub])
         log.debug("Found rules: {0}".format(rules))
@@ -417,8 +487,8 @@ class PluginConfig(object):
         Args:
             name: The plugins folder name.
         """
-
-        self.path = os.path.abspath(os.path.join("/home/www/copilot/copilot/plugins/", name, "plugin.conf"))
+        plugin_base_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
+        self.path = os.path.abspath(os.path.join(plugin_base_dir, "plugins", name, "plugin.conf"))
         self.parser = ProfileParser()
         if self.valid():
             self.data = self.build_map()

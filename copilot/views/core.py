@@ -41,7 +41,7 @@ def index():
 def not_found(error):
     """ The route for pages that are not found"""
     flash("We're sorry. The page you are looking for cannot be found.", "error")
-    return redirect(url_for("error", face="sad"))
+    return redirect(url_for("profile"))
 
 @app.route('/menu')
 @login_required
@@ -63,12 +63,12 @@ def info():
     """
     profile = get_profile_status()
     access_point = get_ap_status()
-    status = [{"icon" : "profile",
+    status = [{"icon" : "vpn_lock",
                "name" : "Profile",
               "value" : profile['value'],
               "status" : profile['status'],
                "url" : "profile_current"},
-              {"icon":"wifi",
+              {"icon":"wifi_tethering",
                "name" : "Access Point Name",
                "value":access_point['value'],
                "status":access_point['status'],

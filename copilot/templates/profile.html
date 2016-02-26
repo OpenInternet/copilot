@@ -1,69 +1,119 @@
 {% extends "base.html" %}
-{% from "rule_item.html" import render_rules %}
-{% from "alert.html" import render_alerts %}
-{% from "submit.html" import render_submit_buttons %}
+{% from "_formhelpers.html" import render_field %}
+
+{% macro render_rules(field) %}
+<section class="section--center mdl-grid rule-section rule_block" id="{{field.name}}-group">
+  <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
+  </div>
+  <div class="mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp">
+    <div class="mdl-card__title">
+      {% for subfield in field %}
+      {% if subfield.short_name == "action" %}
+      <h2 class="mdl-card__title-text" id="{{field.name}}-title">{{ subfield.data|title }} Rule</h2>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <div class="row rule">
+          {% for subfield in field %}
+          {% if subfield.short_name != "csrf_token" %}
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select mdl-cell mdl-cell--3-col ">
+            {{ subfield(class_="mdl-selectfield", onclick="update_from_selector('{0}-{1}')".format(field.name,subfield.short_name)) }}
+            <!-- TODO Add the tooltip back into the compiled versions
+                 <div class="mdl-tooltip mdl-tooltip--large">The action to be taken against the "targeted" traffic. e.g. block, throttle, redirect, or monitor.</div>
+          </div>
+          <div class="mdl-tooltip mdl-tooltip--large">The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL.</div>
+          <div class="mdl-tooltip mdl-tooltip--large">"A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic."</div>
+          -->
+          </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right">
+        <i class="material-icons">remove</i>
+      </button>
+    </div>
+  </div>
+</section>
+{% endmacro %}
 
 
 {% block body %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
-<meta id="all_actions" name="all_actions" content="{% for action in action_pairs %}{{ action }} {% endfor %}">
-<meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }} {% endfor %}">
+<meta id="all_actions" name="all_actions" content="{% for action in action_pairs %}{{ action }}|{% endfor %}">
+<meta id="all_targets" name="all_targets" content="{% for tar in all_targets %}{{ tar }}|{% endfor %}">
 {% for action in action_pairs %}
-    <meta id="pairs-{{ action }}" name="pairs-{{ action }}" content="{% for tar in action_pairs[action] %}{{ tar }} {% endfor %}">
+<meta id="pairs-{{ action }}" name="pairs-{{ action }}" content="{% for tar in action_pairs[action] %}{{ tar }}|{% endfor %}">
 {% endfor %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/visual.js') }}"></script>
-<form name="profile_form" action="{{ url_for('profile_save') }}" method="post">
+<meta id="has_subtarget" name="has_subtarget" content="{% for plugin in has_subtarget %}{{ plugin }}|{% endfor %}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}">
+</script>
+
+<form name="profile_form" action="{{ url_for('profile_save') }}" method="post" id="profile_form">
     {{ form.csrf_token }}
-    <div id="rule_list">
-        {% if form.prof_name %}
-        <div class="row rule_name">
-        <label for="Name">Name</label>
-        {{form.prof_name }}
-        {% endif %}
+    <section class="section--center mdl-grid">
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
         </div>
-        <div class="row mock_rule">
-            <div class="one columns">
-                <p></p>
+        <div class="mdl-card profile-list mdl-cell mdl-cell--8-col mdl-shadow--4dp">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">CoPilot Profile</h2>
             </div>
-            <div class="three columns">
-                <div class="rule_desc_label">Action</div>
-                <p>The action to be taken against the "targeted" traffic. e.g. block, throttle, redirect, or monitor.</p>
+            <div class="mdl-card__supporting-text">
+                Give your CoPilot profile a name.
             </div>
-            <div class="three columns">
-                <div class="rule_desc_label">Target</div>
-                <p>The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL.</p>
-            </div>
-            <div class="three columns">
-                <div class="rule_desc_label">Sub-Target</div>
-                <p>A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic.</p>
-            </div>
-        </div>
-        {% for item in form.rules %}
-        {{ render_rules(item) }}
-        {% endfor %}
-        <div class="row mock_rule" id="addButton">
-            <div class="one columns">
-                <img src="{{ url_for('static', filename='images/add_rule.png') }}" onclick="addRule()">
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-
-{% block submit %}
-    <a href='#' onclick='overlay()' class="button button-primary blues">Save & Apply</a>
-    <div id="overlay">
-        <div class="paper">
-            <div class="submit">
-                Where would you like to save your profile?
-                {% for location in locations %}
-                <div class="row input_field">
-                    <input type="submit" name="submit_action" value="{{ location }}" class="button-primary blues">
+            <div class="mdl-card__actions mdl-card--border">
+                <div class="mdl-textfield mdl-js-textfield">
+                    {{ render_field(form.prof_name, class='mdl-textfield__input') }}
+                    <span class="mdl-textfield__error">You need to give a name to each profile.</span>
                 </div>
-                {% endfor %}
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Rules Section -->
+
+    {% for item in form.rules %}
+        {{ render_rules(item) }}
+    {% endfor %}
+
+        <section class="section--center mdl-grid" id="buttonSection">
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
+            </div>
+            <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                <!-- New rule button -->
+                <div class="add_new_rule" id="addButton">
+                    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" type="button" onclick="addRule(); return false;">
+                        <i class="material-icons">add</i>
+                    </button>
+                    <span for="new_rule_button" class="mdl-tooltip">Click to add a <br> new rule to your profile.</span>
+                </div>
+                <div class="add_new_rule">
+                    <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button-right mdl-button--colored">Save & Apply</button>
+                </div>
+            </div>
+        </section>
 </form>
+
+<!-- Dialogue -->
+<dialog class="mdl-dialog">
+    <h5 class="mdl-dialog__title">Save</h5>
+    <div class="mdl-dialog__content">
+      <p> Where would you like to save your profile?</p>
+    </div>
+    <div class="mdl-dialog__actions">
+      {% for location in locations %}
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" form="profile_form" name="submit_action" value="{{ location }}">{{ location }}</button>
+      {% endfor %}
+    </div>
+</dialog>
+<script>
+ var dialog = document.querySelector('dialog');
+ var showDialogButton = document.querySelector('#show-dialog');
+ if (! dialog.showModal) {
+     dialogPolyfill.registerDialog(dialog);
+ }
+ showDialogButton.addEventListener('click', function() {
+     dialog.showModal();
+ });
+</script>
 {% endblock %}

@@ -95,10 +95,9 @@ class RuleField(Form):
     profile. https://github.com/OpenInternet/co-pilot/wiki/Glossary
     """
     action = SelectField("Action", choices=zip(get_valid_actions(),
-                                               get_valid_actions()),
-                         default="block")
-    target = SelectField("Target", choices=zip(get_valid_targets(), get_valid_targets()), default="dns")
-    sub_target = TextField("Sub-Target", default="")
+                                               get_valid_actions()))
+    target = SelectField("Target", choices=zip(get_valid_targets(), get_valid_targets()))
+    sub_target = TextField("Sub-Target")
     def __init__(self, *args, **kwargs):
         kwargs['csrf_enabled'] = False
         super(RuleField, self).__init__(*args, **kwargs)

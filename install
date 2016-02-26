@@ -8,7 +8,9 @@ readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
 readonly TESTING=false
-
+readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
+readonly PLUGINS_BRANCH="master"
+readonly COPILOT_PLUGINS_DIRECTORY="/bin/copilot/"
 
 # ==== HARDWARE ====
 
@@ -143,7 +145,11 @@ setup_nginx() {
 }
 
 setup_supervisor() {
-    cp $COPILOT_DIR/templates/supervisor /etc/supervisor/conf.d/supervisord.conf
+    # replace PLUGIN_DIR_REPLACE_STRING with the actual value of the var
+    # Using @ as the sed seperator so that we don't get errors when using double quotes
+    cat $COPILOT_DIR/templates/supervisor \
+        | sed "s@PLUGIN_DIR_REPLACE_STRING@${COPILOT_PLUGINS_DIRECTORY}@" \
+              > /etc/supervisor/conf.d/supervisord.conf
     #enable
     update-rc.d supervisor enable
 }
@@ -167,17 +173,33 @@ setup_avahi() {
 
 install_plugins() {
     echo "Installing plugins."
-    for path in "$COPILOT_DIR"/copilot/plugins/*; do
+
+    # Create Plugin Directory
+    mkdir "${COPILOT_PLUGINS_DIRECTORY}"
+    # Create global environment variable for copilot to use
+    echo "COPILOT_PLUGINS_DIRECTORY=${COPILOT_PLUGINS_DIRECTORY}" >> /etc/environment
+
+    cd "${COPILOT_PLUGINS_DIRECTORY}"
+    echo "Retreiving Plugins from ${PLUGINS_REPO}"
+    git clone "${PLUGINS_REPO}" "plugins"
+    cd plugins
+    git checkout "${PLUGINS_BRANCH}"
+
+    for path in "${COPILOT_PLUGINS_DIRECTORY}"plugins/*; do
         [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
         echo "Beginning install of plugin $dirname"
         # Run installation script
-        if [ -a "$path"/install ]; then
+        if [ -a "${path}"/install ]; then
             "$path"/install
         fi
         # Add supervisor configs to supervisor
         if [ -a "$path"/supervisor.conf ]; then
-            cat "$path"/supervisor.conf >> /etc/supervisor/conf.d/supervisord.conf
+            # replace COPILOT_PLUGINS_DIRECTORY with the actual value of the var
+            # Using @ as the sed seperator so that we don't get errors when using double quotes
+            cat "$path"/supervisor.conf \
+                | sed "s@COPILOT_PLUGINS_DIRECTORY@${COPILOT_PLUGINS_DIRECTORY}@" \
+                >> /etc/supervisor/conf.d/supervisord.conf
         fi
         echo "Plugin $dirname installed"
     done

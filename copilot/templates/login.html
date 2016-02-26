@@ -1,28 +1,28 @@
 {% extends "base.html" %}
-{% from "alert.html" import render_alerts %}
-{% from "submit.html" import render_submit_buttons %}
 {% from "_formhelpers.html" import render_field %}
 
-{% block alert %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
-{% endblock %}
 
 {% block body %}
-<div class="welcome_bar">
-    <div class="welcome_container">
-        <img src="{{ url_for('static', filename='images/face_smile_48.png') }}" alt="Co-Pilot Logo" />
+<section class="section--center mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
     </div>
-</div>
-<form action="{{ url_for('login') }}" method=post>
-    {{ form.csrf_token }}
-    <div class="row">
-        <div class="six columns">
-            {{ render_field(form.password) }}
+    <div class="mdl-card login_card mdl-cell mdl-cell--8-col mdl-shadow--4dp">
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">Login</h2>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <form action="{{ url_for('login') }}" method=post>
+                {{ form.csrf_token }}
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="password" name="password" pattern=".{3,31}" id="password">
+                    <label class="mdl-textfield__label" for="password">Password</label>
+                    <span class="mdl-textfield__error">Passwords must be between 3 and 31 characters long.</span>
+                </div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onchange="this.form.submit()">
+                    Login
+                </button>
+            </form>
         </div>
     </div>
-{% endblock %}
-
-{% block submit %}
-{{ render_submit_buttons(buttons) }}
-</form>
+</section>
 {% endblock %}

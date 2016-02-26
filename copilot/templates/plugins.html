@@ -1,17 +1,40 @@
 {% extends "base.html" %}
-{% from "alert.html" import render_alerts %}
 
 {% block body %}
-{{ render_alerts(get_flashed_messages(with_categories=true))}}
+<section class="section--center mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone">
+</div>
+<div class="mdl-card plugin-list mdl-cell mdl-cell--8-col mdl-shadow--4dp">
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Plugins & Services</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        Click on a service to restart it.
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <div class="plugin-list-action mdl-list">
+            {% for name in services %}
+            {% if services[name] == "RUNNING" %}
+            <div class="mdl-list__item">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-avatar service_running">check</i>
+                    <span>{{ name }}</span>
+                </span>
+                <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">settings_backup_restore</i></a>
+            </div>
+            {% else %}
+            <div class="mdl-list__item">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-avatar service_down">close</i>
+                    <span>{{ name }}</span>
+                </span>
+                <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">refresh</i></a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</section>
 
-<div>Click on a service to restart it.</div>
-<ul class="services">
-  {% for name in services %}
-    {% if services[name] == "RUNNING" %}
-    <li class="working"><a href="/plugins/restart/{{ name }}">{{ name }}</a></li>
-    {% else %}
-    <li class="broken"><a href="/plugins/restart/{{ name }}">{{ name }}</a></li>
-    {% endif %}
-{% endfor %}
-</ul>
 {% endblock %}

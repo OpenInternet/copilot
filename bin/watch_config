@@ -78,6 +78,7 @@ if __name__ == "__main__":
     # Add config files to monitor
     config_handle.add_config("dnschef.conf", "dnschef")
     config_handle.add_config("ap.conf", "create_ap")
+    config_handle.add_config("copilot-suricata.rules", "suricata")
     prep_directory("/tmp/copilot/")
     observer.schedule(config_handle, "/tmp/copilot/")
     observer.start()

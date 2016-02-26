@@ -7,10 +7,6 @@ import re
 import logging
 log = logging.getLogger(__name__)
 
-# For easier usage calculate the path relative to here.
-# See: https://github.com/mitsuhiko/pluginbase/blob/master/example/example.py
-here = os.path.abspath(os.path.dirname(__file__))
-get_path = partial(os.path.join, here)
 
 def get_plugins():
     """ Get a list of available plugins.
@@ -18,9 +14,11 @@ def get_plugins():
     Gets the basename of each folder name in the plugins directory
     and returns the list as the list of plugins.
     """
-    plugin_dir = "/home/www/copilot/copilot/plugins"
-    # Get all folder names in plugins and remove the directory cruft to make them plugin names
-    plugins = [os.path.basename(x[0]) for x in os.walk(plugin_dir) if os.path.basename(x[0]) != "plugins"]
+    plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY'] + "/plugins/"
+    # Get all folder names in plugins directory
+    # remove the directory cruft to make them plugin names
+    plugins = [os.path.basename(x[0]) for x in os.walk(plugin_dir)
+               if os.path.basename(x[0]) != "plugins"]
     log.debug("Plugins found: {0}".format(plugins))
     return plugins
 
@@ -33,10 +31,10 @@ def is_plugin(name):
     log.debug("Checking if plugin {0} exists".format(name))
     plugins = get_plugins()
     if name in plugins:
-        log.debug("plugin exists.")
+        log.debug("plugin {0} exists.".format(name))
         return True
     else:
-        log.debug("plugin does not exist.")
+        log.debug("plugin {0} does not exist.".format(name))
         return False
 
 

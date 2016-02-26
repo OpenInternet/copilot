@@ -1,3 +1,6 @@
+[supervisord]
+environment=COPILOT_PLUGINS_DIRECTORY="PLUGIN_DIR_REPLACE_STRING"
+
 [program:copilot]
 command = gunicorn --log-level debug run:app -b localhost:8000
 directory = /home/www/copilot

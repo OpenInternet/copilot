@@ -1,13 +1,13 @@
 
 //Rule Defaults
 // Ignore the ugly one liners.
-var targetOptions = document.getElementById("all_targets").content.split(" ").filter(function(el) {return el.length != 0});
-var actionOptions = document.getElementById("all_actions").content.split(" ").filter(function(el) {return el.length != 0});
-var subTargetDefault = "internews.org";
+var targetOptions = document.getElementById("all_targets").content.split("|").filter(function(el) {return el.length != 0});
+var actionOptions = document.getElementById("all_actions").content.split("|").filter(function(el) {return el.length != 0});
+var subTargetDefault = "";
 var helpText = {}
-helpText.action = ""
-helpText.target = ""
-helpText.subTarget = ""
+helpText.action = "The action to be taken against the \"targeted\" traffic. e.g. block, throttle, redirect, or monitor."
+helpText.target = "The type of network traffic to be targeted by this rule. e.g. HTTP, HTTPS, DNS, or URL."
+helpText.sub_target = "A URL or ip-address that should be specifically targeted. (Use <strong>*</strong> to target ALL traffic."
 
 
 //Add a rule to the rule list
@@ -18,26 +18,47 @@ function addRule() {
     //create group id
     var groupID = "rules-".concat(idNum, "-", "group");
 
+    //Create the surrounding section
+    var section = document.createElement("section");
+    section.className = "section--center mdl-grid rule-section rule_block";
+    section.id = groupID;
+
+    //Create the spacer
+    var spacerDiv = document.createElement("div");
+    spacerDiv.className = "mdl-cell mdl-cell--2-col mdl-cell--hide-tablet= mdl-cell---hide-phone";
+    section.appendChild(spacerDiv);
+
+    //Create the rule card
+    var ruleCard = document.createElement("div");
+    ruleCard.className = "mdl-card rule-card mdl-cell mdl-cell--8-col mdl-shadow--4dp";
+    // Added to section below
+    //section.appendChild(ruleCard);
+
+    //Create the rule card title
+    var ruleTitleBox = document.createElement("div");
+    ruleTitleBox.className = "mdl-card__title";
+
+
+    //Create the rule card title
+    var ruleTitle = document.createElement("h2");
+    ruleTitle.className = "mdl-card__title-text";
+    ruleTitle.id = "rules-".concat(idNum, "-", "title");
+    var ruleTitleText = document.createTextNode("Rule");
+    ruleTitle.appendChild(ruleTitleText);
+    ruleTitleBox.appendChild(ruleTitle);
+    ruleCard.appendChild(ruleTitleBox);
+
+
+    // Create rule card actions section
+    var ruleCardActions = document.createElement("div");
+    ruleCardActions.className = "mdl-card__actions mdl-card--border";
+    // Added to rule card later
+    //ruleCard.appendChild(ruleCardActions);
+
+
     // Create the surrounding row div
     var row = document.createElement("div");
     row.className = "row rule";
-    row.id = groupID;
-
-
-    //Create deletion button
-    //<div class="one columns">
-    //<img src="{{ url_for('static', filename='images/delete_rule.png') }}" onclick="del_rule()">
-    //</div>
-    //create surounding column item
-    var imgDiv = document.createElement("div");
-    imgDiv.className = "one columns";
-    //create image
-    var delImage = document.createElement("img");
-    delImage.src = "/static/images/delete_rule.png";
-    delImage.onclick = function() { delRule(groupID); };
-    //append image to row
-    imgDiv.appendChild(delImage);
-    row.appendChild(imgDiv);
 
     // Create action rule sub components
     var actionSelector = addRuleSelector(idNum, "action", actionOptions);
@@ -51,10 +72,30 @@ function addRule() {
     var subTargetSelector = addRuleSelector(idNum, "sub_target", targetOptions);
     row.appendChild(subTargetSelector);
 
+    // Create delete Rule button
+    var delButton = document.createElement("button");
+    delButton.className = "mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right";
+    delButton.onclick = function() { delRule(groupID); };
+    // Add icon to button
+    var icon = document.createElement("i");
+    icon.className = "material-icons"
+    var iconText = document.createTextNode("remove");
+    icon.appendChild(iconText);
+    delButton.appendChild(icon);
+
+
+    //add row to rule card actions
+    ruleCardActions.appendChild(row)
+    ruleCardActions.appendChild(delButton)
+    ruleCard.appendChild(ruleCardActions);
+    section.appendChild(ruleCard);
+
+
     // Get the list object
-    var list = document.getElementById("rule_list");
-    var addButton = document.getElementById("addButton");
-    list.insertBefore(row, addButton);
+    var list = document.getElementById("profile_form");
+    var buttonSection = document.getElementById("buttonSection");
+    componentHandler.upgradeElement(section);
+    list.insertBefore(section, buttonSection);
 }
 
 //This deletes the rule that uses this image.
@@ -70,7 +111,15 @@ function addRuleSelector(idNum, type, options) {
 
     //Create span
     var ruleDiv = document.createElement("div");
-    ruleDiv.className = "three columns";
+    ruleDiv.className = "mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select mdl-cell mdl-cell--3-col ";
+
+    //var label = document.createElement("label");
+    //label.className = "mdl-textfield__label"
+    //label.for = ruleID
+    //get help text from above
+    //var labelText = document.createTextNode(type);
+    //label.appendChild(labelText);
+    //ruleDiv.appendChild(label);
 
     // Create Data
     var data = createRuleData(type, ruleID, options);
@@ -79,47 +128,65 @@ function addRuleSelector(idNum, type, options) {
     ruleDiv.appendChild(data);
 
     //create help
-    //<div class="help"> {{help goes here}} </div>
-    var help = document.createElement("div");
-    help.className = "help"
+    var tooltip = document.createElement("div");
+    tooltip.className = "mdl-tooltip mdl-tooltip--large"
+    tooltip.for = ruleID
     //get help text from above
-    var text = document.createTextNode(helpText[type]);
-    help.appendChild(text);
-    ruleDiv.appendChild(help);
+    var tooltipText = document.createTextNode(helpText[type]);
+    tooltip.appendChild(tooltipText);
+    ruleDiv.appendChild(tooltip);
 
     return ruleDiv
 }
 
-//Creates a html rule object
-// <select id="rules-0-action" class="u-full-width action" name="rules-0-action">
-// <option value="block" selected="">block</option>
-// </select>
+function getDefaultOption(type) {
+    var defaultOption = document.createElement("option");
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    defaultOption.value = "";
+    var defaultContent = document.createTextNode("Choose your "+type);
+    defaultOption.appendChild(defaultContent);
+    return defaultOption
+}
+
+//Creates a html rule object using material design select
+// https://github.com/CreativeIT/getmdl-select
 function createRuleData(type, ruleID, options) {
     var data;
     if (type == "action" || type == "target") {
-        // <select id="rules-2-action" name="rules-2-action">
+        // Create input element
         data = document.createElement("select");
+        data.className = "mdl-selectfield"
+
+        // Don't display targets until actions have been chosen
+        if (type == "target") {
+            data.style.visibility = "hidden";
+        }
+
         // Add all options to the select object
+        defaultOption = getDefaultOption(type)
+        data.appendChild(defaultOption);
+
+        // Add all proper options to object
         for(var i = 0; i < options.length; i++) {
             // <option selected value="block">block</option>
             var dataOption = document.createElement("option");
-            dataOption.value = options[i];
             var dataContent = document.createTextNode(options[i]);
             dataOption.appendChild(dataContent);
             data.appendChild(dataOption);
         }
-        //Set the class of the data objects to be the name of the type of object that they are.
-        data.className = type
     } else if (type == "sub_target") {
         data = document.createElement("input");
-        data.type = "text"
-        data.value = subTargetDefault
+        data.className = "mdl-textfield__input";
+        data.type = "text";
+        data.value = subTargetDefault;
+        data.style.visibility = "hidden";
     }
+
     //Set Generic Properties
-    data.id = ruleID
-    data.onclick = "update_from_".concat(type, "(this)")
-    data.className = "u-full-width {{ type }}"
-    data.name = ruleID
+    data.id = ruleID;
+    data.addEventListener('click', function(){update_from_selector(ruleID)});
+    data.name = ruleID;
     return data
 }
 
@@ -127,7 +194,8 @@ function createRuleData(type, ruleID, options) {
 function getIdNum() {
     // get list of links with 'rules' class
     var curNum
-    var links = document.getElementsByClassName('rule');
+    var links = document.getElementsByClassName('rule_block');
+    //console.log(links)
     var last = links[links.length - 1]
     if (typeof last !== 'undefined') {
         var lastID = last.id
@@ -143,23 +211,66 @@ function getIdNum() {
     return curNum
 }
 
+function update_from_selector(id) {
+    //console.log(id);
+    var selector_type = id.split("-")[2]
+    if (selector_type == "action") {
+        update_from_action(id)
+    } else if (selector_type == "target") {
+        update_from_target(id)
+    } else if (selector_type == "sub_target") {
+        update_from_sub_target(id)
+    }
+}
+
 
 //update the target based upon an action
-function update_from_action(selector) {
-    var idNum = selector.id.split("-")[1]
+function update_from_action(id) {
+    var selector = document.getElementById(id)
+    var idNum = id.split("-")[1]
+    var selector_type = selector.options[selector.selectedIndex].value
     // get metadata object data of action target pairs
-    var raw_targets = document.getElementById('pairs-'.concat(selector.value)).content;
-    var targets = raw_targets.split(" ").filter(function(el) {return el.length != 0})
+    var raw_targets = document.getElementById('pairs-'.concat(selector_type)).content;
+    var targets = raw_targets.split("|").filter(function(el) {return el.length != 0})
 
     // get the target selector we will be modifying
     var targetObj = document.getElementById('rules-'.concat(idNum, "-", "target"));
     // clear all options from it
     targetObj.options.length=0
+    targetObj.style.visibility = "visible"
     // repopulate the options
+    defaultOption = getDefaultOption("target")
+    targetObj.appendChild(defaultOption);
     for (i=0; i < targets.length; i++){
         targetObj.options[targetObj.options.length]=new Option(targets[i],  targets[i])
     }
+
+    // Hide sub target always
+    var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
+    subTargetObj.style.visibility = "hidden"
+
+    // Change the Rule Title
+    var ruleTitle = document.getElementById("rules-".concat(idNum, "-", "title"));
+    var selector_string = selector_type.charAt(0).toUpperCase() + selector_type.slice(1);
+    ruleTitle.textContent = selector_string + " Rule";
 }
 
-function update_from_target(selector) {}
+function update_from_target(id) {
+    var selector = document.getElementById(id)
+    var idNum = id.split("-")[1]
+    var selector_type = selector.options[selector.selectedIndex].value
+    // get metadata object data of action target pairs
+    var sub_target_list = document.getElementById('has_subtarget').content;
+    var has_sub_targets = sub_target_list.split("|").filter(function(el) {return el.length != 0})
+    //console.log(sub_target_list)
+    //console.log(has_sub_targets)
+    // get the target selector we will be modifying
+    var subTargetObj = document.getElementById('rules-'.concat(idNum, "-", "sub_target"));
+    if (has_sub_targets.indexOf(selector_type) > -1) {
+        subTargetObj.style.visibility = "visible"
+    } else {
+        subTargetObj.style.visibility = "hidden"
+    }
+}
+
 function update_from_sub_target(selector) {}

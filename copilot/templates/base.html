@@ -1,38 +1,84 @@
+{% from "alert.html" import render_alerts %}
+
 <!doctype html>
 <!-- Core stlesheet -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
+<head>
+    <!-- Internal Links to be added later. TODO FONT NEEDS TO BE LOCAL AS WELL.
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/material.blue_grey-blue.min.css') }}">
+         <script src="{{ url_for('static', filename='js/material.min.js') }}"></script>
+         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+       -->
+    <script src="{{ url_for('static', filename='js/dialog-polyfill.js') }}"></script>
+    <!-- EXTERNAL LINKS TODO REMOVED when internal is added -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.blue_grey-blue.min.css" />
+    <script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dialog-polyfill.css') }}">
 
-<!-- Responsive stylesheets -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type=text/css media="screen and (max-width: 320px) and (orientation: portrait)" href="{{ url_for('static', filename='css/small.css') }}">
-<link rel="stylesheet" type=text/css media="screen and (min-width: 320px) and (max-width: 640px)" href="{{ url_for('static', filename='css/medium.css') }}">
-<link rel="stylesheet" type=text/css media="screen and (min-width: 640px)" href="{{ url_for('static', filename='css/large.css') }}">
-<link rel="stylesheet" type=text/css media="(orientation: portrait)" href="{{ url_for('static', filename='css/portrait.css') }}">
-<link rel="stylesheet" type=text/css media="(orientation: landscape)" href="{{ url_for('static', filename='css/landscape.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<body>
-    <ul class="navigation">
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('profile') }}">New</a></li>
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('profile_load') }}">Load</a></li>
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('profile_current') }}">Edit</a></li>
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('config') }}">Settings</a></li>
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('info') }}">Info</a></li>
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('plugins') }}">Plugins</a></li>
-        <li class="nav-item"><a class="popover-link" href="{{ url_for('logout') }}">Logout</a></li>
-    </ul>
-    <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-    <label for="nav-trigger"></label>
-    <div class="site-wrap">
-        <div class="menu_bar">
-            <div class="page_title">
-                {{ title }}
+    <title>{{ title }}</title>
+
+</head>
+
+<body class="copilot-interface">
+    <div class="copilot-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+        <header class="copilot-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">{{ title }}</span>
+                <div class="mdl-layout-spacer"></div>
+                <!-- TODO Make the following DropDown populate with all available PROFILES
+                     <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+                     <i class="material-icons">more_vert</i>
+                     </button>
+                     <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+                     <li class="mdl-menu__item">About</li>
+                     <li class="mdl-menu__item">Contact</li>
+                     <li class="mdl-menu__item">Legal information</li>
+                     </ul>
+                   -->
             </div>
+        </header>
+        <div class="copilot-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+            <header class="copilot-drawer-header">
+                {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                <img src="{{ url_for('static', filename='images/face_frown_128.png') }}" class="copilot-avatar">
+                {% elif get_flashed_messages(category_filter=["success"]) %}
+                <img src="{{ url_for('static', filename='images/face_fire_128.png') }}" class="copilot-avatar">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">
+                {% endif %}
+                {% endwith %}
+            </header>
+            <!-- TODO make background of head change with emotion -->
+            <nav class="copilot-navigation mdl-navigation mdl-color--blue-grey-800">
+                <a class="mdl-navigation__link" href="{{ url_for('profile') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">add_circle</i>New</a>
+                <a class="mdl-navigation__link" href="{{ url_for('profile_load') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">file_upload</i>Load</a>
+                <a class="mdl-navigation__link" href="{{ url_for('profile_current') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">edit</i>Edit</a>
+                <a class="mdl-navigation__link" href="{{ url_for('config') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">settings</i>Settings</a>
+                <a class="mdl-navigation__link" href="{{ url_for('info') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">info</i>Info</a>
+                <!-- Removed because it is really an advanced menu not for users
+                     <a class="mdl-navigation__link" href="{{ url_for('plugins') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">extension</i>Plugins</a>
+                   -->
+                <a class="mdl-navigation__link" href="{{ url_for('logout') }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">lock</i>Logout</a>
+                <div class="mdl-layout-spacer"></div>
+                <!-- TODO Add in help page later. -->
+                <!-- <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a> -->
+            </nav>
         </div>
-        <div class="container content-frame">
-            {% block body %}{% endblock %}
-            {% block submit %}{% endblock %}
-        </div>
+        <main class="mdl-layout__content mdl-color--grey-100">
+            <div class="main-content">
+                <!-- INSERT MAIN CONTENT HERE -->
+                {% block alert %}
+                {{ render_alerts(get_flashed_messages(with_categories=true))}}
+                {% endblock %}
+                {% block body %}{% endblock %}
+                {% block submit %}{% endblock %}
+            </div>
+        </main>
     </div>
 </body>
+</html>
