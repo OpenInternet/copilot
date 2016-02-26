@@ -12,11 +12,11 @@
             <ul class="status mdl-list">
                 {% for item in status %}
                 <li class="mdl-list__item">
-                    <span class="mdl-list__item-primary-content" id="{{ item['name'] }}">
+                    <strong>{{ item['name'] }}</strong>
+                    <span class="mdl-list__item-primary-content" >
                         <i class="material-icons mdl-list__item-icon">{{ item['icon'] }}</i>
                         <a href="{{ url_for( item['url'] ) }}">{{ item['value'] }}</a>
                     </span>
-                    <label class="mdl-textfield__label" for="{{ item['name'] }}">{{ item['name'] }}</label>
                 </li>
                 {% endfor %}
             </ul>
