@@ -47,11 +47,11 @@
                     {% for category, message in get_flashed_messages(with_categories=true) %}
                 <!-- Check for error face first -->
                        {% if category == "error" %}
-                <img src="{{ url_for('static', filename='images/face_frown_128.png') }}" class="copilot-avatar">
+                <img src="{{ url_for('static', filename='images/face_frown_128.png') }}" class="copilot-avatar">{% break %}
                        {% elif category == "success" %}
-                <img src="{{ url_for('static', filename='images/face_fire_128.png') }}" class="copilot-avatar">
+                <img src="{{ url_for('static', filename='images/face_fire_128.png') }}" class="copilot-avatar">{% break %}
                        {% else %}
-                <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">
+                <img src="{{ url_for('static', filename='images/face_smile_128.png') }}" class="copilot-avatar">{% break %}
                        {% endif %}
                     {% endfor %}
                 {% else %}
