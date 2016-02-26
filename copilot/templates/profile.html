@@ -18,7 +18,7 @@
           {% for subfield in field %}
           {% if subfield.short_name != "csrf_token" %}
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select mdl-cell mdl-cell--3-col ">
-            {{ subfield(class_="mdl-selectfield", onclick="update_from_selector({0}-{1})".format(field.name,subfield.short_name)) }}
+            {{ subfield(class_="mdl-selectfield", onclick="update_from_selector('{0}-{1}')".format(field.name,subfield.short_name)) }}
             <!-- TODO Add the tooltip back into the compiled versions
                  <div class="mdl-tooltip mdl-tooltip--large">The action to be taken against the "targeted" traffic. e.g. block, throttle, redirect, or monitor.</div>
           </div>
