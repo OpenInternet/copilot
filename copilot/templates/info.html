@@ -15,8 +15,8 @@
                     <span class="mdl-list__item-primary-content" >
                         <i class="material-icons mdl-list__item-icon .mdl-list_big-item-icon">{{ item['icon'] }}</i>
                         <div>
-                            <p>{{ item['name'] }}</p>
-                            <p><strong><a href="{{ url_for( item['url'] ) }}">{{ item['value'] }}</a><strong></p>
+                            <label>{{ item['name'] }}</label>
+                            <p><a href="{{ url_for( item['url'] ) }}">{{ item['value'] }}</a></p>
                         </div>
                     </span>
                 </li>
