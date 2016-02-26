@@ -112,7 +112,12 @@ class Profile(object):
         if isinstance(ruleset, dict):
             rule = ruleset
         elif isinstance(ruleset ,list):
-            rule = {"action":ruleset[0], "target":ruleset[1], "sub_target":ruleset[2]}
+            rule = {"action":ruleset[0],
+                    "target":ruleset[1],
+                    "sub_target":ruleset[2]}
+            # Rules without sub-targets need a default to ignore
+            if rule['sub_target'] == "":
+                rule['sub_target'] = "SUB_TARGET_NOT_GIVEN"
         log.debug("adding rule {0} {1} {2}".format(rule['action'], rule['target'], rule['sub_target']))
         plugin_name = get_plugin_from_rules(rule.get('action',""), rule.get('target',""))
         config_obj = get_config_writer(plugin_name)

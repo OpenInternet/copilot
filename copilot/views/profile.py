@@ -58,7 +58,10 @@ def profile(prof_name):
         for rule in profile.rules:
             _action = rule[0]
             _tar = rule[1]
-            _sub = rule[2]
+            if rule[2] == "SUB_TARGET_NOT_GIVEN":
+                _sub = ""
+            else:
+                _sub = rule[2]
             log.debug("adding rule: action: {0}, target:{1}, subtarget{2}".format(_action, _tar, _sub))
             form.rules.append_entry(data={"target":_tar, "sub_target":_sub, "action":_action})
     else:
