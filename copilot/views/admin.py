@@ -34,6 +34,7 @@ def login():
             return redirect(url_for('index'))
         else:
             log.debug("User supplied an incorrect password.")
+            flash("The password provided was incorrect. Please try again", "error")
             return redirect(url_for('login'))
     buttons = [{"name":"Submit", "submit":True}]
     return render_template('login.html', form=form, buttons=buttons)
