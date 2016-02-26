@@ -58,6 +58,7 @@ def profile(prof_name):
         for rule in profile.rules:
             _action = rule[0]
             _tar = rule[1]
+            # See default for missing subtargets in the profile model for more info.
             if rule[2] == "SUB_TARGET_NOT_GIVEN":
                 _sub = ""
             else:
