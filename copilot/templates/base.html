@@ -43,23 +43,17 @@
         </header>
         <div class="copilot-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
             <header class="copilot-drawer-header">
+                {% set emotion = emotion|default("smile") %}
                 {% if get_flashed_messages(with_categories=true) %}
                     {% for category, message in get_flashed_messages(with_categories=true) %}
                 <!-- Check for error face first -->
                        {% if category == "error" %}
-                error - {{message}}
-                            {% set emotion = "frown" %}
+                            {% set emotion = "frown"! %}
                        {% elif category == "success" %}
-                success - {{message}}
-                           {% set emotion = "fire" %}
-                {% else %}
-                other - {{message}}
+                           {% set emotion = "fire"! %}
                         {% endif %}
                     {% endfor %}
-                {% else %}
-                    {% set emotion = "smile" %}
                 {% endif %}
-                {% set emotion = "smile" %}
                 <img src="{{ url_for('static', filename='images/face_'+emotion+'_128.png') }}" class="copilot-avatar">
             </header>
             <!-- TODO make background of head change with emotion -->
