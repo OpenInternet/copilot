@@ -6,39 +6,39 @@ categories: developer
 
 **Table of Contents**
 
-[1. Acknowledgements](#1-acknowledgements)
+[1. Acknowledgements](#acknowledgements)
 
-[2. About Internews](#2-about-internews)
+[2. About Internews](#about-internews)
 
-[3. Executive Summary](#3-executive-summary)
+[3. Executive Summary](#executive-summary)
 
-- [3.1. Findings](#31-findings)
+- [3.1. Findings](#findings)
 
-- [3.2. Limitations](#32-limitations)
+- [3.2. Limitations](#limitations)
 
-- [3.3. Recommendations](#33-recommendations)
+- [3.3. Recommendations](#recommendations)
 
-[4. Research Approach](#4-research-approach)
+[4. Research Approach](#research-approach)
 
-[5. Major Findings](#5-major-findings)
+[5. Major Findings](#major-findings)
 
-- [5.1. Adoption: Making Co-Pilot valuable to the trainer community](#51-adoption-making-co-pilot-valuable-to-the-trainer-community)
+- [5.1. Adoption: Making Co-Pilot valuable to the trainer community](#adoption-making-co-pilot-valuable-to-the-trainer-community)
 
-- [5.2. Adaptation: Ensuring the growth and long-term stability of Co-Pilot](#52-adaptation-ensuring-the-growth-and-long-term-stability-of-co-pilot)
+- [5.2. Adaptation: Ensuring the growth and long-term stability of Co-Pilot](#adaptation-ensuring-the-growth-and-long-term-stability-of-co-pilot)
 
-[6. Limitations](#6-limitations)
+[6. Limitations](#limitations)
 
-- [6.1. Duty of Care: Simulating hostile environments without causing trauma](#61-duty-of-care-simulating-hostile-environments-without-causing-trauma)
+- [6.1. Duty of Care: Simulating hostile environments without causing trauma](#duty-of-care-simulating-hostile-environments-without-causing-trauma)
 
-[7. Recommendations](#7-recommendations)
+[7. Recommendations](#recommendations)
 
-- [7.1. Simulations: The creation and sharing of accurate reproductions of regional censorship](#71-simulations-the-creation-and-sharing-of-accurate-reproductions-of-regional-censorship)
+- [7.1. Simulations: The creation and sharing of accurate reproductions of regional censorship](#simulations-the-creation-and-sharing-of-accurate-reproductions-of-regional-censorship)
 
-- [7.2. Context Appropriate: Supporting the diversity of training environments](#72-context-appropriate-supporting-the-diversity-of-training-environments)
+- [7.2. Context Appropriate: Supporting the diversity of training environments](#context-appropriate-supporting-the-diversity-of-training-environments)
 
-- [7.3. Documentation: Removing trainer uncertainty](#73-documentation-removing-trainer-uncertainty)
+- [7.3. Documentation: Removing trainer uncertainty](#documentation-removing-trainer-uncertainty)
 
-[8. Conclusion](#8-conclusion)
+[8. Conclusion](#conclusion)
 
 ## 1. Acknowledgements
 
