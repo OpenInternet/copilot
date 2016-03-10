@@ -7,7 +7,7 @@ layout: default
   <h1 class="page-heading">Trainer Resources</h1>
   {% for post in site.categories["trainer"] %}
   <h2>
-      <a class="post-link" href="{{ post.url }}">{{ post.title }}</a>
+      <a class="post-link" href="{{ post.url | prepend: site.url }}">{{ post.title }}</a>
   </h2>
   {% endfor %}
   <h1 class="page-heading">Developer Resources</h1>
