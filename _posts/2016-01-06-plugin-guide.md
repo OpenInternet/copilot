@@ -4,11 +4,8 @@ title:  "Plugin Guide"
 categories: developer
 ---
 
-<div class="plugin-head">
-
+{:.plugin-logo}
 ![Co-Pilot Plugin Logo](https://raw.github.com/wiki/openinternet/co-pilot/images/plugins_logo.png)
-
-</div>
 
 ### What is a Plugin?
 

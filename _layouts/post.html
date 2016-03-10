@@ -10,7 +10,7 @@ layout: default
             <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
         </header>
 
-        <div class="post-content" itemprop="articleBody">
+        <div class="post-content {{ page.title | slugify }}" itemprop="articleBody">
             {{ content }}
         </div>
 
