@@ -195,8 +195,10 @@ html, body {
 
 .copilot-page .copilot-logo {
     background-color: white;
+    height: 100px;
 }
 
 .copilot-page .copilot-logo-buffer {
     background-color: white;
+    height: 10px;
 }
