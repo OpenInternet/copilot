@@ -229,3 +229,8 @@ html, body {
 .copilot-post-content h3 {
   margin-top: 48px;
 }
+
+.copilot-post-container img {
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
