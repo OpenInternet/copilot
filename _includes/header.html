@@ -13,6 +13,7 @@
             {% if my_page.url == page.url %}
             <a href="{{ my_page.url | prepend: site.github.url }}" class="mdl-layout__tab is-active">{{ my_page.title }}</a>
             {% else %}
+            <p>{{ my_page.url }}:::{{ page.url }}</p>
             <a href="{{ my_page.url | prepend: site.github.url }}" class="mdl-layout__tab">{{ my_page.title }}</a>
             {% endif %}
             {% endif %}

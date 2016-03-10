@@ -9,6 +9,6 @@
 title: CoPilot
 description: > # this means to ignore newlines until "baseurl:"
   Co-Pilot is an easy to use censorship simulating access point.
-baseurl: "copilot" # the subpath of your site, e.g. /blog
+baseurl: "/copilot" # the subpath of your site, e.g. /blog
 url: "http://openinternet.github.io" # the base hostname & protocol for your site
 github_username:  openinternet

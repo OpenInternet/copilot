@@ -198,6 +198,10 @@ html, body {
     height: 100px;
 }
 
+.copilot-page .copilot-logo img {
+        height: 100%;
+}
+
 .copilot-page .copilot-logo-buffer {
     background-color: white;
     height: 10px;
