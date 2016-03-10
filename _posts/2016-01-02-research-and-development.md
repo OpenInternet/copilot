@@ -40,7 +40,7 @@ categories: developer
 
 [8. Conclusion](#8-conclusion)
 
-# 1. Acknowledgements
+## 1. Acknowledgements
 
 The Co-Pilot project was made possible through funding from the Knight Foundation, and continuous support and cooperation of Chris Barr and Nina Zenni.
 
@@ -50,13 +50,13 @@ We are indebted to the trainers and developers who volunteered their deep knowle
 
 We would also like to acknowledge the Internews management team, and specifically Jon Camfield for his technical review and inputs during the peer review processes, and his deep commitment during the development phase of the project.
 
-# 2. About Internews
+## 2. About Internews
 
 Internews is an international nonprofit organization whose mission is to empower local media worldwide to give people the news and information they need, the ability to connect and the means to make their voices heard. Formed in 1982, Internews has worked in more than 90 countries, and currently has offices in Africa, Asia, Europe, the Middle East, Latin America and North America. With global expertise and reach, Internews trains media professionals and civil society, introduces innovative media solutions, increases coverage of vital issues and helps establish policies needed for open access to information.
 
 Internews is a pioneer in developing and enhancing information security tools and practices, increasing the use of circumvention and mobile technologies, and improving secure communication channels to ensure journalists, civil society and human rights defenders have access to independent information. Internews has a robust physical and digital security program with staff who provide extensive support on-the-ground and remotely. The program has managed the development, deployment, and scaling of several new circumvention tools (Tor, Psiphon, Lantern), secure mobile technologies (Orweb, Orbot, ChatSecure), and a wealth of resources (LevelUp, SaferJourno, and SAFETAG) to enable and empower individuals and organizations to better identify and resolve their digital vulnerabilities more effectively.
 
-# 3. Executive Summary
+## 3. Executive Summary
 
 Over the first six months of 2015, Internews' ICT programs, with support from a Knight Prototype Fund Grant, developed Co-Pilot; an open source tool that enables a digital security trainer to simulate hostile digital environments.
 
@@ -78,17 +78,17 @@ This process resulted in the successful development of the Co-Pilot tool, which 
 
 This report summarizes the major findings, limitations, and future recommendations that were derived from the human-centered research & design process of Co-Pilot.
 
-## 3.1. Findings
+### 3.1. Findings
 
 -   **Adoption:** Making Co-Pilot valuable to the trainer community
 
 -   **Adaption:** Ensuring the growth and long-term stability of Co-Pilot
 
-## 3.2. Limitations
+### 3.2. Limitations
 
 -   **Duty of Care:** Simulating hostile environments without causing trauma
 
-## 3.3. Recommendations
+### 3.3. Recommendations
 
 -   **Simulations:** The creation and sharing of accurate reproductions of regional censorship
 
@@ -96,7 +96,7 @@ This report summarizes the major findings, limitations, and future recommendatio
 
 -   **Documentation:** Removing trainer uncertainty
 
-# 4. Research Approach
+## 4. Research Approach
 
 The Co-Pilot team determined that an initial needs assessment was a necessary first step in order to ensure that the Co-Pilot prototype addressed the core issues digital security trainers face in the field. The main goals of the initial needs assessment were two-fold:
 
@@ -125,9 +125,9 @@ Internews has developed its [own research design methodology](http://design.inte
 
 ![document](https://raw.github.com/wiki/openinternet/co-pilot/images/document.png) Once the Co-Pilot device was completed the Co-Pilot team focused on [documenting](https://github.com/OpenInternet/co-pilot/wiki) Co-Pilot's [setup](https://github.com/OpenInternet/co-pilot/wiki/Setup-Guide), [use](https://github.com/OpenInternet/co-pilot/wiki/Sample-Training-Activity), and [modification](https://github.com/OpenInternet/co-pilot/wiki/Plugin-Guide),  The team also took time to document their research findings to support future development in this area of work (this document).
 
-# 5. Major Findings
+## 5. Major Findings
 
-## 5.1. Adoption: Making Co-Pilot valuable to the trainer community
+### 5.1. Adoption: Making Co-Pilot valuable to the trainer community
 
 When asked what would cause a trainer to use or not use a tool like Co-Pilot, the majority of interviewees wrote that ease of setup and use was critical. While not entirely unexpected, this was a major theme in all questions that explored adoption by trainers. Understanding that ease of use was one of the most important features of Co-Pilot, multiple iterations of usability testing occurred throughout the development process – with both trainers and training participants.
 
@@ -183,7 +183,7 @@ Throughout the Co-Pilot research and development phases the team was approached 
 
 Adding support for the variety of devices that developers and trainers desired pushed the Co-Pilot team to seek out a stable core platform that worked across a variety of requested devices. The Co-Pilot team identified the  [Kali Linux penetration testing system](https://www.kali.org/)  as the perfect platform. This platform has a set of build scripts that allow for stable installation on on a variety of embedded hardware devices. Co-Pilot currently runs on [three embedded hardware devices](https://github.com/OpenInternet/co-pilot/wiki/Supported-Devices) and has possible integration across an additional five devices because of its Kali-Linux base. The Kali-Linux distribution also has built within it a [variety of specialized tools](http://tools.kali.org/tools-listing) for traffic sniffing (surveillance), spoofing, and wireless attacks that developers can use to easily extend co-pilots capabilities. By using these well known, stable, open-source platforms and tools Co-Pilot's team could extend its supported devices while adding high-impact censorship and surveillance simulations easier for outside developers.
 
-## 5.2. Adaptation: Ensuring the growth and long-term stability of Co-Pilot
+### 5.2. Adaptation: Ensuring the growth and long-term stability of Co-Pilot
 
 One of the benefits of having a wide range of digital security trainers take the survey is being able to see its applicability in a variety of different settings and contexts around the globe. Understanding the value that trainers from different regions and contexts see in this type of tool also has implications for the tool’s design. Many trainers mentioned specific countries when talking about demonstrating censorship environments. This led to internal discussions on how to incorporate country-specific censorship and blocking into the Co-Pilot prototype. Given that country-specific censorship is difficult to track and takes a significant amount of resources to stay up-to-date, the Co-Pilot team focused instead on the ability to share different blocking configuration profiles with other trainers.
 
@@ -196,9 +196,9 @@ Profile sharing allows trainers to pool resources, while also allowing them to l
 It is [known in the open-source community](http://producingoss.com/en/today.html) that if an open-source project wishes to gather outside contributions and adaptations, it needs to also make it easy for developers to engage with, and contribute to the project. But surprisingly, many projects require a developer to read through list-serv's and issue queues, beg for advice in chatrooms, and read pages of source code in order to figure out how to add even the smallest feature to a tool. These developers will seek out alternative uses for their free time if a project has not been [built for modification and optimized for their success.](https://opensource.com/business/14/9/community-best-practices-new-era-open-source) The team [faced continuous requests](https://github.com/OpenInternet/co-pilot/issues/25) from developers who wished to add different types of functionality to Co-Pilot. Just as the ability to create tailored profiles was critical to the long-term adoption and use of Co-Pilot, developers saw the ability for outsiders to extend the Co-Pilot software as vital to its long-term viability as a core digital security training tool. In response to this Co-Pilot was re-engineered to include a [plugin system at its core.](https://github.com/OpenInternet/co-pilot/wiki/Plugin-Guide) This plugin system allows for Co-Pilot's capabilities to be extended without having in-depth knowledge of how Co-Pilot's back-end works or having had experience working with its underlying code-base. In order to support developers using the plugin system the Co-Pilot team also created an [example plugin](https://github.com/OpenInternet/co-pilot/tree/master/docs/example_plugin), [documentation for creating and installing a plugin](https://github.com/OpenInternet/co-pilot/wiki/Plugin-Guide), and a [plugin management menu](https://github.com/OpenInternet/co-pilot/wiki/Plugin-Guide#restarting-a-plugin-using-the-copilot-user-interface) that allows developers to monitor and restart a plugins from the Co-Pilot web interface.
 
 
-# 6. Limitations
+## 6. Limitations
 
-# 6.1. Duty of Care: Simulating hostile environments without causing trauma
+## 6.1. Duty of Care: Simulating hostile environments without causing trauma
 
 There was a split within the trainer community between those who requested that Co-Pilot implement surveillance, faux malware delivery, and other active digital attacks and those who felt that implementing these could end up harming those we wish to help. The practice of **controlled exploitation** is used by some trainers to increase the sense of urgency or vulnerability of participants. Examples of controlled exploitation can include a trainer changing a participants background when they leave their computer logged in while out of the room, showing participant's user-names and passwords that are exposed in wireless traffic during the training, or even using a wireless device, like Co-Pilot, to replace all images on websites that participants browse during the training with one of the trainers choosing.
 
@@ -216,9 +216,9 @@ With the limited time-line for core feature development, the Co-Pilot team decid
 
 The team cannot prevent Co-Pilot from being used maliciously. One cannot create software that leverages malicious technology without accepting some level of risk that others will use their software in an unintended manner. Knowing this, the team, therefore, decided that they would target the motivation behind most software reuse; commercial gain. The team applied an open-source and non-commercial license to the software so that Co-Pilot could not be merged into commercial or proprietary small-scale censorship projects. This is a minor mitigation for a risk that the team almost entirely had to accept in order to gain the adoption, use, and adaptation that would be needed to make an impact in the trainer community.
 
-## 7. Recommendations
+### 7. Recommendations
 
-## 7.1. Simulations: The creation and sharing of accurate reproductions of regional censorship
+### 7.1. Simulations: The creation and sharing of accurate reproductions of regional censorship
 
 Early in the project there was a misconception that Co-Pilot was attempting to provide accurate simulations of the censorship being used in various countries. This misconception led to a flood of initial feedback on the value that this would provide in advocacy, education and circumvention tool development. This feedback made it clear that the ability to incorporate country-specific censorship and blocking into Co-Pilot could be valuable.
 
@@ -226,7 +226,7 @@ Early in the project there was a misconception that Co-Pilot was attempting to p
 
 Supporting these simulations, while possibly quite valuable, have challenges that led the team to keep them off the current implementation roadmap. Country-specific censorship is difficult to track and keeping accurate, and up to date analysis takes a significant amount of resources. Accurate simulations add realism to the training environment at the expense of trainer control. When trainers use the current Co-Pilot they have full control of the censorship that the participants will encounter. Trainers can craft censorship profiles that specifically support the lessons that they are teaching. By using accurate simulations of a country the trainer would lose the fine grained control over the Co-Pilot environment that they need to directly support their individual lessons. Furthermore, the possibility of a trainer experiencing unexpected censorship that they cannot diagnose as censorship or connectivity issues adds a technical barrier to use that subverts the basic Co-Pilot goal of supporting non-technical trainers.
 
-## 7.2. Context Appropriate: Supporting the diversity of training environments
+### 7.2. Context Appropriate: Supporting the diversity of training environments
 
 Digital security trainers face a range of challenges in their work environment. Inconsistency in the quality of venues, access to training materials, and Internet bandwidth in a training space are just a few of the challenges that trainers face. In the future, Co-Pilot can be extended to respond to, and even address, some of these challenges.
 
@@ -236,7 +236,7 @@ During the interview process trainers were most concerned about how to use Co-Pi
 
 Especially slow Internet can cripple a training if a trainer has participants accessing training resources and software from the Internet. More troubling is when access to the Internet, or even power, is entirely unavailable for large periods of time. These situations render Co-Pilot's censorship capabilities useless, as they require access. But, the Co-Pilot device can still provide local connectivity that could allow a trainer to take a training offline. Traditionally, trainers keep copies of their training materials and software on USB, CD devices in case they are inaccessible during a training. Recently, some trainers have begun using portable tools like [LibraryBox](http://librarybox.us/) that can distribute training materials (presentations, guides, video-clips, how-to's) and software locally over a wireless link to make this process easier, and far less likely to pass malware between computers. Adding this functionality to Co-Pilot will make it a valuable addition to a digital security trainers tool-kit no matter what connectivity challenges they face.
 
-## 7.3. Documentation: Removing trainer uncertainty
+### 7.3. Documentation: Removing trainer uncertainty
 
 In the findings, limitations, and recommendations above a core theme is apparent - Co-Pilot can be a valuable and long-term addition to the trainer community if its possibilities and proper use are understood. The team has already created [base documentation for Co-Pilot](https://github.com/OpenInternet/co-pilot/wiki), but as new features are added, and as the community who uses Co-Pilot widens to those who do not have some level of connection to the Co-Pilot team ongoing updates to documentation will be needed to respond. Opportunities for documentation are evident to:
 
@@ -246,16 +246,16 @@ In the findings, limitations, and recommendations above a core theme is apparent
 
 Beyond this, greater integration of Co-Pilot documentation into the interface itself, through more robust and interactive help text, would allow trainers to get access to documentation that they need without having to seek it out on the Internet.
 
-# 8. Conclusion
+## 8. Conclusion
 
 The digital security training community is a loosely knit web of individuals from across the globe. These individuals work in a range of hostile environments, and have an even wider range of experience and expertise. The Co-Pilot team applied a human-centered methodology to this community in order to develop a tool that they would not only want to use in their trainings, but a tool that they would want to adapt and build upon in the future. The feedback collected from the training community during this process had a deep impact on the design, development, and future path of the Co-Pilot project. The result of this six month project is a tool that meets the functional needs of the digital security training community and is tied deeply into their existing practices.
 
-# Footnotes
+## Footnotes
 
 <a name="footnoteone">1</a>: Graffiti was used during the March 2014 censorship to share address' of DNS servers which would, unlike the countries DNS servers, provide the correct address for Twitter.
 
 
-# References
+## References
 
 [1] [A pdf report of the needs assessment survey can be downloaded here.](https://raw.github.com/wiki/openinternet/co-pilot/docs/co-pilot_needs_assessment_survey.pdf)
 

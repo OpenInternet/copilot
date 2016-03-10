@@ -4,11 +4,11 @@ title:  "Installation Guide"
 categories: developer
 ---
 
-## Co-Pilot installation on unsupported ARM devices
+### Co-Pilot installation on unsupported ARM devices
 
 Co-Pilot is still in its **BETA stages**.
 
-### Installing the underlying system.
+#### Installing the underlying system.
 
 Co-Pilot uses the Kali-Linux ARM distribution as its underlying system.
 
@@ -16,7 +16,7 @@ Co-Pilot uses the Kali-Linux ARM distribution as its underlying system.
 
 * [Load your Kali-Linux image onto an SD-card.](http://odroid.us/mediawiki/index.php?title=Step-by-step_Ubuntu_SD_Card_Setup) and plug it into your Device.
 
-### Installing and Configuring the Co-Pilot system
+#### Installing and Configuring the Co-Pilot system
 
 * On the co-pilot device clone the co-pilot repository.
 
@@ -37,6 +37,6 @@ cd  co-pilot
 shutdown -r 0
 ```
 
-### Running Co-Pilot
+#### Running Co-Pilot
 
 * Follow the [configuration instructions](https://github.com/OpenInternet/co-pilot/wiki/Configuring-Co-Pilot) for running co-pilot.

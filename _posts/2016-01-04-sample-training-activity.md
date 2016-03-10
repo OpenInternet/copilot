@@ -4,7 +4,7 @@ title:  "Sample Training Activity"
 categories: trainer
 ---
 
-# Tor Browser Bundle Curricula
+## Tor Browser Bundle Curricula
 
 **Table Of Contents**
 
@@ -21,7 +21,7 @@ categories: trainer
 * [Additional Resources](#additional-resources)
 
 
-## [Level-Up](https://www.level-up.cc/about) Curricula Information
+### [Level-Up](https://www.level-up.cc/about) Curricula Information
 
 |***|***|
 |---|---|
