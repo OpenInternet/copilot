@@ -13,12 +13,13 @@ title: Main
                 <ul class='mdl-list'>
                 {% for post in site.categories["trainer"] %}
                     <li class="mdl-list__item">
-                        {% if post.icon %}
-                        <i class="material-icons mdl-list__item-icon">{{ post.icon }}</i>
-                        {% else %}
-                        <i class="material-icons mdl-list__item-icon">school</i>
-                        {% endif %}
                         <span class="mdl-list__item-primary-content">
+                            {% if post.icon %}
+                            <i class="material-icons mdl-list__item-icon">{{ post.icon }}</i>
+                            {% else %}
+                            <i class="material-icons mdl-list__item-icon">school</i>
+                            {% endif %}
+
                             <a class="post-link" href="{{ post.url | prepend: site.github.url }}">{{ post.title }}</a>
                         </span>
                     </li>
@@ -38,12 +39,12 @@ title: Main
                 <ul class='mdl-list'>
                     {% for post in site.categories["developer"] %}
                     <li class="mdl-list__item">
-                        {% if post.icon %}
-                        <i class="material-icons mdl-list__item-icon">{{ post.icon }}</i>
-                        {% else %}
-                        <i class="material-icons mdl-list__item-icon">build</i>
-                        {% endif %}
                         <span class="mdl-list__item-primary-content">
+                            {% if post.icon %}
+                            <i class="material-icons mdl-list__item-icon">{{ post.icon }}</i>
+                            {% else %}
+                            <i class="material-icons mdl-list__item-icon">build</i>
+                            {% endif %}
                             <a class="post-link" href="{{ post.url | prepend: site.github.url }}">{{ post.title }}</a>
                         </span>
                     </li>
