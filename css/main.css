@@ -231,6 +231,6 @@ html, body {
 }
 
 .copilot-post-container img {
-  width: calc(100% - 16px);
+  max-width: calc(100% - 16px);
   margin: 0 auto;
 }
