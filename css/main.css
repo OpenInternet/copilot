@@ -188,10 +188,15 @@ html, body {
   line-height: 28px;
   display: block;
 }
+
 .copilot-page .mdl-menu__container {
   z-index: 99;
 }
 
 .copilot-page .copilot-logo {
+    background-color: white;
+}
+
+.copilot-page .copilot-logo-buffer {
     background-color: white;
 }
