@@ -19,6 +19,11 @@ title: Main
                         <span class="mdl-list__item-primary-content">
                             <a class="post-link" href="{{ post.url | prepend: site.github.url }}">{{ post.title }}</a>
                         </span>
+                        {% if post.icon %}
+                        <i class="material-icons mdl-list__item-icon">{{ post.icon }}</i>
+                        {% else %}
+                        <i class="material-icons mdl-list__item-icon">person</i>
+                        {% endif %}
                     </li>
                 {% endfor %}
                 </ul>
@@ -28,7 +33,7 @@ title: Main
 </section>
 <section class="section--center mdl-grid">
     <div class="mdl-card plugin-list mdl-cell mdl-cell--12-col mdl-shadow--4dp">
-        <div class="mdl-card__title">
+        <div class="mdl-card__title mdl-color--accent">
             <h2 class="mdl-card__title-text">Developer Resources</h2>
         </div>
         <div class="mdl-card__supporting-text">
@@ -37,7 +42,7 @@ title: Main
         <div class="mdl-card__actions mdl-card--border">
             <div class="plugin-list-action mdl-list">
                 <ul class='mdl-list'>
-                    {% for post in site.categories["trainer"] %}
+                    {% for post in site.categories["developer"] %}
                     <li class="mdl-list__item">
                         <span class="mdl-list__item-primary-content">
                             <a class="post-link" href="{{ post.url | prepend: site.github.url }}">{{ post.title }}</a>
