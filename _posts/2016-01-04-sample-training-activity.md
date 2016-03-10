@@ -8,16 +8,16 @@ categories: trainer
 
 **Table Of Contents**
 
-* [Curricula Information](#level-up-curricula-information)
+* [Curricula Information](#level-uphttpswwwlevel-upccabout-curricula-information)
 * [Materials to Prepare](#materials-to-prepare)
 * [Preparation](#preparation)
 * [Tor Browser Bundle Hands-On Steps](#tor-browser-bundle-hands-on-steps)
-  * [1. Show the public IP address of the training room's Internet connection](#1-show-the-public-ip-address-of-the-training-rooms-internet-connection)
-  * [2. Show the websites blocked by Co-Pilot](#2-show-the-websites-blocked-by-co-pilot)
-  * [3. Show the public IP address of the Tor "exit relay"](#3-show-the-public-ip-address-of-the-tor-exit-relay)
-  * [4. Show how the websites blocked by Co-Pilot are now accessible](#4-show-how-the-websites-blocked-by-co-pilot-are-now-accessible)
-  *[5. Show how to select a new path through the Tor network](#5-show-how-to-select-a-new-path-through-the-tor-network)
-  *[6. Ask participants to repeat this exercise, until they demonstrate that they can use the Tor Browser Bundle successfully. Then, explain that:](#6-ask-participants-to-repeat-this-exercise-until-they-demonstrate-that-they-can-use-the-tor-browser-bundle-successfully-then-explain-that)
+  * [Show the public IP address of the training room's Internet connection](show-the-public-ip-address-of-the-training-rooms-internet-connection)
+  * [Show the websites blocked by Co-Pilot](#2-show-the-websites-blocked-by-co-pilot)
+  * [Show the public IP address of the Tor "exit relay"](show-the-public-ip-address-of-the-tor-exit-relay)
+  * [Show how the websites blocked by Co-Pilot are now accessible](show-how-the-websites-blocked-by-co-pilot-are-now-accessible)
+  *[Show how to select a new path through the Tor network](show-how-to-select-a-new-path-through-the-tor-network)
+  *[Ask participants to repeat this exercise, until they demonstrate that they can use the Tor Browser Bundle successfully. Then, explain that:](ask-participants-to-repeat-this-exercise-until-they-demonstrate-that-they-can-use-the-tor-browser-bundle-successfully-then-explain-that)
 * [Additional Resources](#additional-resources)
 
 
@@ -64,7 +64,7 @@ Tor Browser Bundle Hands-On Steps:
 
 In this exercise, participants will use the Tor Browser Bundle to create an anonymous connection, confirm that it is working by accessing a website blocked by Co-Pilot, and change their Tor "exit relay."
 
-1. Show the public IP address of the training room's Internet connection
+Show the public IP address of the training room's Internet connection
 ------------------------------------------------------------------------
 
 -   In a browser, visit [whatismyip.com](https://whatismyip.com/) [1] (https) or [whatismyipaddress.com](http://whatismyipaddress.com/) [2] (which includes a map)
@@ -73,7 +73,7 @@ In this exercise, participants will use the Tor Browser Bundle to create an anon
 
 -   Invite participants to visit the site themselves, using their own devices.
 
-2. Show the websites blocked by Co-Pilot
+Show the websites blocked by Co-Pilot
 -----------------------------------------------------
 
 -   In a browser, visit site that you blocked with Co-Pilot
@@ -82,7 +82,7 @@ In this exercise, participants will use the Tor Browser Bundle to create an anon
 
 -   Invite participants to visit the site themselves, using their own devices.
 
-3. Show the public IP address of the Tor "exit relay"
+Show the public IP address of the Tor "exit relay"
 -----------------------------------------------------
 
 -   Close all web browsers
@@ -95,7 +95,7 @@ In this exercise, participants will use the Tor Browser Bundle to create an anon
 
 -   In Tor Browser, visit [whatismyip.com](https://www.whatismyip.com/) [3] or  [whatismyipaddress.com](http://whatismyipaddress.com/) [4] and show that the IP address has changed.
 
-4. Show how the websites blocked by Co-Pilot are now accessible
+Show how the websites blocked by Co-Pilot are now accessible
 -----------------------------------------------------
 
 -   In Tor Browser,  visit site that you blocked with Co-Pilot and show that it is now accessible.
@@ -104,14 +104,14 @@ In this exercise, participants will use the Tor Browser Bundle to create an anon
 
 -   Invite participants to visit the site themselves, using their own devices.
 
-5. Show how to select a new path through the Tor network
+Show how to select a new path through the Tor network
 --------------------------------------------------------
 
 -   Explain that Tor could conceivably select an “exit relay” in the same country as the user. (An "exit relay" is the Tor server from which one's outgoing traffic leaves the Tor network, and through which one's incoming traffic enters it.) This is not good for anonymity and would not allow them to bypass DNS based censorship occurring in-country.. It is also one reason why a Tor Browser user might want to select a new exit relay. This can be done by clicking on the green onion to the left of the browser's address field and clicking “New Identity”.
 
 -   Request a new identity, then refresh the webpage ([whatismyip.com](https://www.whatismyip.com/) [3] or [whatismyipaddress.com](http://www.whatismyipaddress.com/) [5]). The IP address should change.
 
-6. Ask participants to repeat this exercise, until they demonstrate that they can use the Tor Browser Bundle successfully. Then, explain that:
+Ask participants to repeat this exercise, until they demonstrate that they can use the Tor Browser Bundle successfully. Then, explain that:
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -   Though Tor encrypts your traffic on its way to the first Tor relay, and while it travels through the Tor network, **it cannot automatically encrypt your connection between the "exit relay" and the website you are visiting.** So, if you are visiting a site that does not support HTTPS, the exit relay operator (who could be *anybody*) can see everything you send and receive. They might know who you are—unless there are hints in the traffic itself, which is not uncommon—but they can see everything else. So, it is still important to use secure, HTTPS Web services. You might want to use the [EFF visualization](https://www.eff.org/pages/tor-and-https) [6] to help explain this concept.

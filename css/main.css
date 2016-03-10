@@ -234,3 +234,8 @@ html, body {
   max-width: calc(100% - 16px);
   margin: 0 auto;
 }
+
+.copilot-post-container .plugin-head img {
+  max-width: calc(75% - 16px);
+  margin: 0 auto;
+}
