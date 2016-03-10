@@ -40,6 +40,7 @@ def index():
 @app.errorhandler(404)
 def not_found(error):
     """ The route for pages that are not found"""
+    log.debug("This page cannot be found")
     flash("We're sorry. The page you are looking for cannot be found.", "error")
     return redirect(url_for("profile"))
 
