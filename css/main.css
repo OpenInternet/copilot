@@ -236,6 +236,7 @@ html, body {
 }
 
 .plugin-logo {
-  max-width: calc(75% - 16px);
+  max-width: calc(50% - 16px);
   margin: 0 auto;
+  float: right;
 }

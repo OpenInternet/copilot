@@ -7,6 +7,9 @@ categories: developer
 {:.plugin-logo}
 ![Co-Pilot Plugin Logo](https://raw.github.com/wiki/openinternet/co-pilot/images/plugins_logo.png)
 
+* TOC
+{:toc}
+
 ### What is a Plugin?
 
 All the core functionality of Co-Pilot (censorship and networking) is provided plugins that use the Co-Pilot Plugin Interface. This plugin system allows developers to easily add new censorship, surveillance, or networking functionality to Co-Pilot without having in-depth knowledge of how Co-Pilot's back-end works or having had experience working with its underlying code-base.
