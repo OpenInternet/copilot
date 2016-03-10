@@ -206,3 +206,26 @@ html, body {
     background-color: white;
     height: 10px;
 }
+
+
+
+.copilot-post-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.copilot-post-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+
+.copilot-page.is-small-screen .copilot-post-content {
+  padding: 40px 28px;
+}
+
+.copilot-post-content h3 {
+  margin-top: 48px;
+}
