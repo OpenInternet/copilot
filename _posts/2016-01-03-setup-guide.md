@@ -4,39 +4,8 @@ title:  "Setup Guide"
 categories: trainer
 ---
 
-**Table Of Contents**
-
-* [Initial Configuration](#beaglebone-black-initial-configuration)
-
-  * [What You Will Need](#what-you-will-need)
-
-  * [Step 1: Attach Wireless Antenna and Ethernet to Co-Pilot](#step-1-attach-wireless-antenna-and-plug-in-ethernet)
-
-  * [Step 2: Plug in your devices power supply](#step-2-plug-in-power-supply)
-
-  * [Step 3: Connect your personal device to the 'copilot' access point](#step-3-connect-personal-device-to-the-copilot-access-point)
-
-  * [Step 4: Open a web browser and enter "copilot.local:8080"](#step-4-open-a-web-browser-and-type-in-copilotlocal8080)
-
-  * [Step 5: Fill out the initial settings](#step-5-fill-out-the-initial-settings)
-
-* [Advanced Configuration](#beaglebone-black-advanced-configuration)
-
-  * [Create a new profile](#create-a-new-profile)
-
-  * [Add a rule to your current profile](#add-a-rule-to-your-current-profile)
-
-  * [Remove a rule from your current profile](#remove-a-rule-from-your-current-profile)
-
-  * [Load a profile](#load-a-profile)
-
-  * [Download your current profile](#download-your-current-profile)
-
-  * [Upload a profile](#upload-a-profile)
-
-  * [Change the wireless password students will use to access co-pilot](#change-the-wireless-password-students-will-use-to-access-co-pilot)
-
-  * [Check the current status of your Co-Pilot Device](#check-the-current-status-of-your-co-pilot-device)
+* TOC
+{:toc}
 
 
 ### BeagleBone Black Initial Configuration

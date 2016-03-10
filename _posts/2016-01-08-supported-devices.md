@@ -4,12 +4,9 @@ title:  "Supported Devices"
 categories: trainer
 ---
 
+* TOC
+{:toc}
 
-**Table of Contents**
-
-* [Currently Supported Devices](#currently-supported-devices)
-* [Devices Being Considered for Support](#devices-being-considered-for-support)
-* [Unsupported Devices](#unsupported-devices)
 
 ### Currently Supported Devices
 

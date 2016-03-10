@@ -4,6 +4,9 @@ title:  "Installation Guide"
 categories: developer
 ---
 
+* TOC
+{:toc}
+
 ### Co-Pilot installation on unsupported ARM devices
 
 Co-Pilot is still in its **BETA stages**.

@@ -4,22 +4,10 @@ title:  "Sample Training Activity"
 categories: trainer
 ---
 
+* TOC
+{:toc}
+
 ## Tor Browser Bundle Curricula
-
-**Table Of Contents**
-
-* [Curricula Information](#level-uphttpswwwlevel-upccabout-curricula-information)
-* [Materials to Prepare](#materials-to-prepare)
-* [Preparation](#preparation)
-* [Tor Browser Bundle Hands-On Steps](#tor-browser-bundle-hands-on-steps)
-  * [Show the public IP address of the training room's Internet connection](show-the-public-ip-address-of-the-training-rooms-internet-connection)
-  * [Show the websites blocked by Co-Pilot](#2-show-the-websites-blocked-by-co-pilot)
-  * [Show the public IP address of the Tor "exit relay"](show-the-public-ip-address-of-the-tor-exit-relay)
-  * [Show how the websites blocked by Co-Pilot are now accessible](show-how-the-websites-blocked-by-co-pilot-are-now-accessible)
-  *[Show how to select a new path through the Tor network](show-how-to-select-a-new-path-through-the-tor-network)
-  *[Ask participants to repeat this exercise, until they demonstrate that they can use the Tor Browser Bundle successfully. Then, explain that:](ask-participants-to-repeat-this-exercise-until-they-demonstrate-that-they-can-use-the-tor-browser-bundle-successfully-then-explain-that)
-* [Additional Resources](#additional-resources)
-
 
 ### [Level-Up](https://www.level-up.cc/about) Curricula Information
 
