@@ -9,7 +9,7 @@ categories: trainer
 
 ## Tor Browser Bundle Curricula
 
-### [Level-Up](https://www.level-up.cc/about) Curricula Information
+### Level-Up Curricula Information
 
 |***|***|
 |---|---|
