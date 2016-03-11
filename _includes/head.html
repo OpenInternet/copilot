@@ -21,12 +21,13 @@
             <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
             <meta name="msapplication-TileColor" content="#3372DF">
 
-            <link rel="shortcut icon" href="images/favicon.png">
+            <link rel="shortcut icon" href="images/favicon.png" />
 
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
             <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.orange-blue.min.css" />
-            <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.github.url }}">
-            <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.github.url  }}">
+            {% capture unbounded_site_url %}//{{ site.github.owner_name  }}.github.io/{{ site.github.repository_name }}{% endcapture %}
+            <link rel="stylesheet" href="{{ "/css/main.css" | prepend: unbounded_site_url }}" />
+            <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.github.url  }}" />
             <script src="https://code.getmdl.io/1.1.2/material.min.js"></script>
 </head>
