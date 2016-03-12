@@ -10,38 +10,118 @@ html, body {
 .copilot-page .mdl-layout.is-small-screen .mdl-layout__header-row h3 {
   font-size: inherit;
 }
-.copilot-page .mdl-layout__tab-bar-button {
-  display: none;
+
+.docs-navigation__container {
+    overflow: hidden;
+    position: absolute;
+    height: 64px;
+    width: 100%;
+    bottom: 0;
+    left: 0
 }
-.copilot-page .mdl-layout.is-small-screen .mdl-layout__tab-bar .mdl-button {
-  display: none;
+.docs-navigation {
+    box-shadow: none!important;
+    border: 0!important;
+    width: 100%;
+    height: 85px;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    padding: 0 16px 0 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-bottom: -16px
 }
-.copilot-page .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar,
-.copilot-page .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar-container {
-  overflow: visible;
+.docs-layout.is-small-screen .docs-navigation {
+    padding: 0
 }
-.copilot-page .mdl-layout__tab-bar-container {
-  height: 64px;
+.docs-layout.is-small-screen .docs-navigation .mdl-navigation__link .material-icons {
+    display: none
 }
-.copilot-page .mdl-layout__tab-bar {
-  padding: 0;
-  padding-left: 16px;
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
+.mdl-navigation__link--icon>span,
+.mdl-navigation__link--icon>.material-icons {
+    line-height: 64px;
+    margin-right: 8px;
+    line-height: inherit
 }
-.copilot-page .mdl-layout__tab-bar .mdl-layout__tab {
-  height: 64px;
-  line-height: 64px;
+.docs-navigation .mdl-navigation__link {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-user-select: inherit;
+    -moz-user-select: inherit;
+    -ms-user-select: inherit;
+    user-select: inherit;
+    height: 64px
 }
-.copilot-page .mdl-layout__tab-bar .mdl-layout__tab.is-active::after {
-  background-color: white;
-  height: 4px;
+.docs-navigation .mdl-navigation__link:hover,
+.docs-navigation .mdl-navigation__link.download:hover>span,
+.docs-navigation .mdl-navigation__link.download:hover>.material-icons {
+    background-color: inherit;
+    opacity: 1!important
 }
-.copilot-page main > .mdl-layout__tab-panel {
-  padding: 8px;
-  padding-top: 48px;
+.docs-navigation .mdl-navigation__link:not(.download),
+.docs-navigation .mdl-navigation__link.download>span,
+.docs-navigation .mdl-navigation__link.download>.material-icons {
+    opacity: .65
 }
+.docs-navigation .mdl-navigation__link,
+section.download {
+    font-weight: 500;
+    font-size: 13px;
+    text-transform: uppercase;
+    line-height: 64px;
+    padding: 0 16px;
+    color: #fff;
+    box-sizing: border-box;
+    border-bottom: 3px solid transparent
+}
+.docs-layout.is-small-screen .docs-navigation .mdl-navigation__link,
+.docs-layouy.is-small-screen section.download {
+    padding: 0 12px
+}
+.about .docs-layout:not(.is-small-screen) .mdl-navigation__link.download>.material-icons,
+.about .docs-layout.is-small-screen .mdl-navigation__link.download>button,
+body:not(.about) .mdl-navigation__link.download>button {
+    display: none
+}
+.docs-navigation .download button .material-icons {
+    color: #000;
+    opacity: .54
+}
+.docs-navigation .is-active {
+    opacity: 1;
+    border-bottom-color: #18FFFF
+}
+.docs-navigation::-webkit-scrollbar {
+    display: none
+}
+body:not(.about) .docs-layout.is-small-screen .docs-layout-header {
+    background-image: none
+}
+.docs-layout.mdl-layout.is-small-screen .docs-layout-header.mdl-layout__header {
+    padding: 0;
+    height: 64px
+}
+.docs-layout.is-small-screen .docs-layout-header .docs-layout-title,
+.docs-layout.is-small-screen .docs-layout-header .mdl-textfield {
+    display: none
+}
+.docs-layout.is-small-screen .docs-navigation__container {
+    top: 0;
+    bottom: auto;
+    left: 48px;
+    width: calc(100% - 2 * 48px);
+    padding: 0!important
+}
+
 .copilot-page .mdl-card {
   height: auto;
   display: flex;
