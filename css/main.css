@@ -96,7 +96,7 @@ body:not(.about) .mdl-navigation__link.download>button {
     opacity: .54
 }
 .docs-navigation .is-active {
-    opacity: 1;
+    opacity: 1!important;
     border-bottom-color: #18FFFF
 }
 .docs-navigation::-webkit-scrollbar {
@@ -153,7 +153,7 @@ body:not(.about) .docs-layout.is-small-screen .docs-layout-header {
 .copilot-page .mdl-card__actions a:active {
   color: inherit;
   background-color: transparent;
-}
+}
 .copilot-page .mdl-card__supporting-text + .mdl-card__actions {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
