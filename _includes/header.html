@@ -7,15 +7,17 @@
     </div>
     <div class="copilot-logo-buffer mdl-layout_header mdl-layout__header-row">
     </div>
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+    <div class="docs-navigation__container">
+        <nav class="docs-navigation mdl-navigation">
         {% for my_page in site.pages %}
         {% if my_page.title %}
         {% if my_page.url == page.url %}
-        <a href="{{ my_page.url | prepend: site.github.url }}" class="mdl-layout__tab is-active">{{ my_page.title }}</a>
+        <a href="{{ my_page.url | prepend: site.github.url }}" class="mdl-navigation__link is-active">{{ my_page.title }}</a>
         {% else %}
-        <a href="{{ my_page.url | prepend: site.github.url }}" class="mdl-layout__tab">{{ my_page.title }}</a>
+        <a href="{{ my_page.url | prepend: site.github.url }}" class="mdl-navigation__link">{{ my_page.title }}</a>
         {% endif %}
         {% endif %}
         {% endfor %}
+        </nav>
     </div>
 </header>
