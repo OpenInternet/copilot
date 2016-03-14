@@ -29,7 +29,7 @@
           {% endif %}
           {% endfor %}
       </div>
-      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right">
+      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent mdl-button-right" onclick="delRule('{{field.name}}-group'); return false;">
         <i class="material-icons">remove</i>
       </button>
     </div>
