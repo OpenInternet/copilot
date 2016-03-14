@@ -36,7 +36,7 @@ def import_plugin(name):
         log.error("Could not import plugin {0}".format(name))
         log.error(_e)
         raise ImportError(_e)
-    log.debug("returning {0}".format(config.name))
+    log.debug("returning {0}".format(config))
     return config
 
 def get_plugin(name):
