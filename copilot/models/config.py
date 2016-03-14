@@ -212,7 +212,8 @@ def get_target_by_actions():
         for action, targets in rules.iteritems():
             log.debug("Plugin {0} has action {1} ".format(plugin.name, action) +
                       "on targets {0}".format(targets))
-            collective_rules.setdefault(action, set()).union(targets)
+            collective_rules.setdefault(action, set())
+            collective_rules[action] = collective_rules[action].union(targets)
 
     log.debug("action to target sets found: {0}".format(collective_rules))
     return collective_rules
