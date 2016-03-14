@@ -17,8 +17,10 @@ def get_plugins():
     plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY'] + "/plugins/"
     # Get all folder names in plugins directory
     # remove the directory cruft to make them plugin names
-    plugins = [os.path.basename(x[0]) for x in os.walk(plugin_dir)
-               if os.path.basename(x[0]) != "plugins"]
+    plugins = []
+    for item in os.listdir(plugin_dir):
+        if os.path.isfile(os.path.join(plugin_dir, item, "config.py")):
+            plugins.append(item)
     log.debug("Plugins found: {0}".format(plugins))
     return plugins
 

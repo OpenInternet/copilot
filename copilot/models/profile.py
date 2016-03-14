@@ -67,11 +67,12 @@ class Profile(object):
 
     def __init__(self, name, description="A co-pilot profile", rules={}):
         self.rules = []
-        self.profile_dir = "profiles"
         self.name = name
+        self.profile_dir = "profiles"
         self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
         self.description = description
         if rules:
+            log.debug("rules found")
             try:
                 for rule in rules:
                     self.add_rule(rule)
@@ -94,20 +95,24 @@ class Profile(object):
         try:
             _dir = get_config_dir(plaintext)
             self._profile_dir = _dir
+            log.debug("profile directory set to {0}".format(self._profile_dir))
             try:
-                self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
+                log.debug("Profile name is {0}".format(secure_filename(self.name)))
+                self.profile_file = os.path.join(self._profile_dir, secure_filename(self.name))
             except AttributeError as ee:
-                log.debug("cannot set profile_file as {0} is not initialized yet.".format(ee))
+                log.debug("cannot set profile_file as {0} is not initialized yet.".format(plaintext))
+                log.error("Error encountered {0}".format(ee))
+                raise ValueError("{0}".format(ee))
         except ValueError:
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
     def add_rule(self, ruleset):
         """ Add a rule to the Profile object
 
-
         Args:
         ruleset (list|dict): a single set containing an  action, target, and sub_target.
         """
+        log.debug("Adding rule {0}".format(ruleset))
         # Rapid prototyping means that I just want the rule, I don't care how it is formatted.
         if isinstance(ruleset, dict):
             rule = ruleset
@@ -148,6 +153,7 @@ class Profile(object):
 
     def exist(self):
         """Checks if the profile file already exists."""
+        log.debug("Checking if current profile file exists")
         if os.path.isfile(self.profile_file):
             log.info(" profile {0} exists".format(self.name))
             return True

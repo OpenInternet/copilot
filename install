@@ -8,9 +8,17 @@ readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
 readonly TESTING=false
+
+# Plugin Configuration Variables
 readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
 readonly PLUGINS_BRANCH="master"
 readonly COPILOT_PLUGINS_DIRECTORY="/bin/copilot/"
+
+# Configuration Directory Variables
+readonly COPILOT_PROFILE_CONFIG_DIRECTORY="/var/lib/copilot/profiles/"
+readonly COPILOT_TEMPORARY_CONFIG_DIRECTORY="/tmp/copilot/tmp/"
+readonly COPILOT_DEFAULT_CONFIG_DIRECTORY="/tmp/copilot/"
+
 
 # ==== HARDWARE ====
 
@@ -58,10 +66,15 @@ install_co-pilot_deps() {
     apt-get -y install usbmount
 }
 
+setup_copilot_env() {
+    # Create global environment variable for copilot to use
+    echo "COPILOT_PROFILE_CONFIG_DIRECTORY=${COPILOT_PROFILE_CONFIG_DIRECTORY}" >> /etc/environment
+    echo "COPILOT_TEMPORARY_CONFIG_DIRECTORY=${COPILOT_TEMPORARY_CONFIG_DIRECTORY}" >> /etc/environment
+    echo "COPILOT_DEFAULT_CONFIG_DIRECTORY=${COPILOT_DEFAULT_CONFIG_DIRECTORY}" >> /etc/environment
+}
 
 setup_copilot_db() {
-    mkdir -p /var/lib/copilot
-    mkdir -p /var/lib/copilot/profiles
+    mkdir -p "${COPILOT_PROFILE_CONFIG_DIRECTORY}"
 }
 
 
@@ -145,10 +158,13 @@ setup_nginx() {
 }
 
 setup_supervisor() {
-    # replace PLUGIN_DIR_REPLACE_STRING with the actual value of the var
+    # replace the various environment variables with the actual value of the vars
     # Using @ as the sed seperator so that we don't get errors when using double quotes
     cat $COPILOT_DIR/templates/supervisor \
         | sed "s@PLUGIN_DIR_REPLACE_STRING@${COPILOT_PLUGINS_DIRECTORY}@" \
+        | sed "s@COPILOT_PROFILE_DIR_REPLACE_STRING@${COPILOT_PROFILE_CONFIG_DIRECTORY}@" \
+        | sed "s@COPILOT_TEMP_DIR_REPLACE_STRING@${COPILOT_TEMPORARY_CONFIG_DIRECTORY}@" \
+        | sed "s@COPILOT_DEFAULT_DIR_REPLACE_STRING@${COPILOT_DEFAULT_CONFIG_DIRECTORY}@" \
               > /etc/supervisor/conf.d/supervisord.conf
     #enable
     update-rc.d supervisor enable
@@ -217,6 +233,7 @@ install() {
     #Create website Directory
     mkdir -p $WEB_DIR
     install_copilot
+    setup_copilot_env
     setup_copilot_db
     setup_flask_env
     install_avahi
