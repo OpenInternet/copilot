@@ -113,7 +113,9 @@ def import_all_plugins():
     plugin_names = get_plugins()
     plugins = []
     for name in plugin_names:
+        log.debug("loading plugin {0}".format(name))
         plugins.append(get_plugin(name))
+        log.debug("plugin {0} loaded".format(name))
     return plugins
 
 def get_valid_actions(plugin_name=None):
@@ -203,8 +205,10 @@ def get_target_by_actions():
     for plugin in plugins:
         rules = plugin.rules
         if rules is None:
+            log.debug("plugin {0} has no rules".format(plugin.name))
             continue
 
+        log.debug("gathering rules from plugin {0}".format(plugin.name))
         for action, targets in rules.iteritems():
             log.debug("Plugin {0} has action {1} ".format(plugin.name, action) +
                       "on targets {2}".format(targets))
