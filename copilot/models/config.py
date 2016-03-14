@@ -182,7 +182,7 @@ def get_plugin_from_rules(action, target):
         identified_plugin = plugins.pop()
         log.warn("Multiple plugins found that support the rule pair" +
                  "{0} : {1}. This is not allowed.".format(action, target) +
-                 " Using first plugin: {2}".format(identified_plugin))
+                 " Using first plugin: {0}".format(identified_plugin))
         return identified_plugin
     else:
         log.warn("No plugins found that matched the " +
@@ -211,7 +211,7 @@ def get_target_by_actions():
         log.debug("gathering rules from plugin {0}".format(plugin.name))
         for action, targets in rules.iteritems():
             log.debug("Plugin {0} has action {1} ".format(plugin.name, action) +
-                      "on targets {2}".format(targets))
+                      "on targets {0}".format(targets))
             collective_rules.setdefault(action, set()).union(targets)
 
     log.debug("action to target sets found: {0}".format(collective_rules))
