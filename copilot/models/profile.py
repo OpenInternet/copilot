@@ -95,7 +95,7 @@ class Profile(object):
             _dir = get_config_dir(plaintext)
             self._profile_dir = _dir
             try:
-                self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
+                self.profile_file = os.path.join(self._profile_dir, secure_filename(self.name))
             except AttributeError as ee:
                 log.debug("cannot set profile_file as {0} is not initialized yet.".format(plaintext))
                 raise ValueError("{0}".format(ee))
