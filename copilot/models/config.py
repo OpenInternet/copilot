@@ -124,7 +124,7 @@ def get_valid_actions(plugin_name=None):
         plugins = import_all_plugins()
         combined_values = set()
         for plugin in plugins:
-            combined_values.union(plugin.actions)
+            combined_values = combined_values.union(plugin.actions)
         return combined_values
     else:
         return get_plugin(plugin_name).actions
@@ -136,7 +136,7 @@ def get_valid_targets(plugin_name=None):
         plugins = import_all_plugins()
         combined_values = set()
         for plugin in plugins:
-            combined_values.union(plugin.targets)
+            combined_values = combined_values.union(plugin.targets)
         return combined_values
     else:
         return get_plugin(plugin_name).targets
@@ -160,7 +160,7 @@ def get_targets_with_subtargets():
     plugins = get_plugins_with_subtargets()
     targets = set()
     for plugin_name in plugins:
-        targets.union(get_plugin(plugin_name).targets)
+        targets = targets.union(get_plugin(plugin_name).targets)
     return targets
 
 def get_plugin_from_rules(action, target):
@@ -475,7 +475,7 @@ class PluginOptions(object):
         else:
             targets = set()
             for target in self.rules.values():
-                targets.union(target)
+                targets = targets.union(target)
             return targets
 
     def get_actions(self, target=None):
