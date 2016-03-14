@@ -47,7 +47,9 @@ def profile(prof_name):
     log.debug("profile received {0}".format(prof_name))
 
     form = forms.NewProfileForm()
+    log.debug("Creating profile")
     profile = mdl_prof.Profile(prof_name)
+    log.debug("Profile Created")
     if profile.exist():
         title = "Profile > Edit"
         log.info("Existing profile found. Loading profile")

@@ -48,6 +48,7 @@ def get_plugin(name):
 
     plugin = import_plugin(name)
     config = plugin.Plugin()
+    log.debug("Plugin {0} imported.".format(name))
     return config
 
 def get_config_writer(name):
@@ -56,6 +57,7 @@ def get_config_writer(name):
     Args:
         name (str): The name of the plugin that you want a writer for.
     """
+    log.debug("getting configuration writer")
     plugin = import_plugin(name)
     writer = plugin.ConfigWriter()
     return writer
@@ -107,6 +109,7 @@ def get_config_path(plugin_name):
 def import_all_plugins():
     """Create a list containing all plugin objects.
     """
+    log.debug("importing all plugins")
     plugin_names = get_plugins()
     plugins = []
     for name in plugin_names:
@@ -139,16 +142,19 @@ def get_valid_targets(plugin_name=None):
 def get_plugins_with_subtargets():
     """Create a set containing all possible targets that have subtargets.
     """
+    log.debug("Getting plugins with subtargets")
     plugins = import_all_plugins()
     has_subtarget = set()
     for plugin in plugins:
         if plugin.has_subtarget is True:
+            log.debug("plugin {0} has subtargets".format(plugin.name))
             has_subtarget.add(plugin.name)
     return has_subtarget
 
 def get_targets_with_subtargets():
     """Create a set containing all possible targets that have subtargets.
     """
+    log.debug("Getting targets with subtargets")
     plugins = get_plugins_with_subtargets()
     targets = set()
     for plugin_name in plugins:

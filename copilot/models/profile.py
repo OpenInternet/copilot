@@ -72,6 +72,7 @@ class Profile(object):
         self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
         self.description = description
         if rules:
+            log.debug("rules found")
             try:
                 for rule in rules:
                     self.add_rule(rule)
@@ -108,10 +109,10 @@ class Profile(object):
     def add_rule(self, ruleset):
         """ Add a rule to the Profile object
 
-
         Args:
         ruleset (list|dict): a single set containing an  action, target, and sub_target.
         """
+        log.debug("Adding rule {0}".format(ruleset))
         # Rapid prototyping means that I just want the rule, I don't care how it is formatted.
         if isinstance(ruleset, dict):
             rule = ruleset
@@ -152,6 +153,7 @@ class Profile(object):
 
     def exist(self):
         """Checks if the profile file already exists."""
+        log.debug("Checking if current profile file exists")
         if os.path.isfile(self.profile_file):
             log.info(" profile {0} exists".format(self.name))
             return True
