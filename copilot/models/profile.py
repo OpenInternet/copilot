@@ -94,10 +94,13 @@ class Profile(object):
         try:
             _dir = get_config_dir(plaintext)
             self._profile_dir = _dir
+            log.debug("profile directory set to {0}".format(self._profile_dir))
             try:
+                log.debug("Profile name is {0}".format(secure_filename(self.name)))
                 self.profile_file = os.path.join(self._profile_dir, secure_filename(self.name))
             except AttributeError as ee:
                 log.debug("cannot set profile_file as {0} is not initialized yet.".format(plaintext))
+                log.error("Error encountered {0}".format(ee))
                 raise ValueError("{0}".format(ee))
         except ValueError:
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
