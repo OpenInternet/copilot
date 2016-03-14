@@ -11,93 +11,14 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def get_config_dir(directory):
-    """Return the appropriate directory for a type of config file.
-
-    Each type of config file is kept in a different location. This
-    function identified the correct location for a specific config
-    file.
-
-    Args:
-        directory (str): The type of config file directory to return.
-    """
-
-    directories = {"main" : "/tmp/copilot/",
-                   "profiles" : "/var/lib/copilot/profiles/",
-                   "temporary" : "/tmp/copilot/tmp/"}
-    # Adding plugin directories
-    plugins = get_value_dict("directory")
-    for p in plugins:
-        directories[p] = plugins[p][0]
-    # Adding USB directory
-    directories["usb"] = get_likely_usb()
-    if directory in directories:
-        log.debug("Directory {0} found and being returned.".format(directory))
-        return directories[directory]
-    else:
-        raise ValueError("That config directory is not valid.")
-
-def get_config_file(config):
-    """ Return the path to a plugins config file.
-
-    Given a plugins name this function will query the
-    plugins options to retreive the path where its
-    config file should be stored.
-
-    Args:
-        config (str): The name of the plugin that you wish to retrive a
-    config path for.
-    """
-    log.info("getting {0} config file.".format(config))
-    directory = get_option("directory", config)[0]
-    log.debug("found directory {0}".format(directory))
-    config_file = get_option("config_file", config)[0]
-    log.debug("found config file {0}".format(config_file))
-    path = os.path.join(directory, config_file)
-    return path
-
-def get_valid_actions(package=None):
-    """ Returns the valid actions for a plugin, or all plugin as a list"""
-
-    if not package:
-        return get_unique_values("actions")
-    else:
-        return get_option("actions", package)
-
-def get_valid_targets():
-    """Return all valid targets for CoPilot Rules."""
-    log.info("getting valid targets.")
-    return get_unique_values("target")
-
-def get_plugins_with_subtargets():
-    plugin_values = get_value_list("has_subtarget")
-    has_subtarget = []
-    for pairs in plugin_values:
-        plugin = pairs[0]
-        values = pairs[1]
-        if "true" in values:
-            has_subtarget.append(plugin)
-    return has_subtarget
-
-def get_targets_with_subtargets():
-    plugins = get_plugins_with_subtargets()
-    all_targets = get_value_list("target")
-    targets = []
-    for pairs in all_targets:
-        plugin = pairs[0]
-        values = pairs[1]
-        if plugin in plugins:
-            targets += values
-    return targets
-
-def get_config_writer(name):
-    """Get a plugins config file writer object.
+def import_plugin(name):
+    """Import and return a plugin module
 
     Args:
         name (str): The name of the plugin that you want a writer for.
     """
 
-    log.info("getting a plugins config writer.")
+    log.info("getting a plugins configuration.")
     # Get plugin directory from system COPIOT_PLUGINS_DIRECTORY
     plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
     log.debug("Plugin directory identified at {0}".format(plugin_dir))
@@ -115,99 +36,135 @@ def get_config_writer(name):
         log.error(_e)
         raise ImportError(_e)
     log.debug("{0} contains {1}".format(config.__name__, dir(config)))
-    writer = config.ConfigWriter()
+    return config
+
+def get_plugin(name):
+    """Get a plugins copilot configuration object
+
+    Args:
+        name (str): The name of the plugin that you want a writer for.
+    """
+
+    plugin = import_plugin(name)
+    config = plugin.Plugin()
+    return config
+
+def get_config_writer(name):
+    """Get a plugins config file writer object.
+
+    Args:
+        name (str): The name of the plugin that you want a writer for.
+    """
+    plugin = import_plugin(name)
+    writer = plugin.ConfigWriter()
     return writer
 
-def get_option(option, plugin):
-    """Get an option from a plugin config file as a list.
+def get_config_dir(directory):
+    """Return the appropriate directory for a non-plugin config file.
+
+    Each type of config file is kept in a different location. This
+    function identified the correct location for a specific config
+    file.
 
     Args:
-        option (str): The option you want to get.
-        plugin (str): The name of the plugin you want the value from.
+        directory (str): The type of config file directory to return.
     """
-
-    log.info("getting option {0} from {1}'s config file.".format(option, plugin))
-    if not is_plugin(plugin):
-        raise ValueError("{0} is not a plugin.".format(plugin))
-    plugin = PluginConfig(plugin)
-    if plugin.valid():
-        try:
-            option_found = plugin.data['info'][option]
-            log.debug("returning {0} option.".format(option_found))
-            return option_found
-        except KeyError as err:
-            log.warning("Plugin {0} does not have a {1} key.".format(p, option))
-            return []
+    base_directories = {}
+    base_directories.setdefault("profiles", os.environ['COPILOT_PROFILE_CONFIG_DIRECTORY'])
+    base_directories.setdefault("temporary", os.environ['COPILOT_TEMPORARY_CONFIG_DIRECTORY'])
+    base_directories.setdefault("main", os.environ['COPILOT_DEFAULT_CONFIG_DIRECTORY'])
+    # Test if one of the basic directories
+    if directory in base_directories:
+        base_directories.get(directory)
+    elif directory == "usb":
+        return get_likely_usb()
     else:
-        return []
+        raise ValueError("That config directory is not valid.")
 
-def get_unique_values(option):
-    """ Get all possible values for a specific option across all plugins.
+def get_config_path(plugin_name):
+    """ Return the path to a plugins config file.
 
-    Returns a list of a specific key's value across all plugins config files
-    with no repeats.
+    TODO Rename to get_config_path
 
-    Args:
-        option (str): The option you want to get unique values for.
-    """
-
-    log.info("getting all unique values for option {0}.".format(option))
-    values = []
-    val_list = get_value_dict(option)
-    for plugin in val_list:
-        # All values are returned as a list
-        for j in val_list[plugin]:
-            if j not in values:
-                values.append(j)
-    log.debug("unique values found: {0}".format(values))
-    return values
-
-def get_value_list(option):
-    """ Get a list containing the value of an option for each plugin.
-
-    Returns a list of (plugin,[value1, value2, value3]) tuples of a
-    specific key's value across all plugins config files.
+    Given a plugins name this function will query the
+    plugins options to retreive the path where its
+    config file should be stored.
 
     Args:
-        option (str): The option you want to get values for.
+        plugin_name (str): The name of the plugin that you wish to retrive a
+    config path for.
     """
+    log.info("getting {0}'s config path.".format(plugin_name))
+    plugin = get_plugin(plugin_name)
+    return plugin.config_path
 
-    log.info("Getting a list of all values")
-    plugins = get_plugins()
-    plist = []
-    for p in plugins:
-        _plugin = PluginConfig(p)
-        if _plugin.valid():
-            try:
-                plist.append((p, _plugin.data['info'][option]))
-            except KeyError as err:
-                log.warning("Plugin {0} does not have a {1} key.".format(p, option))
-    log.debug("values found: {0}".format(plist))
-    return plist
+def import_all_plugins():
+    """Create a list containing all plugin objects.
+    """
+    plugin_names = get_plugins()
+    plugins = []
+    for name in plugin_names:
+        plugins.append(get_plugin(name))
+    return plugins
+
+def get_valid_actions(plugin_name=None):
+    """ Returns the valid actions for a plugin, or all plugin as a list"""
+    if not plugin_name:
+        plugins = import_all_plugins()
+        combined_values = set()
+        for plugin in plugins:
+            combined_values.union(plugin.actions)
+        return combined_values
+    else:
+        return get_plugin(plugin_name).actions
+
+def get_valid_targets(plugin_name=None):
+    """Return all valid targets for CoPilot Rules."""
+    log.info("getting valid targets.")
+    if not plugin_name:
+        plugins = import_all_plugins()
+        combined_values = set()
+        for plugin in plugins:
+            combined_values.union(plugin.targets)
+        return combined_values
+    else:
+        return get_plugin(plugin_name).targets
+
+def get_plugins_with_subtargets():
+    """Create a set containing all possible targets that have subtargets.
+    """
+    plugins = import_all_plugins()
+    has_subtarget = set()
+    for plugin in plugins:
+        if plugin.has_subtarget is True:
+            has_subtarget.add(plugin.name)
+    return has_subtarget
+
+def get_targets_with_subtargets():
+    """Create a set containing all possible targets that have subtargets.
+    """
+    plugins = get_plugins_with_subtargets()
+    targets = set()
+    for plugin_name in plugins:
+        targets.union(get_plugin(plugin_name).targets)
+    return targets
 
 def get_plugin_from_rules(action, target):
-    """ Get a plugin name from an action & target rule pair.
-    """
-    log.info("Obtaining plugin name from rule pair" +
-             "{0} : {1}".format(action, target))
-    all_actions = get_value_dict("actions")
-    all_targets = get_value_dict("target")
-    plugins = set()
+    plugins = import_all_plugins()
+    identified_plugins = set()
+    for plugin in plugins:
+        if action in plugin.actions:
+            log.debug("Plugin {0} has the action".format(plugin.name))
+            if target in plugin.targets:
+                log.debug("Plugin {0} has the target".format(plugin.name))
+                identified_plugins.add(plugin.name)
 
-    for plugin_name, actions in all_actions.items():
-        if action in actions:
-            log.debug("Plugin {0} has the action".format(plugin_name))
-            if target in all_targets.get(plugin_name, []):
-                log.debug("Plugin {0} has the target".format(plugin_name))
-                plugins.add(plugin_name)
-                log.info("Plugin {0} contained the rule pair.".format(plugin_name))
-
-    log.debug("Plugins found = {0}".format(plugins))
-    if len(plugins) == 1:
+    log.debug("Plugins found = {0}".format(identified_plugins))
+    if len(identified_plugins) == 1:
         identified_plugin = plugins.pop()
         log.info("Plugin {0} identified as target plugin.".format(identified_plugin))
         return identified_plugin
-    elif len(plugins) > 1:
+    elif len(identified_plugins) > 1:
         identified_plugin = plugins.pop()
         log.warn("Multiple plugins found that support the rule pair" +
                  "{0} : {1}. This is not allowed.".format(action, target) +
@@ -219,31 +176,6 @@ def get_plugin_from_rules(action, target):
         raise ValueError("No plugins found that matched the " +
                          "{0}:{1} rule pair.".format(action, target))
 
-
-def get_value_dict(option):
-    """Get a dict containing the value of an option for each plugin.
-
-    Returns a dictionary of {plugin: [value1, value2, value3]} of a
-    specific key's value across all plugins config files.
-
-    Args:
-        option (str): The option you want to get values for.
-
-    """
-
-    log.info("Getting a dict of all values")
-    plugins = get_plugins()
-    pdict = {}
-    for p in plugins:
-        _plugin = PluginConfig(p)
-        if _plugin.valid():
-            try:
-                pdict[p] = _plugin.data['info'][option]
-            except KeyError as err:
-                log.warning("Plugin {0} does not have a {1} key.".format(p, option))
-    log.debug("values found: {0}".format(pdict))
-    return pdict
-
 def get_target_by_actions():
     """Get a dict of targets sorted by their available actions.
 
@@ -253,17 +185,21 @@ def get_target_by_actions():
     lists of all the possile targets (The type of network traffic to be targeted
     by the co-pilot.) that the action can be used against.
     """
+    log.info("getting all plugins targets sorted by actions")
+    plugins = import_all_plugins()
+    collective_rules = {}
+    for plugin in plugins:
+        rules = plugin.rules
+        if rules is None:
+            continue
 
-    log.info("getting targets sorted by actions")
-    action_target_pairings = {}
-    actions_per_plugin = get_value_dict("actions")
-    targets_per_plugin = get_value_dict("target")
-    for plugin, actions in actions_per_plugin.items():
-        for action in actions:
-            for target in targets_per_plugin.get(plugin, []):
-                action_target_pairings.setdefault(action, []).append(target)
-    log.debug("action to target sets found: {0}".format(action_target_pairings))
-    return action_target_pairings
+        for action, targets in rules.iteritems():
+            log.debug("Plugin {0} has action {1} ".format(plugin.name, action) +
+                      "on targets {2}".format(targets))
+            collective_rules.setdefault(action, set()).union(targets)
+
+    log.debug("action to target sets found: {0}".format(collective_rules))
+    return collective_rules
 
 
 class Config(object):
@@ -302,10 +238,10 @@ class Config(object):
         """
 
         try:
-            config_file = get_config_file(config_type)
+            config_file = get_config_path(config_type)
             log.debug("config file {0} found".format(config_file))
         except ValueError as err:
-            log.error("An invalid config type was passed. Please check \"get_config_file\" in the models/config.py scripts for the valid types of config files.")
+            log.error("An invalid config type was passed. Please check \"get_config_path\" in the models/config.py scripts for the valid types of config files.")
             raise ValueError(err)
         log.debug("setting config type.")
         self._config_type = config_type
@@ -471,72 +407,92 @@ class ProfileConfig(object):
         for sect in _sections:
             _dict[sect] = {}
             _options = self.parser.options(sect)
-            log.debug("Config file section {0} has the following options {0}.".format(sect, _options))
+            log.debug("Config file section {0} has the following options {1}.".format(sect, _options))
             for opt in _options:
                 _dict[sect][opt] = self.parser.get_list(sect, opt)
         return _dict
 
+class PluginOptions(object):
+    """Plugin options object."""
 
-
-
-class PluginConfig(object):
-    """ Config file parser for plugins."""
-
-    def __init__(self, name):
-        """
-        Args:
-            name: The plugins folder name.
-        """
-        plugin_base_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
-        self.path = os.path.abspath(os.path.join(plugin_base_dir, "plugins", name, "plugin.conf"))
-        self.parser = ProfileParser()
-        if self.valid():
-            self.data = self.build_map()
-
-    def build_map(self):
-        """ Builds a dictionary out of a plugin config."""
-
-        _dict = {}
-        _data = self.parser.readfp(open(self.path))
-        _sections = self.parser.sections()
-        log.debug("Config file has the following sections {0}.".format(_sections))
-        for sect in _sections:
-            _dict[sect] = {}
-            log.debug("getting options for section {0}".format(sect))
-            _options = self.parser.options(sect)
-            log.debug("It has the following options {0}.".format(_options))
-            for opt in _options:
-                _dict[sect][opt] = self.parser.get_list(sect, opt)
-        log.debug("Created below plugin data map. \n {0}".format(_dict))
-        return _dict
-
-    def valid(self):
-        """Tests if a configuration file is properly configured.
-
-        Returns: (bool) True is proper, False if not
+    def __init__(self):
         """
 
-        try:
-            _data = self.parser.read(self.path)
-        except:
-            log.info("Config file at {0} is not ".format(self.path) +
-                     "properly configured. Marking as invalid.")
+        A Plugin requires the following values to be set during its initialization.
+
+        self.rules = {"block":set(["dns"]),
+                      "redirect":set(["dns"])}
+        # self.rules should equal None if a plugin has no rules.
+        self.name = "dnschef"
+        self.has_subtarget = True
+        self.config_directory = "/tmp/copilot/"
+        self.config_file = "dnschef.conf"
+        self.config_path = path.join(self.config_directory, self.config_file)
+
+        TODO:
+                advanced_configuration_page = bool
+
+        """
+        log.debug("Initializing base plugin object")
+        self.rules = {}
+        self.name = None
+        self.config_file = None
+        self.has_subtarget = None
+        self.config_directory = None
+        self.config_path = None
+
+    @property
+    def actions(self):
+        """Returns a set containing the plugins actions."""
+        if self.rules is None:
+            return set([])
+        else:
+            return set(self.rules.keys())
+
+    @property
+    def targets(self):
+        """Returns a set containing the plugins targets."""
+        if self.rules is None:
+            return set([])
+        else:
+            targets = set()
+            for target in self.rules.values():
+                targets.union(target)
+            return targets
+
+    def get_actions(self, target=None):
+        """Get a list of actions corresponding to a target.
+        """
+        if self.rules is None:
+            return []
+        actions = set()
+        if target:
+            for action_name, targets in self.rules.iteritems():
+                if target in targets:
+                    actions.add(action_name)
+        else:
+            return self.actions
+
+    def get_targets(self, action=None):
+        """Get a list of targets corresponding to an action.
+        """
+        if self.rules is None:
+            return []
+        if action:
+            for action_name, targets in self.rules.iteritems():
+                if action == action_name:
+                    return list(targets)
+        else:
+            return self.targets
+
+    def has_action(self, action):
+        if action in self.actions:
+            return True
+        else:
             return False
-        if _data == []:
-            log.info("Config file at {0} is not properly ".format(self.path) +
-                     "configured or does not exist. Marking as invalid.")
+
+    def has_targets(self, target):
+        if target in self.targets:
+            return True
+        else:
             return False
-        required = ["name", "config_file", "directory"]
-        desired = ["target", "actions"]
-        for r in required:
-            if not self.parser.has_option("info", r):
-                log.info("Config file at {0} has no {1} and ".format(self.path, r) +
-                         "therefore cannot be used. Marking as invalid.")
-                return False
-        for r in desired:
-            if not self.parser.has_option("info", r):
-                log.info("Config file at {0} has no {1} ".format(self.path, r) +
-                         "and will not generate rules.")
-        log.info("Config file at {0} is properly ".format(self.path) +
-                 "formatted. Marking as valid.")
-        return True
