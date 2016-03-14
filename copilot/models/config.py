@@ -78,8 +78,10 @@ def get_config_dir(directory):
     log.debug("base directories set as {0}".format(base_directories))
     # Test if one of the basic directories
     if directory in base_directories:
-        base_directories.get(directory)
+        log.debug("directory {0} found in the base directories".format(directory))
+        return base_directories.get(directory)
     elif directory == "usb":
+        log.debug("directory is a usb directory")
         return get_likely_usb()
     else:
         log.error("The config directory {0} is not valid.".format(directory))
