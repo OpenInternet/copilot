@@ -67,8 +67,8 @@ class Profile(object):
 
     def __init__(self, name, description="A co-pilot profile", rules={}):
         self.rules = []
-        self.profile_dir = "profiles"
         self.name = name
+        self.profile_dir = "profiles"
         self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
         self.description = description
         if rules:
