@@ -97,7 +97,8 @@ class Profile(object):
             try:
                 self.profile_file = os.path.join(self.profile_dir, secure_filename(self.name))
             except AttributeError as ee:
-                log.debug("cannot set profile_file as {0} is not initialized yet.".format(ee))
+                log.debug("cannot set profile_file as {0} is not initialized yet.".format(plaintext))
+                raise ValueError("{0}".format(ee))
         except ValueError:
             raise ValueError("\"{0}\" is not a valid co-pilot directory. It cannot be set.".format(plaintext))
 
