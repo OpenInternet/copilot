@@ -69,6 +69,7 @@ def get_config_dir(directory):
     Args:
         directory (str): The type of config file directory to return.
     """
+    log.debug("requesting config directory {0}".format(directory))
     base_directories = {}
     base_directories.setdefault("profiles", os.environ['COPILOT_PROFILE_CONFIG_DIRECTORY'])
     base_directories.setdefault("temporary", os.environ['COPILOT_TEMPORARY_CONFIG_DIRECTORY'])
@@ -79,6 +80,7 @@ def get_config_dir(directory):
     elif directory == "usb":
         return get_likely_usb()
     else:
+        log.error("The config directory {0} is not valid.".format(directory))
         raise ValueError("That config directory is not valid.")
 
 def get_config_path(plugin_name):
@@ -287,7 +289,8 @@ class Config(object):
     def prepare(self):
         """Create a config directory if it does not exist."""
 
-        log.info("Creating the config directory if it does not exist.")
+        log.info("Creating the config directory " +
+                 "{0} if it does not exist.".format(self.config_dir))
         _dir = get_config_dir(self.config_dir)
         if not os.path.exists(_dir):
             log.info("Creating the main config directory {0}.".format(_dir))
