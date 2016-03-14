@@ -22,7 +22,8 @@ def import_plugin(name):
     # Get plugin directory from system COPIOT_PLUGINS_DIRECTORY
     plugin_dir = os.environ['COPILOT_PLUGINS_DIRECTORY']
     log.debug("Plugin directory identified at {0}".format(plugin_dir))
-    sys.path.append(plugin_dir)
+    if plugin_dir not in sys.path:
+        sys.path.append(plugin_dir)
     log.debug("After adding plugin_dir python path is: {0}".format(sys.path))
 
     if not is_plugin(name):
@@ -35,7 +36,7 @@ def import_plugin(name):
         log.error("Could not import plugin {0}".format(name))
         log.error(_e)
         raise ImportError(_e)
-    log.debug("{0} contains {1}".format(config.__name__, dir(config)))
+    log.debug("returning {0}".format(config.name))
     return config
 
 def get_plugin(name):
