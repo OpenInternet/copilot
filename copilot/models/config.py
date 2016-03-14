@@ -36,7 +36,7 @@ def import_plugin(name):
         log.error("Could not import plugin {0}".format(name))
         log.error(_e)
         raise ImportError(_e)
-    log.debug("returning {0}".format(config))
+    log.debug("returning {0}".format(config.__name__))
     return config
 
 def get_plugin(name):
@@ -75,6 +75,7 @@ def get_config_dir(directory):
     base_directories.setdefault("profiles", os.environ['COPILOT_PROFILE_CONFIG_DIRECTORY'])
     base_directories.setdefault("temporary", os.environ['COPILOT_TEMPORARY_CONFIG_DIRECTORY'])
     base_directories.setdefault("main", os.environ['COPILOT_DEFAULT_CONFIG_DIRECTORY'])
+    log.debug("base directories set as {0}".format(base_directories))
     # Test if one of the basic directories
     if directory in base_directories:
         base_directories.get(directory)
