@@ -325,3 +325,7 @@ body:not(.about) .docs-layout.is-small-screen .docs-layout-header {
     text-align: center;
     text-transform:uppercase;
 }
+
+.intro-box {
+    text-align:center;
+}
