@@ -319,3 +319,9 @@ body:not(.about) .docs-layout.is-small-screen .docs-layout-header {
   margin: 0 auto;
   float: right;
 }
+
+.resource-hint {
+    color: #fff;
+    text-align: center;
+    text-transform:uppercase;
+}
