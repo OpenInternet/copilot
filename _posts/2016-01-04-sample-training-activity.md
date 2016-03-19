@@ -34,23 +34,23 @@ Materials to Prepare:
 
 -   A copy of the Tor Browser Bundle "installer" (a self-extracting archive) for distribution to participants. The Tor Browser Bundle is quite large, so it's a good idea to prepare this ahead of time,  especially if you have a slow Internet connection in the training room.
 
--   [A Co-Pilot censorship simulating access point kit.](https://github.com/OpenInternet/co-pilot/wiki/Setup-Guide#what-you-will-need)
+-   [A CoPilot censorship simulating access point kit.](https://github.com/OpenInternet/CoPilot/wiki/Setup-Guide#what-you-will-need)
 
 Preparation:
 ==================================
 
-- Before the training begins turn on the co-pilot device.
+- Before the training begins turn on the CoPilot device.
 
-- If you have not yet configured your Co-Pilot device follow the [configuration instructions](https://github.com/OpenInternet/co-pilot/wiki/Configuring-Co-Pilot) provided on the Co-Pilot wiki.
+- If you have not yet configured your CoPilot device follow the [configuration instructions](https://github.com/OpenInternet/CoPilot/wiki/Configuring-CoPilot) provided on the CoPilot wiki.
 
-- [Create a new "censorship" profile](https://github.com/OpenInternet/co-pilot/wiki/Setup-Guide#step-6-create-a-new-profile-optional) that targets a widely known website that participants are likely to have not visited recently. (e.g Disney.com, .gov, hotmail)
+- [Create a new "censorship" profile](https://github.com/OpenInternet/CoPilot/wiki/Setup-Guide#step-6-create-a-new-profile-optional) that targets a widely known website that participants are likely to have not visited recently. (e.g Disney.com, .gov, hotmail)
 
-- Instruct the participants to connect to the access point being provided by Co-Pilot (by default this will be **copilot**.)
+- Instruct the participants to connect to the access point being provided by CoPilot (by default this will be **copilot**.)
 
 Tor Browser Bundle Hands-On Steps:
 ==================================
 
-In this exercise, participants will use the Tor Browser Bundle to create an anonymous connection, confirm that it is working by accessing a website blocked by Co-Pilot, and change their Tor "exit relay."
+In this exercise, participants will use the Tor Browser Bundle to create an anonymous connection, confirm that it is working by accessing a website blocked by CoPilot, and change their Tor "exit relay."
 
 Show the public IP address of the training room's Internet connection
 ------------------------------------------------------------------------
@@ -61,10 +61,10 @@ Show the public IP address of the training room's Internet connection
 
 -   Invite participants to visit the site themselves, using their own devices.
 
-Show the websites blocked by Co-Pilot
+Show the websites blocked by CoPilot
 -----------------------------------------------------
 
--   In a browser, visit site that you blocked with Co-Pilot
+-   In a browser, visit site that you blocked with CoPilot
 
 -   Explain the concept of DNS, and how just like participants have an IP address, participants must get the IP address of websites that they visit.
 
@@ -83,12 +83,12 @@ Show the public IP address of the Tor "exit relay"
 
 -   In Tor Browser, visit [whatismyip.com](https://www.whatismyip.com/) [3] or  [whatismyipaddress.com](http://whatismyipaddress.com/) [4] and show that the IP address has changed.
 
-Show how the websites blocked by Co-Pilot are now accessible
+Show how the websites blocked by CoPilot are now accessible
 -----------------------------------------------------
 
--   In Tor Browser,  visit site that you blocked with Co-Pilot and show that it is now accessible.
+-   In Tor Browser,  visit site that you blocked with CoPilot and show that it is now accessible.
 
--   Explain how Tor allows allows a user to access the Internet from another location, and how that allows them to bypass the Co-Pilot device sitting between them and the Internet.
+-   Explain how Tor allows allows a user to access the Internet from another location, and how that allows them to bypass the CoPilot device sitting between them and the Internet.
 
 -   Invite participants to visit the site themselves, using their own devices.
 

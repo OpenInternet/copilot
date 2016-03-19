@@ -10,7 +10,7 @@ categories: trainer
 
 ### Currently Supported Devices
 
-The following devices have been tested and found to work with the Co-Pilot platform.
+The following devices have been tested and found to work with the CoPilot platform.
 
 #### Beagle Bone Black
 
@@ -36,7 +36,7 @@ The following devices have been tested and found to work with the Co-Pilot platf
 
 ### Devices Being Considered for Support
 
-The following devices have *not** been tested with the Co-Pilot platform. But, because they are supported by [Offensive Securities Kali-Linux Build System](https://www.offensive-security.com/kali-linux-vmware-arm-image-download/#) they will be reviewed for support when we get money to purchase them. We would love to know if you install Co-Pilot on these devices so that we know if they will work or not.
+The following devices have *not** been tested with the CoPilot platform. But, because they are supported by [Offensive Securities Kali-Linux Build System](https://www.offensive-security.com/kali-linux-vmware-arm-image-download/#) they will be reviewed for support when we get money to purchase them. We would love to know if you install CoPilot on these devices so that we know if they will work or not.
 
 #### CompuLab - Utilite & TrimSlice
 
@@ -50,8 +50,8 @@ The following devices have *not** been tested with the Co-Pilot platform. But, b
 
 ### Unsupported Devices
 
-The following devices been tested with the Co-Pilot platform. They have been found wanting and will not be supported in future Co-Pilot releases.
+The following devices been tested with the CoPilot platform. They have been found wanting and will not be supported in future CoPilot releases.
 
 #### Raspberry-Pi 1
 
-The First Release of the Raspberry Pi will **not** be supported. [The Raspberry pi requires either an external powered USB hub or the user to remove a fuse connecting the USB ports to the board.](https://github.com/OpenInternet/co-pilot/issues/45) Beyond this, we have serious concerns about the general lack of computing power supplied by the original Raspberry-Pi.
+The First Release of the Raspberry Pi will **not** be supported. [The Raspberry pi requires either an external powered USB hub or the user to remove a fuse connecting the USB ports to the board.](https://github.com/OpenInternet/CoPilot/issues/45) Beyond this, we have serious concerns about the general lack of computing power supplied by the original Raspberry-Pi.

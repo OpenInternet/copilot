@@ -5,22 +5,22 @@ categories: developer
 ---
 
 {:.plugin-logo}
-![Co-Pilot Plugin Logo](https://raw.github.com/wiki/openinternet/co-pilot/images/plugins_logo.png)
+![CoPilot Plugin Logo](https://raw.github.com/wiki/openinternet/CoPilot/images/plugins_logo.png)
 
 * TOC
 {:toc}
 
 ### What is a Plugin?
 
-All the core functionality of Co-Pilot (censorship and networking) is provided plugins that use the Co-Pilot Plugin Interface. This plugin system allows developers to easily add new censorship, surveillance, or networking functionality to Co-Pilot without having in-depth knowledge of how Co-Pilot's back-end works or having had experience working with its underlying code-base.
+All the core functionality of CoPilot (censorship and networking) is provided plugins that use the CoPilot Plugin Interface. This plugin system allows developers to easily add new censorship, surveillance, or networking functionality to CoPilot without having in-depth knowledge of how CoPilot's back-end works or having had experience working with its underlying code-base.
 
 ### Why Plugins?
 
-The Co-Pilot team [faced continuous requests](https://github.com/OpenInternet/co-pilot/issues/25) from developers during [Co-Pilots initial research and development](https://github.com/OpenInternet/co-pilot/wiki/Research-&-Development) to add different types of functionality to Co-Pilot. Just as the ability to create tailored censorship profiles was critical to the long-term adoption and use of Co-Pilot for trainers, developers saw the ability for outsiders to extend the Co-Pilot software as vital to its long-term viability as a core digital security training tool. In response to this Co-Pilot was re-engineered to include a plugin system at its core.
+The CoPilot team [faced continuous requests](https://github.com/OpenInternet/CoPilot/issues/25) from developers during [CoPilots initial research and development](https://github.com/OpenInternet/CoPilot/wiki/Research-&-Development) to add different types of functionality to CoPilot. Just as the ability to create tailored censorship profiles was critical to the long-term adoption and use of CoPilot for trainers, developers saw the ability for outsiders to extend the CoPilot software as vital to its long-term viability as a core digital security training tool. In response to this CoPilot was re-engineered to include a plugin system at its core.
 
 ### What makes up a plugin?
 
-Plugins are made up of 2 configuration files, one installation script, on start-up script, and a small script to allow the plugin to write, and save, its own configuration files. An example plugin can be found in [the docs repository](https://github.com/OpenInternet/co-pilot/tree/master/docs/example_plugin).
+Plugins are made up of 2 configuration files, one installation script, on start-up script, and a small script to allow the plugin to write, and save, its own configuration files. An example plugin can be found in [the docs repository](https://github.com/OpenInternet/CoPilot/tree/master/docs/example_plugin).
 
 #### Required package files
 
@@ -46,11 +46,11 @@ The executable script that is used to start and clean up after the package. **RE
 
 * \__init\__.py
 
-An empty file that allows co-pilot to use this folder as a package. **REQUIRED**
+An empty file that allows CoPilot to use this folder as a package. **REQUIRED**
 
 ### How do I write a plugin?
 
-In order to support developers using the plugin system the Co-Pilot team also created an [example plugin](https://github.com/OpenInternet/co-pilot/tree/master/docs/example_plugin) and a [plugin management menu](https://github.com/OpenInternet/co-pilot/wiki/Plugin-Guide#restarting-a-plugin-using-the-copilot-user-interface) that allows developers to monitor and restart a plugins from the Co-Pilot web interface.
+In order to support developers using the plugin system the CoPilot team also created an [example plugin](https://github.com/OpenInternet/CoPilot/tree/master/docs/example_plugin) and a [plugin management menu](https://github.com/OpenInternet/CoPilot/wiki/Plugin-Guide#restarting-a-plugin-using-the-copilot-user-interface) that allows developers to monitor and restart a plugins from the CoPilot web interface.
 
 #### Naming your plugin
 
@@ -58,8 +58,8 @@ A plugin must have a unique name. A plugin name should also be descriptive of it
 
 #### Adding the required files for your plugin
 
-* Fork the [Co-Pilot repository.](https://github.com/OpenInternet/co-pilot)
-* Add a folder in the [plugins directory](https://github.com/OpenInternet/co-pilot/tree/master/copilot/plugins) named similarly to the name of your plugin.
+* Fork the [CoPilot repository.](https://github.com/OpenInternet/CoPilot)
+* Add a folder in the [plugins directory](https://github.com/OpenInternet/CoPilot/tree/master/copilot/plugins) named similarly to the name of your plugin.
 * Add the following blank files to this repository.
   * package.conf
   * supervisor.conf
@@ -70,7 +70,7 @@ A plugin must have a unique name. A plugin name should also be descriptive of it
 
 #### Creating a package config file
 
-The ```package.conf``` file is a configuration file that Co-Pilot uses to load the package and properly integrate its functionality into the Co-Pilot user interface.
+The ```package.conf``` file is a configuration file that CoPilot uses to load the package and properly integrate its functionality into the CoPilot user interface.
 
 ##### The info header
 
@@ -84,13 +84,13 @@ A configuration file must start with an *info header* that looks like the follow
 
 **name:** The name of your plugin.
 
-**config_file:** The name of the configuration file that Co-Pilot should write to.
+**config_file:** The name of the configuration file that CoPilot should write to.
 
 **target:** The target(s) you would like trainers to be able to choose from.
 
 **actions:**The action(s) you would like trainers to be able to choose from.
 
-**directory:** The directory that co-pilot should store your config files in
+**directory:** The directory that CoPilot should store your config files in
 
 ##### Required Values
 
@@ -118,7 +118,7 @@ directory = /tmp/copilot/
 
 #### Creating a supervisor script
 
-Co-Pilot uses [Supervisor](http://supervisord.org) to control starting, stopping, and restarting its plugins. If you create a file named ```supervisor.conf``` in your plugin directory Co-Pilot will append it to the existing supervisor.conf. This file should be a [valid supervisor program configuration section](http://supervisord.org/configuration.html#program-x-section-settings).
+CoPilot uses [Supervisor](http://supervisord.org) to control starting, stopping, and restarting its plugins. If you create a file named ```supervisor.conf``` in your plugin directory CoPilot will append it to the existing supervisor.conf. This file should be a [valid supervisor program configuration section](http://supervisord.org/configuration.html#program-x-section-settings).
 
 ##### Example Supervisor Script
 
@@ -174,7 +174,7 @@ main
 
 #### Creating a configuration file writer
 
-Your plugin will have different configuration file needs than any other program. To handle this we have created a [Python based "configuration writer" class](https://github.com/OpenInternet/co-pilot/blob/master/copilot/models/config.py#L140-L204) that can be customized to write all manner of configuration files. [You can see an example of a customized config writer in the DNS plugin](https://github.com/OpenInternet/co-pilot/blob/master/copilot/plugins/dns/config.py)
+Your plugin will have different configuration file needs than any other program. To handle this we have created a [Python based "configuration writer" class](https://github.com/OpenInternet/CoPilot/blob/master/copilot/models/config.py#L140-L204) that can be customized to write all manner of configuration files. [You can see an example of a customized config writer in the DNS plugin](https://github.com/OpenInternet/CoPilot/blob/master/copilot/plugins/dns/config.py)
 
 ##### Minimal Configuration Example
 
@@ -202,7 +202,7 @@ action, target, sub_target = rule[0], rule[1], rule[2]
 ```
 
 ####### Example
-[This example is pulled directly from the DNS plugin.](https://github.com/OpenInternet/co-pilot/blob/master/copilot/plugins/dns/config.py#L18-L36)
+[This example is pulled directly from the DNS plugin.](https://github.com/OpenInternet/CoPilot/blob/master/copilot/plugins/dns/config.py#L18-L36)
 
 ```
 def add_rule(self, rule):
@@ -277,9 +277,9 @@ An example of an alternative write header function that shows how it can be modi
 
 Currently adding a watchdog rule is the only place where you will need to edit an existing piece of code. This will be streamlined in the future.
 
-To edit this you will first need to open the [watchdog script](https://github.com/OpenInternet/co-pilot/blob/master/bin/watch_config).
+To edit this you will first need to open the [watchdog script](https://github.com/OpenInternet/CoPilot/blob/master/bin/watch_config).
 
-You will then need to add your config file to the configs that it watches. You do this by adding the following line into the [main configuration block.](https://github.com/OpenInternet/co-pilot/blob/d200e33c896593314c751301faadd24e6015a8f0/bin/watch_config#L39-L45)
+You will then need to add your config file to the configs that it watches. You do this by adding the following line into the [main configuration block.](https://github.com/OpenInternet/CoPilot/blob/d200e33c896593314c751301faadd24e6015a8f0/bin/watch_config#L39-L45)
 
 
 ```
@@ -292,14 +292,14 @@ Replace ```MYCONFFILE``` with the ```config_file``` value from your configuratio
 
 ### How do I install a plugin?
 
-* Fork the co-pilot github repository
-* Add your plugin to the [plugins folder.](https://github.com/OpenInternet/co-pilot/tree/master/copilot/plugins)
+* Fork the CoPilot github repository
+* Add your plugin to the [plugins folder.](https://github.com/OpenInternet/CoPilot/tree/master/copilot/plugins)
 
 ```
-co-pilot/copilot/plugins/[PLUGIN_NAME]
+CoPilot/copilot/plugins/[PLUGIN_NAME]
 ```
 
-* Follow the [Installation Guide](https://github.com/OpenInternet/co-pilot/wiki/Installing-Co-Pilot) replacing the URL of the core copilot repository with the URL of your repository.
+* Follow the [Installation Guide](https://github.com/OpenInternet/CoPilot/wiki/Installing-CoPilot) replacing the URL of the core copilot repository with the URL of your repository.
 
 
 ### How do I troubleshoot my plugin?
@@ -308,7 +308,7 @@ co-pilot/copilot/plugins/[PLUGIN_NAME]
 
 In the copilot user interface, in the info menu you can restart a plugin by clicking on the circular arrow icon next to your plugins name.
 
-![plugins page](https://raw.github.com/wiki/openinternet/co-pilot/images/plugins.png)
+![plugins page](https://raw.github.com/wiki/openinternet/CoPilot/images/plugins.png)
 
 #### Checking your plugins logs
 

@@ -7,39 +7,39 @@ categories: developer
 * TOC
 {:toc}
 
-### Co-Pilot installation on unsupported ARM devices
+### CoPilot installation on unsupported ARM devices
 
-Co-Pilot is still in its **BETA stages**.
+CoPilot is still in its **BETA stages**.
 
 #### Installing the underlying system.
 
-Co-Pilot uses the Kali-Linux ARM distribution as its underlying system.
+CoPilot uses the Kali-Linux ARM distribution as its underlying system.
 
 * Download a [pre-built Kali-Linux ARM build](https://www.offensive-security.com/kali-linux-vmware-arm-image-download/) for your device or build your own Kali-Linux image using the [Kali-Arm Build scripts](https://github.com/offensive-security/kali-arm-build-scripts) on a existing Kali device.
 
 * [Load your Kali-Linux image onto an SD-card.](http://odroid.us/mediawiki/index.php?title=Step-by-step_Ubuntu_SD_Card_Setup) and plug it into your Device.
 
-#### Installing and Configuring the Co-Pilot system
+#### Installing and Configuring the CoPilot system
 
-* On the co-pilot device clone the co-pilot repository.
+* On the CoPilot device clone the CoPilot repository.
 
 ```
-https://github.com/OpenInternet/co-pilot.git
+https://github.com/OpenInternet/CoPilot.git
 ```
 
 * Run the installation script from that repository.
 
 ```
-cd  co-pilot
+cd  CoPilot
 ./install
 ```
 
-* Restart Co-Pilot
+* Restart CoPilot
 
 ```
 shutdown -r 0
 ```
 
-#### Running Co-Pilot
+#### Running CoPilot
 
-* Follow the [configuration instructions](https://github.com/OpenInternet/co-pilot/wiki/Configuring-Co-Pilot) for running co-pilot.
+* Follow the [configuration instructions](https://github.com/OpenInternet/CoPilot/wiki/Configuring-CoPilot) for running CoPilot.
