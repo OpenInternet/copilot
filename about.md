@@ -13,7 +13,7 @@ Research on [the needs of digital security trainers](https://www.internews.org/r
 - A wireless hotspot that allows trainers to provide a safe environment for participants to explore censorship.
 - [Easy-to-use interfaces](http://openinternet.github.io/copilot/developer/2016/01/10/tour.html) that allow trainers to have fine-grained control of censorship environments.
 - The ability to for trainers to [download](http://openinternet.github.io/copilot/developer/2016/01/10/tour.html#save-profile) and [share](http://openinternet.github.io/copilot/developer/2016/01/10/tour.html#load-profile) different censorship configuration profiles with other trainers through the CoPilot interface.
-- Pre-loaded [DNS](https://www.youtube.com/watch?v=2ZUxoi7YNgs) censorship plugins for [DNS Blocking and Redirection.](https://www.youtube.com/watch?v=4WyVqHVyN5E)
+- Pre-loaded [DNS](https://www.youtube.com/watch?v=2ZUxoi7YNgs) censorship plugins that allow targeted [DNS Blocking and Redirection.](https://www.youtube.com/watch?v=4WyVqHVyN5E)
 - Pre-loaded “Intrusion Prevention” plugin which allows for wide-ranging censorship simulation using [censorship “rules”](https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Suricata_Rules) from [standard Intrusion prevention and detection systems.](http://suricata-ids.org/)
 - A [plugin system](http://openinternet.github.io/copilot/developer/2016/01/06/plugin-guide.html) that allows developers to easily add new censorship and surveillance functionality.
 - [Support for three “playing card deck” sized embedded hardware platforms that allow CoPilot to be built for under $100 USD.](http://openinternet.github.io/copilot/developer/2016/01/08/supported-devices.html)
