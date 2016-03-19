@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-CoPilot is a wireless hotspot for digital security trainers that provides an easy to use web interface for *simulating custom censorship environments** during trainings. CoPilot lets participants experience and successfully circumventing censorship in the safety of an interactive training environment.
+CoPilot is a wireless hotspot for digital security trainers that provides an easy to use web interface for **simulating custom censorship environments** during trainings. CoPilot lets participants experience and successfully circumventing censorship in the safety of an interactive training environment.
 
 Research on [the needs of digital security trainers](https://www.internews.org/research-publications/training-digital-security-trainers-preliminary-review-methods-needs-and-challe) has demonstrated that one of the leading needs of trainers is a framework for assessing the effectiveness of trainings, as well as a more robust set of tools and resources for evaluating trainees’ uptake during and after trainings. As a part of the overall objective to improve the quality and effectiveness of digital security resources Internews has been exploring innovative and interactive ways to increase the adoption of safer digital behavior while understanding the time constraints of trainers to monitor the progress of participants.
 
