@@ -153,6 +153,18 @@ def get_plugins_with_subtargets():
             has_subtarget.add(plugin.name)
     return has_subtarget
 
+def get_plugins_with_advanced_config_pages():
+    """Create a set containing all possible targets that have advanced configuration pages.
+    """
+    log.debug("Getting plugins with advanced configuration pages")
+    plugins = import_all_plugins()
+    has_advanced_config_page = set()
+    for plugin in plugins:
+        if plugin.has_configuration_page is True:
+            log.debug("plugin {0} has an advanced configuration page".format(plugin.name))
+            has_advanced_config_page.add(plugin.name)
+    return has_advanced_config_page
+
 def get_targets_with_subtargets():
     """Create a set containing all possible targets that have subtargets.
     """

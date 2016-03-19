@@ -76,45 +76,6 @@ def info():
                "url":"config"}]
     return render_template('info.html', status=status, title="Co-Pilot Info")
 
-@app.route('/plugins')
-@login_required
-def plugins():
-    """ CoPilot plugin status and management interface
-
-    An page that displays all the current co-pilot services and
-    allows the trainer to restart them if they are acting up.
-    https://github.com/OpenInternet/co-pilot/wiki/User-Interface-Elements#plugins
-
-    """
-    services = {}
-    for line in subprocess.check_output(['supervisorctl', 'status']).split('\n'):
-        log.debug("Service line received: {0}".format(line))
-        match_name = re.search("^([^\s]*)\s*([A-Z]*)", line)
-        if match_name and match_name.group(1) != "":
-            name = match_name.group(1)
-            running = match_name.group(2)
-            services[name] = running
-    return render_template('plugins.html', services=services, title="Service Status/Restart")
-
-@app.route('/plugins/restart/<service>')
-@login_required
-def restart_service(service):
-    """ A route that will restart a service.
-
-    If the plugins/restart/ route is appended with the
-    name of a CoPilot service and accessed by a logged in
-    user CoPilot will restart that service.
-
-    See the plugins interface for usage.
-
-    Args:
-        service (str): The name of a service to be restarted.
-    """
-    if is_service(service):
-        subprocess.call(["supervisorctl", "restart", service])
-    flash("Service {0} restarted.".format(service), "success")
-    return redirect(url_for("plugins"))
-
 
 # HTTP error handling
 @app.route('/error', defaults={"face": "sad"})

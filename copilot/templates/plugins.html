@@ -6,31 +6,21 @@
 </div>
 <div class="mdl-card plugin-list mdl-cell mdl-cell--8-col mdl-shadow--4dp">
     <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Plugins & Services</h2>
+        <h2 class="mdl-card__title-text">Plugins</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Click on a service to restart it.
+        Click on a service to go to its advanced configuration menu.
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <div class="plugin-list-action mdl-list">
             {% for name in services %}
-            {% if services[name] == "RUNNING" %}
             <div class="mdl-list__item">
                 <span class="mdl-list__item-primary-content">
                     <i class="material-icons mdl-list__item-avatar service_running">check</i>
                     <span>{{ name }}</span>
                 </span>
-                <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">settings_backup_restore</i></a>
+                <a class="mdl-list__item-secondary-action" href="/plugins/configure/{{ name }}"><i class="material-icons">build</i></a>
             </div>
-            {% else %}
-            <div class="mdl-list__item">
-                <span class="mdl-list__item-primary-content">
-                    <i class="material-icons mdl-list__item-avatar service_down">close</i>
-                    <span>{{ name }}</span>
-                </span>
-                <a class="mdl-list__item-secondary-action" href="/plugins/restart/{{ name }}"><i class="material-icons">refresh</i></a>
-            </div>
-            {% endif %}
             {% endfor %}
         </div>
     </div>

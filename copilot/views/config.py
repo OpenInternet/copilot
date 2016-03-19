@@ -7,7 +7,7 @@ import subprocess
 from copilot.views.forms import Config, AdminConfig
 from copilot.models.trainer import Trainer
 from copilot.controllers import flash_errors
-from copilot.models.config import get_config_writer
+from copilot.models.config import get_config_writer, get_plugins_with_advanced_config_pages
 #Get flask modules
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, login_required
@@ -81,3 +81,94 @@ def config():
 
     buttons = [{"name":"Submit", "submit":True}]
     return render_template('config.html', form=form, trainer_exists=trainer_exists, buttons=buttons, title="Settings")
+
+
+## ============================
+#  Plugins
+## ============================
+
+@app.route('/plugins')
+@login_required
+def plugins():
+    """ CoPilot plugin status and management interface
+
+    An page that displays all the current co-pilot services and
+    allows the trainer to restart them if they are acting up.
+    https://github.com/OpenInternet/co-pilot/wiki/User-Interface-Elements#plugins
+
+    """
+    services = {}
+    for line in subprocess.check_output(['supervisorctl', 'status']).split('\n'):
+        log.debug("Service line received: {0}".format(line))
+        match_name = re.search("^([^\s]*)\s*([A-Z]*)", line)
+        if match_name and match_name.group(1) != "":
+            name = match_name.group(1)
+            running = match_name.group(2)
+            services[name] = running
+    return render_template('plugins.html',
+                           services=services,
+                           title="Service Status/Restart")
+
+@app.route('/plugins/restart/<service>')
+@login_required
+def restart_service(service):
+    """ A route that will restart a service.
+
+    If the plugins/restart/ route is appended with the
+    name of a CoPilot service and accessed by a logged in
+    user CoPilot will restart that service.
+
+    See the plugins interface for usage.
+
+    Args:
+        service (str): The name of a service to be restarted.
+    """
+    if is_service(service):
+        subprocess.call(["supervisorctl", "restart", service])
+    flash("Service {0} restarted.".format(service), "success")
+    return redirect(url_for("plugins"))
+
+# @app.route('/plugins/configure')
+# @login_required
+# def plugin_configuration_picker(plugin_name):
+#     """List of plugin advanced configuration pages
+
+#     Args:
+#         service (str): The name of a service to be restarted.
+#     """
+#     plugins = get_plugins_with_advanced_config_pages()
+
+
+@app.route('/plugins/configure/<string:prof_name>')
+@login_required
+def configure_plugin(plugin_name):
+    """CoPilot plugin advanced configuration page
+
+    Args:
+        service (str): The name of a service to be restarted.
+    """
+    log.debug("plugin {0} has an advanced configuration page".format(plugin.name))
+    form = plugin.get_config_form()
+    form_config = {}
+    form_config.setdefault("name", url_for("save_plugin_config") + "/" + plugin_name)
+    title="{0} Advanced Configuration Page".format(plugin_name)
+    plugin = get_plugin(plugin_name)
+    if plugin.has_configuration_page is True:
+        form_config.setdefault("has_form", True)
+    else:
+        form_config.setdefault("has_form", False)
+    return render_template("plugin_adv_config.html",
+                           form=form,
+                           title=title,
+                           plugin_name=plugin_name,
+                           form_config=form_config)
+
+@app.route('/plugins/configure/save/<string:plugin_name>')
+@login_required
+def save_plugin_config(plugin_name):
+    """CoPilot plugin advanced  configuration page
+
+    Args:
+        service (str): The name of a service to be restarted.
+    """
+    raise NotImplementedError("")
