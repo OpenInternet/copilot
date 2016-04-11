@@ -205,6 +205,7 @@ def profile_save():
             flash("Location {0} does not exist. Cannot save a profile to a non-existant folder, non mounted USB drive, or un-allowed folder. Did you unplug the usb between page loads?".format(save_dir), "error")
             return redirect(url_for("profile"))
 
+        mdl_prof.unset_profile()
         prof_name = form.prof_name.data
         profile = mdl_prof.Profile(form.prof_name.data)
         profile.profile_dir = save_dir

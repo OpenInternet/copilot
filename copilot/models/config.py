@@ -118,6 +118,13 @@ def import_all_plugins():
         log.debug("plugin {0} loaded".format(name))
     return plugins
 
+def delete_configs():
+    """ Delete all existing plugin config files."""
+    plugins = get_plugins()
+    for name in plugins:
+        plugin = get_config_writer(name)
+        plugin.delete_config()
+
 def get_valid_actions(plugin_name=None):
     """ Returns the valid actions for a plugin, or all plugin as a list"""
     if not plugin_name:
@@ -272,6 +279,11 @@ class Config(object):
             return True
         else:
             return False
+
+    def delete_config(self):
+        """Deletes the plugin config files if they exists."""
+        if os.path.exists(self._config_file):
+            os.remove(self._config_file)
 
     def add_rule(self, rule):
         """ check, transform, and add a single rule.

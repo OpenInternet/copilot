@@ -1,7 +1,7 @@
 from copilot import db
 from flask.ext.login import UserMixin
 import os
-from copilot.models.config import get_config_dir, get_config_writer, ProfileConfig, ProfileWriter, get_plugin_from_rules
+from copilot.models.config import get_config_dir, get_config_writer, ProfileConfig, ProfileWriter, get_plugin_from_rules, delete_configs
 from copilot.models.trainer import get_trainer
 from copilot.utils.file_sys import get_usb_dirs
 from werkzeug import secure_filename
@@ -10,6 +10,12 @@ from werkzeug import secure_filename
 import logging
 log = logging.getLogger(__name__)
 
+def unset_profile():
+    """Unset the current profile and reset all plugins."""
+    trainer = get_trainer()
+    trainer.current = "0"
+    delete_configs()
+
 def get_profile_status():
     """ Gives the status and name of the currenty running profile.
 
@@ -17,7 +23,7 @@ def get_profile_status():
     current profile (if any), and if that profile is enabled. There
     is currently no way to disable the currently running profile
     without creating and running a blank profile. As such, this
-    funtion retuns disabled profiles only when there is no current
+    function returns disabled profiles only when there is no current
     trainer.
     """
     trainer = get_trainer()
