@@ -275,15 +275,15 @@ class Config(object):
     def check_file(self):
         """Checks if the config file exists."""
 
-        if os.path.exists(self._config_file):
+        if os.path.exists(self.config_file):
             return True
         else:
             return False
 
     def delete_config(self):
         """Deletes the plugin config files if they exists."""
-        if os.path.exists(self._config_file):
-            os.remove(self._config_file)
+        if os.path.exists(self.config_file):
+            os.remove(self.config_file)
 
     def add_rule(self, rule):
         """ check, transform, and add a single rule.
