@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 <div class="row">
     <div class="ten columns videoContainer">
         <video class="Video" autoplay="" autobuffer="" controls="" loop="" height="450px" width="600px" poster="{{ url_for('static', filename='images/CjzRbUuUYAIHsAU.jpg') }}" src="{{ url_for('static', filename='images/CjzRbUuUYAIHsAU.mp4') }}"><source src="{{ url_for('static', filename='images/CjzRbUuUYAIHsAU.mp4') }}" type="video/mp4"><img src="{{ url_for('static', filename='images/CjzRbUuUYAIHsAU.jpg') }}" class="Video-fallbackImage" alt="">Your browser does not support playback of this video.</video>
