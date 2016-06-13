@@ -8,6 +8,7 @@ readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
 readonly TESTING=false
+readonly INSTALL_FLAG="/var/log/firstboot.log"
 
 # Plugin Configuration Variables
 readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
@@ -23,24 +24,24 @@ readonly COPILOT_DEFAULT_CONFIG_DIRECTORY="/tmp/copilot/"
 # ==== HARDWARE ====
 
 
-prepare_devices() {
-    #TODO remove the temporary fix that address' a bug introduced in https://github.com/OpenInternet/co-pilot/issues/59
-    # watch https://github.com/OpenInternet/co-pilot/issues/60 for when this can be removed.
-    #To remove this temporary fix delete the call to temporary_fixes below, remove the temporary_fixes function, and uncoment apt-get -y install dnsmasq
-    temporary_fixes
-    #Currently only BBB has specific preparation needs
-    local kernel=$(uname -mrs)
-    if [[ $kernel == *"bone"* ]]; then
-        #Prepare the beagle bone black
-        prep_bbb
-    fi
-}
+# prepare_devices() {
+#     #TODO remove the temporary fix that address' a bug introduced in https://github.com/OpenInternet/co-pilot/issues/59
+#     # watch https://github.com/OpenInternet/co-pilot/issues/60 for when this can be removed.
+#     #To remove this temporary fix delete the call to temporary_fixes below, remove the temporary_fixes function, and uncoment apt-get -y install dnsmasq
+#     temporary_fixes
+#     #Currently only BBB has specific preparation needs
+#     local kernel=$(uname -mrs)
+#     if [[ $kernel == *"bone"* ]]; then
+#         #Prepare the beagle bone black
+#         prep_bbb
+#     fi
+# }
 
-prep_bbb() {
-    rm -rf /var/lib/apt/lists
-    apt-get -y update
-    apt-get -y --force-yes install kali-archive-keyring
-}
+# prep_bbb() {
+#     rm -rf /var/lib/apt/lists
+#     apt-get -y update
+#     apt-get -y --force-yes install kali-archive-keyring
+# }
 
 temporary_fixes () {
     echo dnsmasq-base hold |dpkg --set-selections
@@ -57,13 +58,13 @@ update_os() {
 # ==== CO-PILOT BASE ====
 
 
-install_copilot() {
-    cp -fr $PROG_DIR $COPILOT_DIR
-}
+# install_copilot() {
+#     cp -fr $PROG_DIR $COPILOT_DIR
+# }
 
 install_co-pilot_deps() {
-    #usbmount auto-mounts usb sticks
-    apt-get -y install usbmount
+     # usbmount auto-mounts usb sticks
+     apt-get -y install usbmount
 }
 
 setup_copilot_env() {
@@ -73,9 +74,9 @@ setup_copilot_env() {
     echo "COPILOT_DEFAULT_CONFIG_DIRECTORY=${COPILOT_DEFAULT_CONFIG_DIRECTORY}" >> /etc/environment
 }
 
-setup_copilot_db() {
-    mkdir -p "${COPILOT_PROFILE_CONFIG_DIRECTORY}"
-}
+# setup_copilot_db() {
+#     mkdir -p "${COPILOT_PROFILE_CONFIG_DIRECTORY}"
+# }
 
 
 # ==== FLASK ====
@@ -87,8 +88,8 @@ install_flask_deps() {
     apt-get -y install python2.7-dev
     apt-get -y install python-pysqlite2
     # Instal pip
-    curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python -
-    curl https://bootstrap.pypa.io/get-pip.py | python -
+    # curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python -
+    # curl https://bootstrap.pypa.io/get-pip.py | python -
     export PATH="/usr/local/bin:$PATH"
 
     # Bcrypt Dependencies
@@ -106,20 +107,21 @@ install_flask() {
     pip install Flask-Login
 }
 
+# ADD THESE BITS TO INIT SCRIPT
 setup_flask_env() {
-    cd $WEB_DIR
-    mkdir $COPILOT_DIR/instance
+    # cd $WEB_DIR
+    # mkdir $COPILOT_DIR/instance
     local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    if [[ $TESTING = true ]]; then
-        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/config.py
-        cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
-    else
-        cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/config.py
-        cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/bp_config.py
-    fi
+    # if [[ $TESTING = true ]]; then
+    #     cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/config.py
+    #     cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
+    # else
+    #     cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/config.py
+    #     cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/bp_config.py
+    # fi
 
-    # Get rid of the application root in the bp_config
-    sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
+    # # Get rid of the application root in the bp_config
+    # sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
 
     # Add a random CSRF session key.
     local CSRF=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
@@ -131,7 +133,7 @@ setup_flask_env() {
     sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
     sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/bp_config.py
 
-    cd $PROG_DIR
+    # cd $PROG_DIR
 }
 
 # ==== WSGI ====
@@ -178,12 +180,13 @@ install_avahi() {
     service avahi-daemon restart
 }
 
-setup_avahi() {
-    echo "copilot" > /etc/hostname
-    /etc/init.d/hostname.sh start
-    sed -i 's/127.0.0.1\s*kali/127.0.0.1\tcopilot/' /etc/hosts
-    service networking restart
-}
+# added proper hostname in install
+#setup_avahi() {
+#    echo "copilot" > /etc/hostname
+#    /etc/init.d/hostname.sh start
+#    sed -i 's/127.0.0.1\s*kali/127.0.0.1\tcopilot/' /etc/hosts
+#    service networking restart
+#}
 
 # ==== PLUGINS ====
 
@@ -191,15 +194,16 @@ install_plugins() {
     echo "Installing plugins."
 
     # Create Plugin Directory
-    mkdir "${COPILOT_PLUGINS_DIRECTORY}"
+    #    mkdir "${COPILOT_PLUGINS_DIRECTORY}"
+
     # Create global environment variable for copilot to use
     echo "COPILOT_PLUGINS_DIRECTORY=${COPILOT_PLUGINS_DIRECTORY}" >> /etc/environment
 
     cd "${COPILOT_PLUGINS_DIRECTORY}"
-    echo "Retreiving Plugins from ${PLUGINS_REPO}"
-    git clone "${PLUGINS_REPO}" "plugins"
+    #echo "Retreiving Plugins from ${PLUGINS_REPO}"
+    #git clone "${PLUGINS_REPO}" "plugins"
     cd plugins
-    git checkout "${PLUGINS_BRANCH}"
+    #git checkout "${PLUGINS_BRANCH}"
 
     for path in "${COPILOT_PLUGINS_DIRECTORY}"plugins/*; do
         [ -d "${path}" ] || continue # if not a directory, skip
@@ -223,7 +227,7 @@ install_plugins() {
 }
 
 dependencies() {
-    install_co-pilot_deps
+    # install_co-pilot_deps
     install_flask_deps
 }
 
@@ -232,9 +236,9 @@ install() {
     mkdir -p $SETUP_DIR
     #Create website Directory
     mkdir -p $WEB_DIR
-    install_copilot
+    #install_copilot
     setup_copilot_env
-    setup_copilot_db
+    #setup_copilot_db
     setup_flask_env
     install_avahi
     install_flask
@@ -244,11 +248,11 @@ install() {
 
 setup() {
     setup_wsgi
-    setup_avahi
+    #setup_avahi
 }
 
 main() {
-    prepare_devices
+    # prepare_devices
     update_os
     dependencies
     install
@@ -256,6 +260,7 @@ main() {
     cd $COPILOT_DIR
     install_plugins
     cd $PROG_DIR
+    touch "${INSTALL_FLAG}"
 }
 
 main
