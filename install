@@ -44,6 +44,8 @@ install_flask_deps() {
     apt-get -y install curl
     apt-get -y install python2.7-dev
     apt-get -y install python-pysqlite2
+    apt-get -y install python-pip
+
     # Add pip to path
     export PATH="/usr/local/bin:$PATH"
 
