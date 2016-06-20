@@ -8,7 +8,7 @@ readonly COPILOT_DIR=/home/www/copilot
 readonly WEB_DIR=/home/www
 readonly SETUP_DIR=/tmp/setup
 readonly TESTING=false
-readonly INSTALL_FLAG="/var/log/firstboot.log"
+readonly INSTALL_FLAG="/var/log/firstboot.complete"
 
 # Plugin Configuration Variables
 readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
@@ -228,6 +228,8 @@ install_plugins() {
 
 dependencies() {
     # install_co-pilot_deps
+    # lack of entropy slows installing massively
+    apt-get install -y haveged
     install_flask_deps
 }
 
