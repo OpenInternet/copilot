@@ -3,23 +3,8 @@
 #set -e
 #set -x
 
+source /etc/opt/copilot
 readonly PROG_DIR=$(readlink -m $(dirname $0))
-readonly COPILOT_DIR=/home/www/copilot
-readonly WEB_DIR=/home/www
-readonly SETUP_DIR=/tmp/setup
-readonly TESTING=false
-readonly INSTALL_FLAG="/var/log/firstboot.complete"
-
-# Plugin Configuration Variables
-readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
-readonly PLUGINS_BRANCH="master"
-readonly COPILOT_PLUGINS_DIRECTORY="/bin/copilot/"
-
-# Configuration Directory Variables
-readonly COPILOT_PROFILE_CONFIG_DIRECTORY="/var/lib/copilot/profiles/"
-readonly COPILOT_TEMPORARY_CONFIG_DIRECTORY="/tmp/copilot/tmp/"
-readonly COPILOT_DEFAULT_CONFIG_DIRECTORY="/tmp/copilot/"
-
 
 temporary_fixes () {
     echo dnsmasq-base hold |dpkg --set-selections
