@@ -65,16 +65,28 @@ install_flask() {
 setup_flask_env() {
     # # Get rid of the application root in the bp_config
     # sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
+    set RANDFILE="/tmp/.rnd"
 
-    # Add a random CSRF session key.
-    local CSRF=$(openssl rand -base64 32)
-    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"${CSRF}\"/" $COPILOT_DIR/instance/config.py
-    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"${CSRF}\"/" $COPILOT_DIR/instance/bp_config.py
+    if grep -Fxq "CSRF_SESSION_KEY" $COPILOT_DIR/instance/config.py
+    then
+        # Add a random CSRF session key.
+        local CSRF=$(openssl rand -base64 32)
+        sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"${CSRF}\"/" $COPILOT_DIR/instance/config.py
+        sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"${CSRF}\"/" $COPILOT_DIR/instance/bp_config.py
+    else
+        echo "Random copilot CSRF secret already set. Skipping..."
+    fi
 
-    # Add a random secret key for signing cookies
-    local SECRET=$(openssl rand -base64 32)
-    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"${SECRET}\"/" $COPILOT_DIR/instance/config.py
-    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"${SECRET}\"/" $COPILOT_DIR/instance/bp_config.py
+    if grep -Fxq "SECRET_KEY" $COPILOT_DIR/instance/config.py
+    then
+        # Add a random secret key for signing cookies
+        local SECRET=$(openssl rand -base64 32)
+        sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"${SECRET}\"/" $COPILOT_DIR/instance/config.py
+        sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"${SECRET}\"/" $COPILOT_DIR/instance/bp_config.py
+    else
+        echo "Random copilot secret key already set. Skipping..."
+    fi
+
 }
 
 # ==== WSGI ====
