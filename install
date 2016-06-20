@@ -3,52 +3,14 @@
 #set -e
 #set -x
 
+source /etc/opt/copilot
 readonly PROG_DIR=$(readlink -m $(dirname $0))
-readonly COPILOT_DIR=/home/www/copilot
-readonly WEB_DIR=/home/www
-readonly SETUP_DIR=/tmp/setup
-readonly TESTING=false
-readonly INSTALL_FLAG="/var/log/firstboot.log"
-
-# Plugin Configuration Variables
-readonly PLUGINS_REPO="https://github.com/OpenInternet/copilot-plugins"
-readonly PLUGINS_BRANCH="master"
-readonly COPILOT_PLUGINS_DIRECTORY="/bin/copilot/"
-
-# Configuration Directory Variables
-readonly COPILOT_PROFILE_CONFIG_DIRECTORY="/var/lib/copilot/profiles/"
-readonly COPILOT_TEMPORARY_CONFIG_DIRECTORY="/tmp/copilot/tmp/"
-readonly COPILOT_DEFAULT_CONFIG_DIRECTORY="/tmp/copilot/"
-
-
-# ==== HARDWARE ====
-
-
-# prepare_devices() {
-#     #TODO remove the temporary fix that address' a bug introduced in https://github.com/OpenInternet/co-pilot/issues/59
-#     # watch https://github.com/OpenInternet/co-pilot/issues/60 for when this can be removed.
-#     #To remove this temporary fix delete the call to temporary_fixes below, remove the temporary_fixes function, and uncoment apt-get -y install dnsmasq
-#     temporary_fixes
-#     #Currently only BBB has specific preparation needs
-#     local kernel=$(uname -mrs)
-#     if [[ $kernel == *"bone"* ]]; then
-#         #Prepare the beagle bone black
-#         prep_bbb
-#     fi
-# }
-
-# prep_bbb() {
-#     rm -rf /var/lib/apt/lists
-#     apt-get -y update
-#     apt-get -y --force-yes install kali-archive-keyring
-# }
 
 temporary_fixes () {
     echo dnsmasq-base hold |dpkg --set-selections
 }
 
 # ==== OS ====
-
 
 update_os() {
     apt-get -y update
@@ -57,27 +19,22 @@ update_os() {
 
 # ==== CO-PILOT BASE ====
 
-
-# install_copilot() {
-#     cp -fr $PROG_DIR $COPILOT_DIR
-# }
-
 install_co-pilot_deps() {
      # usbmount auto-mounts usb sticks
      apt-get -y install usbmount
 }
 
 setup_copilot_env() {
-    # Create global environment variable for copilot to use
-    echo "COPILOT_PROFILE_CONFIG_DIRECTORY=${COPILOT_PROFILE_CONFIG_DIRECTORY}" >> /etc/environment
-    echo "COPILOT_TEMPORARY_CONFIG_DIRECTORY=${COPILOT_TEMPORARY_CONFIG_DIRECTORY}" >> /etc/environment
-    echo "COPILOT_DEFAULT_CONFIG_DIRECTORY=${COPILOT_DEFAULT_CONFIG_DIRECTORY}" >> /etc/environment
+    if grep -Fxq "COPILOT_PROFILE_CONFIG_DIRECTORY" /etc/environment
+    then
+        echo "Copilot environment already configured. Skipping..."
+    else
+        # Create global environment variable for copilot to use
+        echo "COPILOT_PROFILE_CONFIG_DIRECTORY=${COPILOT_PROFILE_CONFIG_DIRECTORY}" >> /etc/environment
+        echo "COPILOT_TEMPORARY_CONFIG_DIRECTORY=${COPILOT_TEMPORARY_CONFIG_DIRECTORY}" >> /etc/environment
+        echo "COPILOT_DEFAULT_CONFIG_DIRECTORY=${COPILOT_DEFAULT_CONFIG_DIRECTORY}" >> /etc/environment
+    fi
 }
-
-# setup_copilot_db() {
-#     mkdir -p "${COPILOT_PROFILE_CONFIG_DIRECTORY}"
-# }
-
 
 # ==== FLASK ====
 
@@ -87,14 +44,14 @@ install_flask_deps() {
     apt-get -y install curl
     apt-get -y install python2.7-dev
     apt-get -y install python-pysqlite2
-    # Instal pip
-    # curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python -
-    # curl https://bootstrap.pypa.io/get-pip.py | python -
+    apt-get -y install python-pip
+
+    # Add pip to path
     export PATH="/usr/local/bin:$PATH"
 
     # Bcrypt Dependencies
     apt-get -y install build-essential
-    apt-get -y install libffi-dev
+    #apt-get -y install libffi-dev
 }
 
 install_flask() {
@@ -107,33 +64,31 @@ install_flask() {
     pip install Flask-Login
 }
 
-# ADD THESE BITS TO INIT SCRIPT
 setup_flask_env() {
-    # cd $WEB_DIR
-    # mkdir $COPILOT_DIR/instance
-    local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    # if [[ $TESTING = true ]]; then
-    #     cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/config.py
-    #     cp $COPILOT_DIR/templates/testing_config.py $COPILOT_DIR/instance/bp_config.py
-    # else
-    #     cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/config.py
-    #     cp $COPILOT_DIR/templates/base_config.py $COPILOT_DIR/instance/bp_config.py
-    # fi
-
     # # Get rid of the application root in the bp_config
     # sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
+    set RANDFILE="/tmp/.rnd"
 
-    # Add a random CSRF session key.
-    local CSRF=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/config.py
-    sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/bp_config.py
+    if grep -Fxq "CSRF_SESSION_KEY" $COPILOT_DIR/instance/config.py
+    then
+        # Add a random CSRF session key.
+        local CSRF=$(openssl rand -base64 32)
+        sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"${CSRF}\"/" $COPILOT_DIR/instance/config.py
+        sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"${CSRF}\"/" $COPILOT_DIR/instance/bp_config.py
+    else
+        echo "Random copilot CSRF secret already set. Skipping..."
+    fi
 
-    # Add a random secret key for signing cookies
-    local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
-    sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/bp_config.py
+    if grep -Fxq "SECRET_KEY" $COPILOT_DIR/instance/config.py
+    then
+        # Add a random secret key for signing cookies
+        local SECRET=$(openssl rand -base64 32)
+        sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"${SECRET}\"/" $COPILOT_DIR/instance/config.py
+        sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"${SECRET}\"/" $COPILOT_DIR/instance/bp_config.py
+    else
+        echo "Random copilot secret key already set. Skipping..."
+    fi
 
-    # cd $PROG_DIR
 }
 
 # ==== WSGI ====
@@ -150,26 +105,36 @@ setup_wsgi() {
 }
 
 setup_nginx() {
-    service nginx start
-    rm /etc/nginx/sites-enabled/default
-    cp  $COPILOT_DIR/templates/nginx_sites /etc/nginx/sites-available/copilot
-    ln -s /etc/nginx/sites-available/copilot /etc/nginx/sites-enabled/copilot
-    #enable
-    update-rc.d nginx enable
-    service nginx restart
+    if [[ -a "/etc/nginx/sites-enabled/default" ]]
+    then
+        rm /etc/nginx/sites-enabled/default
+        service nginx start
+        cp  $COPILOT_DIR/templates/nginx_sites /etc/nginx/sites-available/copilot
+        ln -s /etc/nginx/sites-available/copilot /etc/nginx/sites-enabled/copilot
+        #enable
+        update-rc.d nginx enable
+        service nginx restart
+    else
+        echo "Nginx already setup. Skipping..."
+    fi
 }
 
 setup_supervisor() {
-    # replace the various environment variables with the actual value of the vars
-    # Using @ as the sed seperator so that we don't get errors when using double quotes
-    cat $COPILOT_DIR/templates/supervisor \
-        | sed "s@PLUGIN_DIR_REPLACE_STRING@${COPILOT_PLUGINS_DIRECTORY}@" \
-        | sed "s@COPILOT_PROFILE_DIR_REPLACE_STRING@${COPILOT_PROFILE_CONFIG_DIRECTORY}@" \
-        | sed "s@COPILOT_TEMP_DIR_REPLACE_STRING@${COPILOT_TEMPORARY_CONFIG_DIRECTORY}@" \
-        | sed "s@COPILOT_DEFAULT_DIR_REPLACE_STRING@${COPILOT_DEFAULT_CONFIG_DIRECTORY}@" \
-              > /etc/supervisor/conf.d/supervisord.conf
-    #enable
-    update-rc.d supervisor enable
+    if grep -Fxq "PLUGIN_DIR_REPLACE_STRING" /etc/supervisor/conf.d/supervisord.conf
+    then
+        # replace the various environment variables with the actual value of the vars
+        # Using @ as the sed seperator so that we don't get errors when using double quotes
+        cat $COPILOT_DIR/templates/supervisor \
+            | sed "s@PLUGIN_DIR_REPLACE_STRING@${COPILOT_PLUGINS_DIRECTORY}@" \
+            | sed "s@COPILOT_PROFILE_DIR_REPLACE_STRING@${COPILOT_PROFILE_CONFIG_DIRECTORY}@" \
+            | sed "s@COPILOT_TEMP_DIR_REPLACE_STRING@${COPILOT_TEMPORARY_CONFIG_DIRECTORY}@" \
+            | sed "s@COPILOT_DEFAULT_DIR_REPLACE_STRING@${COPILOT_DEFAULT_CONFIG_DIRECTORY}@" \
+                  > /etc/supervisor/conf.d/supervisord.conf
+        #enable
+        update-rc.d supervisor enable
+    else
+        echo "Supervisor already setup. Skipping...."
+    fi
 }
 
 # ==== AVAHI ====
@@ -180,30 +145,21 @@ install_avahi() {
     service avahi-daemon restart
 }
 
-# added proper hostname in install
-#setup_avahi() {
-#    echo "copilot" > /etc/hostname
-#    /etc/init.d/hostname.sh start
-#    sed -i 's/127.0.0.1\s*kali/127.0.0.1\tcopilot/' /etc/hosts
-#    service networking restart
-#}
-
 # ==== PLUGINS ====
 
 install_plugins() {
     echo "Installing plugins."
 
-    # Create Plugin Directory
-    #    mkdir "${COPILOT_PLUGINS_DIRECTORY}"
-
-    # Create global environment variable for copilot to use
-    echo "COPILOT_PLUGINS_DIRECTORY=${COPILOT_PLUGINS_DIRECTORY}" >> /etc/environment
+    if grep -Fxq "COPILOT_PLUGINS_DIRECTORY" /etc/environment
+    then
+        echo "Plugins already added to environment. Skipping..."
+    else
+        # Create global environment variable for copilot to use
+        echo "COPILOT_PLUGINS_DIRECTORY=${COPILOT_PLUGINS_DIRECTORY}" >> /etc/environment
+    fi
 
     cd "${COPILOT_PLUGINS_DIRECTORY}"
-    #echo "Retreiving Plugins from ${PLUGINS_REPO}"
-    #git clone "${PLUGINS_REPO}" "plugins"
     cd plugins
-    #git checkout "${PLUGINS_BRANCH}"
 
     for path in "${COPILOT_PLUGINS_DIRECTORY}"plugins/*; do
         [ -d "${path}" ] || continue # if not a directory, skip
@@ -227,7 +183,8 @@ install_plugins() {
 }
 
 dependencies() {
-    # install_co-pilot_deps
+    # lack of entropy slows installing massively
+    apt-get install -y haveged
     install_flask_deps
 }
 
@@ -236,9 +193,7 @@ install() {
     mkdir -p $SETUP_DIR
     #Create website Directory
     mkdir -p $WEB_DIR
-    #install_copilot
     setup_copilot_env
-    #setup_copilot_db
     setup_flask_env
     install_avahi
     install_flask
@@ -248,11 +203,9 @@ install() {
 
 setup() {
     setup_wsgi
-    #setup_avahi
 }
 
 main() {
-    # prepare_devices
     update_os
     dependencies
     install
