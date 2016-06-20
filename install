@@ -49,7 +49,7 @@ install_flask_deps() {
 
     # Bcrypt Dependencies
     apt-get -y install build-essential
-    apt-get -y install libffi-dev
+    #apt-get -y install libffi-dev
 }
 
 install_flask() {
@@ -62,20 +62,30 @@ install_flask() {
     pip install Flask-Login
 }
 
+get_random() {
+# Here we produce 28 characters each time
+    until RANDOM=$(dd bs=21 count=1 if=/dev/urandom |
+                     LC_ALL=C tr -cd A-Za-z0-9)
+          ((${#RANDOM} >= 32)); do :; done
+    # When the loop ends we have at least 24 characters; truncate
+    RANDOM=${RANDOM:0:32}
+    printf "%s" "${RANDOM}"
+}
+
 # ADD THESE BITS TO INIT SCRIPT
 setup_flask_env() {
-    local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+
 
     # # Get rid of the application root in the bp_config
     # sed -i '/^APPLICATION_ROOT.*/d' $COPILOT_DIR/instance/bp_config.py
 
     # Add a random CSRF session key.
-    local CSRF=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    local CSRF=$(get_random)
     sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/config.py
     sed -i "s/^\(CSRF_SESSION_KEY\s=\s\).*$/\1\"$CSRF\"/" $COPILOT_DIR/instance/bp_config.py
 
     # Add a random secret key for signing cookies
-    local SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    local SECRET=$(get_random)
     sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/config.py
     sed -i "s/^\(SECRET_KEY\s=\s\).*$/\1\"$SECRET\"/" $COPILOT_DIR/instance/bp_config.py
 }
