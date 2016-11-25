@@ -98,7 +98,7 @@ check_string_not_exist() {
     local info="$1"
     local regex="$2"
     local path="$3"
-    if grep -Fxq "${regex}" "${path}"
+    if grep -Exq "${regex}" "${path}"
     then
         local ERROR="${info} placeholder string ${regex} should NOT be found in ${path} it should have been replaced by an actual value"
         error_msg "$ERROR"
@@ -112,7 +112,7 @@ check_string_exist() {
     local info="$1"
     local regex="$2"
     local path="$3"
-    if grep -Fxq "${regex}" "${path}"
+    if grep -Exq "${regex}" "${path}"
     then
         good_msg "${info} string found."
     else
@@ -160,13 +160,13 @@ pip_installed() {
 
 good_msg() {
     if [[ ${PRINT_GOOD} = true ]]; then
-        printf "Good: ${1}\n"
+        printf "\e[32mGood:\e[0m ${1}\n"
     fi
 }
 
 error_msg() {
-    printf "Error: ${1}\n"
-    printf "$2"
+    printf "\e[31mError:\e[0m ${1}\n"
+    printf "$2 \n"
 }
 
 cleanup() {
