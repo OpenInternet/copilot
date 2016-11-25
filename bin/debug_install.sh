@@ -21,7 +21,7 @@ set -e
 set -u
 
 # TODO remove DEBUGGING
-set -x
+#set -x
 
 # Read Only variables
 
@@ -52,7 +52,7 @@ check_core() {
     apt_installed "python-pip"
     apt_installed "usbmount"
     apt_installed "build-essential"
-    apt-installed "nginx"
+    apt_installed "nginx"
     apt_installed "supervisor"
     apt_installed "python-pip"
     apt_installed "avahi-daemon"
@@ -159,7 +159,9 @@ pip_installed() {
 }
 
 good_msg() {
-    printf "Good: ${1}\n"
+    if [[ ${PRINT_GOOD} = true ]]; then
+        printf "Good: ${1}\n"
+    fi
 }
 
 error_msg() {
@@ -174,5 +176,23 @@ cleanup() {
 
 trap 'cleanup' EXIT
 
+PRINT_GOOD=""
+
+while getopts "vd" opt; do
+    case $opt in
+        v)
+            PRINT_GOOD=true
+            echo "Verbose mode activated" >&2
+        ;;
+        d)
+            set -x
+            PRINT_GOOD=true
+            echo "Debug mode activated" >&2
+        ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+        ;;
+    esac
+done
 
 main
