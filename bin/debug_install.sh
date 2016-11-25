@@ -44,8 +44,8 @@ main() {
 }
 
 check_core() {
-    check_exist "CoPilot repository" "/home/www/copilot"
-    check_exist "CoPilot global var config" "/etc/opt/copilot"
+    check_exist "CoPilot repository" "/home/www/copilot" ""
+    check_exist "CoPilot global var config" "/etc/opt/copilot" ""
     apt_installed "python-dev"
     apt_installed "curl"
     apt_installed "python-pysqlite2"
@@ -67,25 +67,25 @@ check_core() {
 }
 
 check_flask() {
-    check_exist "CoPilot instance" "/home/www/copilot/instance"
-    check_exist "CoPilot Flask runner" "/home/www/copilot/run.py"
-    check_exist "CoPilot Flask config" "/home/www/copilot/instance/config.py"
-    check_exist "CoPilot blockpage Flask config" "/home/www/copilot/instance/bp_config.py"
+    check_exist "CoPilot instance" "/home/www/copilot/instance" ""
+    check_exist "CoPilot Flask runner" "/home/www/copilot/run.py" ""
+    check_exist "CoPilot Flask config" "/home/www/copilot/instance/config.py" ""
+    check_exist "CoPilot blockpage Flask config" "/home/www/copilot/instance/bp_config.py" ""
     check_string_exist "CSRF key for copilot" "^CSRF_SESSION_KEY\s=\s" "${COPILOT_DIR}/instance/config.py"
     check_string_exist "CSRF key for copilot blockpage" "SECRET_KEY\s=\s" "${COPILOT_DIR}/instance/config.py"
 }
 
 check_nginx() {
-    check_exist "nginx sites available for copilot" "/etc/nginx/sites-available/copilot"
+    check_exist "nginx sites available for copilot" "/etc/nginx/sites-available/copilot" ""
 }
 
 check_plugins() {
-    check_exist "Copilot plugins repo" "${COPILOT_PLUGINS_DIRECTORY}/plugins"
+    check_exist "Copilot plugins repo" "${COPILOT_PLUGINS_DIRECTORY}/plugins" ""
     check_string_not_exist "Supervisor plugin dir" "COPILOT_PLUGINS_DIRECTORY" "/etc/supervisor/conf.d/supervisord.conf"
 }
 
 check_supervisor() {
-    check_exist "Supervisor config" "/etc/supervisor/conf.d/supervisord.conf"
+    check_exist "Supervisor config" "/etc/supervisor/conf.d/supervisord.conf" ""
     check_string_not_exist "Supervisor plugin dir" "PLUGIN_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor profile dir" "COPILOT_PROFILE_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor plugin dir" "COPILOT_TEMP_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
