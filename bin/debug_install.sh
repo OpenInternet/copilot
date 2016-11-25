@@ -101,7 +101,7 @@ check_string_not_exist() {
     if grep -Exq "${regex}" "${path}"
     then
         local ERROR="${info} placeholder string ${regex} should NOT be found in ${path} it should have been replaced by an actual value"
-        error_msg "$ERROR"
+        error_msg "$ERROR" "You should grep for this pattern in the copilot-install repo to find what is failing"
     else
         good_msg "${info} placeholder string not found."
     fi
