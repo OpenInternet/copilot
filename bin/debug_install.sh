@@ -81,7 +81,7 @@ check_nginx() {
 
 check_plugins() {
     check_exist "Copilot plugins repo" "${COPILOT_PLUGINS_DIRECTORY}/plugins" "TODO: No Fix Documented"
-    check_string_not_exist "Supervisor plugin dir" "COPILOT_PLUGINS_DIRECTORY" "/etc/supervisor/conf.d/supervisord.conf"
+    check_string_not_exist "Supervisor plugin dir" "COPILOT_PLUGINS_DIRECTORY" "/etc/supervisor/conf.d/supervisord.conf" "TODO: No Fix Documented"
 }
 
 check_supervisor() {
@@ -130,7 +130,7 @@ check_exist() {
     if [[ -e "$path"  ]]; then
         good_msg "${path} exists"
     else
-        error_msg "${info} was not found at ${package}" "$fix_msg"
+        error_msg "${info} was not found at ${path}" "${fix_msg}"
     fi
 }
 
