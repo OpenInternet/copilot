@@ -117,7 +117,7 @@ check_string_exist() {
         good_msg "${info} string found."
     else
         local ERROR="${info} string ${regex} should be found in ${path}"
-        error_msg "$ERROR"
+        error_msg "$ERROR" "You should grep for this pattern in the copilot-install repo to find what is failing"
     fi
 }
 
@@ -166,7 +166,7 @@ good_msg() {
 
 error_msg() {
     printf "\e[31mError:\e[0m ${1}\n"
-    printf "$2 \n"
+    printf "${2} \n"
 }
 
 cleanup() {
