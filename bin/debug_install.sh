@@ -67,25 +67,25 @@ check_core() {
 }
 
 check_flask() {
-    check_exist "CoPilot instance" "/home/www/copilot/instance" "TODO: No Fix Documented"
-    check_exist "CoPilot Flask runner" "/home/www/copilot/run.py" "TODO: No Fix Documented"
-    check_exist "CoPilot Flask config" "/home/www/copilot/instance/config.py" "TODO: No Fix Documented"
-    check_exist "CoPilot blockpage Flask config" "/home/www/copilot/instance/bp_config.py" "TODO: No Fix Documented"
+    check_exist "CoPilot instance" "/home/www/copilot/instance" "Check for error messages related to the customize-[PLATFORM].sh script in copilot-install's scripts directory to see what may have failed."
+    check_exist "CoPilot Flask runner" "/home/www/copilot/run.py" "Check for error messages related to the customize-[PLATFORM].sh script in copilot-install's scripts directory to see what may have failed."
+    check_exist "CoPilot Flask config" "/home/www/copilot/instance/config.py" "Check for error messages related to the setup_flask_env() function in copilot-install's firstboot_install.sh script to see what may have failed."
+    check_exist "CoPilot blockpage Flask config" "/home/www/copilot/instance/bp_config.py" "Check for error messages related to the setup_flask_env() function in copilot-install's firstboot_install.sh script to see what may have failed."
     check_string_exist "CSRF key for copilot" "^CSRF_SESSION_KEY\s=\s" "${COPILOT_DIR}/instance/config.py"
     check_string_exist "CSRF key for copilot blockpage" "SECRET_KEY\s=\s" "${COPILOT_DIR}/instance/config.py"
 }
 
 check_nginx() {
-    check_exist "nginx sites available for copilot" "/etc/nginx/sites-available/copilot" "TODO: No Fix Documented"
+    check_exist "nginx sites available for copilot" "/etc/nginx/sites-available/copilot" "Check for error messages related to the setup_nginx() function in copilot-install's firstboot_install.sh script to see what may have failed."
 }
 
 check_plugins() {
-    check_exist "Copilot plugins repo" "${COPILOT_PLUGINS_DIRECTORY}/plugins" "TODO: No Fix Documented"
-    check_string_not_exist "Supervisor plugin dir" "COPILOT_PLUGINS_DIRECTORY" "/etc/supervisor/conf.d/supervisord.conf" "TODO: No Fix Documented"
+    check_exist "Copilot plugins repo" "${COPILOT_PLUGINS_DIRECTORY}/plugins" "Check for error messages related to the install_plugins() function in copilot-install's firstboot_install.sh script to see what may have failed."
+    check_string_not_exist "Supervisor plugin dir" "COPILOT_PLUGINS_DIRECTORY" "/etc/supervisor/conf.d/supervisord.conf" "Check for error messages related to the install_plugins() function in copilot-install's firstboot_install.sh script to see what may have failed."
 }
 
 check_supervisor() {
-    check_exist "Supervisor config" "/etc/supervisor/conf.d/supervisord.conf" "TODO: No Fix Documented"
+    check_exist "Supervisor config" "/etc/supervisor/conf.d/supervisord.conf" "Check for error messages related to the setup_supervisor() function in copilot-install's firstboot_install.sh script to see what may have failed."
     check_string_not_exist "Supervisor plugin dir" "PLUGIN_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor profile dir" "COPILOT_PROFILE_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor plugin dir" "COPILOT_TEMP_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
