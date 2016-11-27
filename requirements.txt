@@ -1,5 +1,3 @@
-setuptools
-cryptography
 Flask-SQLAlchemy
 flask-wtf
 flask-bcrypt

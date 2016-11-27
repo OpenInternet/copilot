@@ -61,8 +61,8 @@ check_core() {
     apt_installed "python-dev"
     apt_installed "git"
     pip_installed "Flask-SQLAlchemy"
-    pip_installed "flask-wtf"
-    pip_installed "flask-bcrypt"
+    pip_installed "Flask-WTF"
+    pip_installed "Flask-Bcrypt"
     pip_installed "Flask-Login"
 }
 
