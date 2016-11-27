@@ -111,8 +111,8 @@ check_supervisor_running() {
     if [[ "$status" == "RUNNING" ]]; then
         good_msg "${process} is running."
     else
-        local problem=$(echo "$status" | sed "s/[a-zA-Z]*\s\([A-Z]*\).*/\1/")
-        local reason=$(echo "$status" | sed "s/[a-zA-Z]*\s[A-Z]*\s\(.*\).*/\1/")
+        local problem=$(echo "$status" | sed "s/[a-zA-Z]*\s*\([A-Z]*\).*/\1/")
+        local reason=$(echo "$status" | sed "s/[a-zA-Z]*\s*[A-Z]*\s*\(.*\).*/\1/")
         error_msg "${process} shows its status as ${problem} because it ${reason}" "${info}"
     fi
 }
