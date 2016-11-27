@@ -108,7 +108,7 @@ check_supervisor_running() {
     local process="$1"
     local info="$2"
     local status=$(supervisorctl status "$process" |grep -o RUNNING)
-    if [[ "$status" == "" ]]; then
+    if [[ "$status" == "RUNNING" ]]; then
         good_msg "${process} is running."
     else
         local problem=$(echo "$status" | sed "s/[a-zA-Z]*\s\([A-Z]*\).*/\1/")
