@@ -156,10 +156,10 @@ apt_installed() {
 pip_installed() {
     local package="${1}"
     if [[ ! -e /tmp/pip_packages ]]; then
-        pip list | grep -E "^${package}\s\([0-9\.]*\)$" > /tmp/pip_packages
+        pip list  > /tmp/pip_packages
     fi
     local fix_msg="You can install this package by running the following command\n pip install ${package}"
-    local installed=$(grep -o "${package}" /tmp/pip_packages)
+    local installed=$(grep -E "^${package}\s\([0-9\.]*\)$" /tmp/pip_packages | grep -o "${package}")
     if [[ "${installed}" = ""  ]]; then
         error_msg "Pip package ${package} missing" "$fix_msg"
     else
