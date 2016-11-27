@@ -64,6 +64,8 @@ check_core() {
     pip_installed "Flask-WTF"
     pip_installed "Flask-Bcrypt"
     pip_installed "Flask-Login"
+    pip_installed "watchdog"
+    pip_installed "gunicorn"
 }
 
 check_flask() {
@@ -93,7 +95,26 @@ check_supervisor() {
     check_string_not_exist "Supervisor plugin dir" "COPILOT_TEMP_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor plugin dir" "PLUGIN_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor plugin dir" "COPILOT_DEFAULT_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
-    check_supervisor_running "blockpage" "check"
+    check_supervisor_running "blockpage" "You should check on the logs at /var/log/supervisor/blockpage-std*"
+    check_supervisor_running "config_watcher" "You should check on the logs at /var/log/supervisor/config_watcher-std*"
+    check_supervisor_running "copilot" "You should check on the logs at /var/log/supervisor/copilot-std*  and the log /var/log/copilot*"
+    check_supervisor_running "create_ap" "You should check on the logs at /var/log/supervisor/create_ap-std*"
+    check_supervisor_running "dnschef" "You should check on the logs at /var/log/supervisor/dnschef-std*"
+    check_supervisor_running "suricata" "You should check on the logs at /var/log/supervisor/suricata-std* and those in /var/log/suricata/"
+}
+
+
+check_supervisor_running() {
+    local process="$1"
+    local info="$2"
+    local status=$(supervisorctl status "$process" |grep -o RUNNING)
+    if [[ "$status" == "" ]]; then
+        good_msg "${process} is running."
+    else
+        local problem=$(echo "$status" | sed "s/[a-zA-Z]*\s\([A-Z]*\).*/\1/")
+        local reason=$(echo "$status" | sed "s/[a-zA-Z]*\s[A-Z]*\s\(.*\).*/\1/")
+        error_msg "${process} shows its status as ${problem} because it ${reason}" "${info}"
+
 }
 
 check_string_not_exist() {
