@@ -98,7 +98,7 @@ check_string_not_exist() {
     local info="$1"
     local regex="$2"
     local path="$3"
-    if [[ -e $path ]]; then
+    if [[ ! -e $path ]]; then
         error_msg "${path} could not be found. It is required" "You should grep for this pattern in the copilot-install repo to find what is failing"
     elif grep -Eq "${regex}" "${path}"; then
         local ERROR="${info} placeholder string ${regex} should NOT be found in ${path} it should have been replaced by an actual value"
