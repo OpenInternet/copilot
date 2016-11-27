@@ -98,9 +98,9 @@ check_string_not_exist() {
     local info="$1"
     local regex="$2"
     local path="$3"
-    grep -Exq "${regex}" "${path}" || error_msg "${path} could not be found. It is required" "You should grep for this pattern in the copilot-install repo to find what is failing"
-    if grep -Exq "${regex}" "${path}"
-    then
+    if [[ -e "$path"]]; then
+        error_msg "${path} could not be found. It is required" "You should grep for this pattern in the copilot-install repo to find what is failing"
+    elif grep -Eq "${regex}" "${path}"; then
         local ERROR="${info} placeholder string ${regex} should NOT be found in ${path} it should have been replaced by an actual value"
         error_msg "$ERROR" "You should grep for this pattern in the copilot-install repo to find what is failing"
     else
@@ -113,9 +113,9 @@ check_string_exist() {
     local info="$1"
     local regex="$2"
     local path="$3"
-    grep -Exq "${regex}" "${path}" || error_msg "${path} could not be found. It is required" "You should grep for this pattern in the copilot-install repo to find what is failing"
-    if grep -Exq "${regex}" "${path}"
-    then
+    if [[ ! -e "$path"]]; then
+        error_msg "${path} could not be found. It is required" "You should grep for this pattern in the copilot-install repo to find what is failing"
+    elif grep -Eq "${regex}" "${path}"; then
         good_msg "${info} string found."
     else
         local ERROR="${info} string ${regex} should be found in ${path}"
