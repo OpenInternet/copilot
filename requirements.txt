@@ -1,3 +1,5 @@
+gunicorn
+watchdog
 setuptools
 Flask-SQLAlchemy
 flask-wtf

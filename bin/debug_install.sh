@@ -77,11 +77,13 @@ check_flask() {
 
 check_nginx() {
     check_exist "nginx sites available for copilot" "/etc/nginx/sites-available/copilot" "Check for error messages related to the setup_nginx() function in copilot-install's firstboot_install.sh script to see what may have failed."
+    check_string_exist "Suricata section in supervisord config" "program:suricata" "/etc/supervisor/conf.d/supervisord.conf"
+    check_string_exist "DNSChef section in supervisord config" "program:dnschef" "/etc/supervisor/conf.d/supervisord.conf"
+    check_string_exist "Create_ap section in supervisord config" "program:create_ap" "/etc/supervisor/conf.d/supervisord.conf"
 }
 
 check_plugins() {
     check_exist "Copilot plugins repo" "${COPILOT_PLUGINS_DIRECTORY}/plugins" "Check for error messages related to the install_plugins() function in copilot-install's firstboot_install.sh script to see what may have failed."
-    check_string_not_exist "Supervisor plugin dir" "COPILOT_PLUGINS_DIRECTORY" "/etc/supervisor/conf.d/supervisord.conf" "Check for error messages related to the install_plugins() function in copilot-install's firstboot_install.sh script to see what may have failed."
 }
 
 check_supervisor() {
@@ -91,6 +93,7 @@ check_supervisor() {
     check_string_not_exist "Supervisor plugin dir" "COPILOT_TEMP_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor plugin dir" "PLUGIN_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
     check_string_not_exist "Supervisor plugin dir" "COPILOT_DEFAULT_DIR_REPLACE_STRING" "/etc/supervisor/conf.d/supervisord.conf"
+    check_supervisor_running "blockpage" "check"
 }
 
 check_string_not_exist() {
@@ -138,7 +141,10 @@ check_exist() {
 
 apt_installed() {
     local package="${1}"
-    local installed=$(dpkg --get-selections | grep -v deinstall |grep ${package})
+    if [[ ! -e /tmp/apt_packages ]]; then
+        dpkg --get-selections | grep -v deinstall > /tmp/apt_packages
+    fi
+    local installed=$(grep ${package} /tmp/apt_packages)
     local fix_msg="You can install this package by running the following command\n apt-get install ${package}"
     if [[ "${installed}" = ""  ]]; then
         error_msg "Apt package ${package} missing" "$fix_msg"
@@ -149,10 +155,11 @@ apt_installed() {
 
 pip_installed() {
     local package="${1}"
-    local installed=$(pip list \
-                             | grep -E "^${package}\s\([0-9\.]*\)$" \
-                             | grep -o "${package}")
+    if [[ ! -e /tmp/pip_packages ]]; then
+        pip list | grep -E "^${package}\s\([0-9\.]*\)$" > /tmp/pip_packages
+    fi
     local fix_msg="You can install this package by running the following command\n pip install ${package}"
+    local installed=$(grep -o "${package}" /tmp/pip_packages)
     if [[ "${installed}" = ""  ]]; then
         error_msg "Pip package ${package} missing" "$fix_msg"
     else
