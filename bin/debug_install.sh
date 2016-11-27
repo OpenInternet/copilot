@@ -127,7 +127,7 @@ check_exist() {
     local info="$1"
     local path="$2"
     local fix_msg="$3"
-    if [[ -e "$path"  ]]; then
+    if [[ -e $path  ]]; then
         good_msg "${path} exists"
     else
         error_msg "${info} was not found at ${path}" "${fix_msg}"
