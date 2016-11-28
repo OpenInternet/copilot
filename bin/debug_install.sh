@@ -100,7 +100,7 @@ check_supervisor() {
     check_supervisor_running "copilot" "You should check on the logs at /var/log/supervisor/copilot-std*  and the log /var/log/copilot*"
     check_supervisor_running "create_ap" "You should check on the logs at /var/log/supervisor/create_ap-std*"
     check_supervisor_running "dnschef" "You should check on the logs at /var/log/supervisor/dnschef-std*"
-    check_supervisor_running "suricata" "You should check on the logs at /var/log/supervisor/suricata-std* and those in /var/log/suricata/"
+    check_supervisor_running "suricata" "If CoPilot is not currently running a blocking profile that uses Suricata than it WILL show as FATAL. \n If your current profile is using suricata you should check on the logs at /var/log/supervisor/suricata-std* and those in /var/log/suricata/"
 }
 
 
