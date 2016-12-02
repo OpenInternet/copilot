@@ -9,5 +9,4 @@ from flask import render_template
 def catch_all(path):
     """ A catch all route that redirects all requests to the blockpage."""
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    image = random.choice(os.listdir(os.path.join(BASE_DIR, "static/images/dns/")))
-    return render_template('blockpage.html', image="images/dns/{0}".format(image))
+    return render_template('blockpage.html', image="images/face_fire_128.png")
