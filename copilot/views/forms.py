@@ -4,7 +4,7 @@ from flask.ext.wtf import Form
 from wtforms import PasswordField, TextField, SelectField, FieldList, FormField, RadioField, HiddenField
 
 # Import Form validators
-from wtforms.validators import Required, Length, EqualTo, ValidationError, Optional
+from wtforms.validators import Required, Length, EqualTo, ValidationError, Optional, Regexp
 from copilot.models.trainer import Trainer
 from copilot.models.config import get_valid_actions, get_valid_targets
 from copilot.utils.file_sys import get_usb_dirs
@@ -27,7 +27,8 @@ class Config(Form):
     """
     ap_name = TextField('Trainee Access Point Name', validators=[
         Required(message='You must change the access point name.'),
-        Length(min=1, max=31)])
+        Length(min=1, max=31),
+        Regexp("^[^\s]*$", "AP Name cannot contain any spaces or tabs.")])
     ap_password = PasswordField('Access Point Password', validators=[
         Required(message='You must change the access point password.'),
         Length(min=8, max=63),
