@@ -28,7 +28,7 @@ class Config(Form):
     ap_name = TextField('Trainee Access Point Name', validators=[
         Required(message='You must change the access point name.'),
         Length(min=1, max=31),
-        Regexp("^[^\s]*$", "AP Name cannot contain any spaces or tabs.")])
+        Regexp("^[^\s]*$", message="AP Name cannot contain any spaces or tabs.")])
     ap_password = PasswordField('Access Point Password', validators=[
         Required(message='You must change the access point password.'),
         Length(min=8, max=63),
