@@ -69,7 +69,8 @@ class AdminConfig(Config):
         check_old_password])
     ap_name = TextField('Trainee Access Point Name', validators=[
         Optional(),
-        Length(min=1, max=31)])
+        Length(min=1, max=31),
+        Regexp("^[^\s]*$", message="AP Name cannot contain any spaces or tabs.")])
     ap_password = PasswordField('Access Point Password', validators=[
         Optional(),
         Length(min=8, max=63),
