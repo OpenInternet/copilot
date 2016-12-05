@@ -7,6 +7,28 @@ categories: developer
 * TOC
 {:toc}
 
+
+### Basic Trainer Troubleshooting
+
+If Copilot does not seem to be working correctly, the first step is to check to see if any plugins have failed to start.
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/I_neQc_sh4c" frameborder="0" allowfullscreen></iframe>
+
+
+### Technical Troubleshooting
+
+Copilot comes with a built in technical debug info gathering script. To use it log into a terminal on your Copilot device by either connecting it with a keyboard and monitor or by using a serial cable.
+
+Run the following commands once you have logged in.
+
+```bash
+cd /home/www/copilot/bin/
+./debug_install.sh
+```
+
+This script will check for common problems and provide guidance on where in the Copilot code you shoudl check to find what went wrong.
+
 ### Access Point is Missing
 
 "I did everything correctly, but there is still no CoPilot access point."
@@ -19,7 +41,6 @@ categories: developer
 There are solutions for some devices, the occasionally require powered USB hubs or ripping out fuses in your device (a little excessive in my opinion)
 * Your device tried to set up the wireless interface before it had an Internet  connection on the Ethernet interface.
 It sometimes helps to restart the device when connected to the Internet so that it gets a lease and the router is quicker to recognize it. (This is PURE speculation, but it seems to work in a chunk of the tests that I have done.) To do this, remove the dongle, restart, wait until it has fully booted up, shut it down, insert the dongle, and then start the device up again.
-
 
 #### Check if device is starting properly
 

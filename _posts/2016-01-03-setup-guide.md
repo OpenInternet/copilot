@@ -10,14 +10,10 @@ categories: trainer
 
 ### BeagleBone Black Initial Configuration
 
-_NOTE: You can download the [*Printable CoPilot Graphic Demonstration Guide* for BeagleBone Black here](https://raw.github.com/wiki/openinternet/CoPilot/docs/graphic_demonstration_setup_guide.pdf)_
-
 #### What You Will Need
 
 - SD Card with CoPilot Installed
-We recommend a 8-16GB class 4 SD card. You can [download the latest CoPilot image on our releases page](https://github.com/OpenInternet/CoPilot/releases) and use the [Raspberry-Pi installation instructions](https://www.raspberrypi.org/help/noobs-setup/) to load it on to your SD card.
-
-*You can install CoPilot on a variety of unsupported devices by following the [installation instructions](https://github.com/OpenInternet/CoPilot/wiki/Install-Guide).*
+We recommend a 8-16GB class 4 SD card. You can follow the [Copilot installation guide](http://openinternet.github.io/copilot/developer/2016/01/05/installation-guide.html) to load Copilot on to your SD card.
 
 - Wireless Antenna
 We recommend a [TP-LINK TL-WN722N External Wireless Adapter](http://www.amazon.com/TP-LINK-TL-WN722N-Wireless-Adapter-External/dp/B002SZEOLG)
@@ -30,7 +26,6 @@ These instructions are for the [BeagleBone Black version of CoPilot.](https://ww
 #### Step 1: Attach Wireless Antenna and Plug-in Ethernet
 
 ![BeagleBone Black Being connected to an antenna and ethernet jack](https://raw.github.com/wiki/openinternet/CoPilot/images/bbb_eth.png)
-
 
 #### Step 2: Plug in power supply
 
@@ -52,7 +47,7 @@ These instructions are for the [BeagleBone Black version of CoPilot.](https://ww
 ![Settings Page](https://raw.github.com/wiki/openinternet/CoPilot/images/config_interface.png)
 
 - Access Point Name
-This is the name you would like the CoPilot access point to advertise. This will be the wireless network name that you and students use to access CoPilot.
+This is the name you would like the CoPilot access point to advertise. This will be the wireless network name that you and students use to access CoPilot. *You cannot use white-space characters (spaces or tabs) in your access point name.*
 
 - Access Point Password
 This is the password that will have to be typed in to connect to the CoPilot access point. Once you have filled out this field, repeat the password in the "Confirm Password" text box below it.
@@ -73,8 +68,8 @@ Type in a password that will allow you to access the CoPilot interface. This pas
 
 - Give your profile a name in the **Name** text box. CoPilot uses this name when saving, loading, and sharing profiles.
 - Using the  **Action** drop-down menu choose how you would like to censor the traffic that you target.
-- Using the **Target** drop-down menu choose a type of traffic to have the action affect. *Currently CoPilot only allows you to manipulate participants DNS traffic.*
-- In the **Sub-Target** text-field type in a website address or IP address you would like CoPilot to take **Action** on. *(You can type in **\*** to have CoPilot target ALL traffic.)*
+- Using the **Target** drop-down menu choose a type of traffic to have the action affect.
+- If the action uses a **Sub-Target** a text field will appear. In the **Sub-Target** text-field you will can type in a website address or IP address you would like CoPilot to take **Action** on.
 
 - Click the **Save & Apply** Button.
 - In the Save Dialogue that appears click the **CoPilot** button.
