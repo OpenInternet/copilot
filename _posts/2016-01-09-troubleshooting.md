@@ -13,7 +13,7 @@ categories: developer
 If Copilot does not seem to be working correctly, the first step is to check to see if any plugins have failed to start.
 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/I_neQc_sh4c" frameborder="0" allowfullscreen></iframe>
+<iframe height="315" src="https://www.youtube.com/embed/I_neQc_sh4c" frameborder="0" allowfullscreen></iframe>
 
 
 ### Technical Troubleshooting
