@@ -13,7 +13,7 @@ categories: developer
 
 Download the [compressed img file for the latest release from the release page](https://github.com/OpenInternet/copilot/releases).
 
-For the 1.0 release the name of this file is [copilot-1.0-bbb.img.tar.gz]()
+You can download the copilot 1.0 release image here: [copilot-1.0-bbb.img.tar.gz](https://github.com/OpenInternet/copilot/releases/download/v1.0/copilot-bbb-1.0.img.tar.gz)
 
 #### Decompress image file
 
